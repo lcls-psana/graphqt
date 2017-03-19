@@ -1,0 +1,382 @@
+#!@PYTHON@
+"""
+Created on February 1, 2017
+
+@author: Mikhail Dubrovin
+
+Class IMVMain is a QWidget for interactive image.
+
+Usage ::
+
+    import sys
+    from graphqt.IMVMain import IMVMain
+    app = QtGui.QApplication(sys.argv)
+    w = IMVMain(None, app)
+    w.show()
+    app.exec_()
+"""
+#import os
+#import math
+
+from math import floor
+from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import Qt
+
+from graphqt.IMVConfigParameters import cp
+
+from graphqt.Logger import log
+import graphqt.ColorTable as ct
+from graphqt.GUViewImage import GUViewImage, image_with_random_peaks
+from graphqt.QWSpectrum import QWSpectrum
+from graphqt.IMVMainButtons import IMVMainButtons
+
+from graphqt.QWUtils import selectFromListInPopupMenu
+
+from graphqt.Frame  import Frame
+from graphqt.QIcons import icon
+from graphqt.Styles import style
+
+#------------------------------
+
+#class IMVMain(Frame) :
+class IMVMain(QtGui.QWidget) :
+
+    _name = 'IMVMain'
+
+    def __init__(self, parser=None) : # **dict_opts) :
+        #Frame.__init__(self, parent=None, mlw=1)
+        QtGui.QWidget.__init__(self, parent=None)
+        #self._name = self.__class__.__name__
+
+        self.proc_parser(parser)
+            
+        self.main_win_width  = cp.main_win_width 
+        self.main_win_height = cp.main_win_height
+        self.main_win_pos_x  = cp.main_win_pos_x 
+        self.main_win_pos_y  = cp.main_win_pos_y  
+
+        self.arr = self.get_image_array()
+        ctab = ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20)
+        self.wimg = GUViewImage(None, self.arr, coltab=ctab, origin='UL', scale_ctl='HV', rulers='DL',\
+                                margl=0.10, margr=0.0, margt=0.0, margb=0.05)
+
+        self.wspe = QWSpectrum(None, self.arr, show_buts=False)
+
+        #icon.set_icons()
+
+        self.wbut = IMVMainButtons()
+
+        #self.vsplit = QtGui.QSplitter(QtCore.Qt.Vertical)
+        #self.vsplit.addWidget(self.but_1)
+        
+        #self.vsplit.moveSplitter(0,200)
+        #self.vsplit.addWidget(self.but_2)
+
+        self.hbox = QtGui.QHBoxLayout() 
+        self.hbox.addWidget(self.wbut) 
+        #self.hbox.addWidget(self.wspe) 
+
+        self.vbox = QtGui.QVBoxLayout() 
+        #self.vbox.addWidget(self.guibuttonbar)
+         #self.vbox.addLayout(self.hboxB) 
+        #self.vbox.addStretch(1)
+        #self.vbox.addWidget(self.vsplit) 
+        #self.vbox.addStretch(1)
+        self.vbox.addLayout(self.hbox) 
+        self.vbox.addStretch(1)
+        self.vbox.addWidget(self.wspe) 
+
+        self.setLayout(self.vbox)
+
+        #self.move(self.main_win_pos_x.value(), self.main_win_pos_y.value())
+
+        self.set_style()
+        self.set_tool_tips()
+
+        self.connect_signals_to_slots()
+
+        #self.spectrum_show(self.arr)
+        self.move(self.pos()) # + QtCore.QPoint(self.width()+5, 0))
+        self.wimg.show()
+
+
+    def connect_signals_to_slots(self):
+
+        self.connect(self.wbut.but_reset, QtCore.SIGNAL('clicked()'), self.on_but_reset)
+        self.connect(self.wbut.but_save,  QtCore.SIGNAL('clicked()'), self.on_but_save)
+
+        #self.wimg.disconnect_axes_limits_changed_from(self.wimg.test_axes_limits_changed_reception)
+        #self.wimg.connect_axes_limits_changed_to(self.wimg.test_axes_limits_changed_reception)
+        self.wimg.connect_axes_limits_changed_to(self.on_image_axes_limits_changed)
+
+        #self.wimg.disconnect_pixmap_is_updated_from(self.wimg.test_pixmap_is_updated_reception)
+        #self.wimg.connect_pixmap_is_updated_to(self.wimg.test_pixmap_is_updated_reception)
+        self.wimg.connect_pixmap_is_updated_to(self.on_image_pixmap_is_updated)
+
+        #self.wspe.hist.connect_axes_limits_changed_to(self.wspe.hist.test_axes_limits_changed_reception)
+        self.wspe.hist.connect_axes_limits_changed_to(self.on_hist_axes_limits_changed)
+
+        #self.wspe.connect_color_table_is_changed_to(self.wspe.test_color_table_is_changed_reception)
+        self.wspe.connect_color_table_is_changed_to(self.on_spectrum_color_table_is_changed)
+
+        #self.wspe.hist.connect_histogram_updated_to(self.wspe.hist.test_histogram_updated_reception)
+
+#------------------------------
+
+    def proc_parser(self, parser=None) :
+        self.parser=parser
+
+        if parser is None :
+            self.ifname = None
+            return
+
+        (opts, args) = parser.parse_args()
+        self.args = args
+        self.opts = vars(opts)
+        self.defs = vars(parser.get_default_values())
+
+        self.verbos = opts.verbos
+
+        exp = self.opts['exp']
+        run = self.opts['run']
+
+        nargs =len(self.args) 
+        self.ifname = self.args[0] if nargs > 0 else None
+  
+        log.info('Input image file name: %s' % self.ifname)
+
+#------------------------------
+
+    def get_image_array(self) :
+        import expmon.PSUtils as psu
+
+        arr = psu.get_image_array_from_file(self.ifname)
+        if arr is None :
+            log.warning('%s Can not get image from file: %s Substitute simulated image' % (self._name, self.ifname))
+            arr = image_with_random_peaks((1000, 1000))
+
+        log.info('Image array shape: %s' % str(arr.shape))
+        return arr
+    
+#------------------------------
+
+    def print_pars(self) :
+        """Prints input parameters"""
+        print 'In print_pars:' 
+        for k,v in self.opts.items() :
+            print '%s %s %s' % (k.ljust(10), str(v).ljust(16), str(self.defs[k]).ljust(16))
+
+#------------------------------
+
+    def spectrum_show(self, arr=None):
+        a = self.arr if arr is None else arr
+        #self.wspe.move(self.pos() + QtCore.QPoint(self.width(), 0))
+        #self.wspe.show()
+
+
+    def spectrum_close(self):
+        pass
+        #self.wspe.hist.disconnect_axes_limits_changed_from(self.wspe.hist.test_axes_limits_changed_reception)
+        ##self.wspe.hist.disconnect_histogram_updated_from(self.wspe.hist.test_histogram_updated_reception)
+        #self.wspe.disconnect_color_table_is_changed_from(self.wspe.test_color_table_is_changed_reception)
+
+        #if self.wspe is None : return
+        #try :
+        #    self.wspe.close()
+        #except : pass
+        #self.wspe = None
+
+
+    def set_image_data(self, arr):
+        '''Sets new image data array:
+        '''
+        log.info('%s.set_image_data' % self._name)
+        #mean, std = arr.mean(), arr.std()
+        #amin, amax = mean-3*std, mean+9*std
+        #self.wimg.set_intensity_limits(amin, amax)
+
+        self.wimg.set_pixmap_from_arr(arr)
+        self.wspe.hist.remove_all_graphs()
+        hcolor = Qt.green # Qt.yellow Qt.blue Qt.yellow 
+        self.wspe.hist.add_array_as_hist(arr, pen=QtGui.QPen(hcolor, 0), brush=QtGui.QBrush(hcolor))
+
+
+    def on_but_reset(self):
+        log.info('%s.on_but_reset' % self._name)
+        self.wimg.on_but_reset()
+
+
+    def on_but_save(self):
+        #log.info('%s.on_but_save' % self._name)
+        slst = ['Spectrum', 'Image', 'Both']
+        sel = selectFromListInPopupMenu(slst)
+        if sel is None : return
+        if sel in (slst[0],slst[2]) : self.wspe.on_but_save()
+        if sel in (slst[1],slst[2]) : self.wimg.on_but_save(at_obj=self.wbut.but_save)
+
+
+    def on_spectrum_color_table_is_changed(self):
+        '''Responce on signal color_table_is_changed():
+        '''
+        log.info('%s.on_color_table_is_changed' % self._name)
+        self.wimg.set_color_table(self.wspe.color_table())
+        self.wimg.set_pixmap_from_arr()
+
+
+    def on_hist_axes_limits_changed(self, x1, x2, y1, y2):
+        '''Responce on signal axes_limits_changed():
+        '''
+        log.info('%s.on_hist_axes_limits_changed x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f'%\
+                 (self._name, x1, x2, y1, y2))
+        self.wimg.set_intensity_limits(amin=x1, amax=x2)
+        self.wimg.set_pixmap_from_arr()
+
+
+    def on_image_axes_limits_changed(self, x1, x2, y1, y2) :
+        '''Responce on signal:
+        '''
+        log.info('%s.on_image_axes_limits_changed x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f'%\
+                 (self._name, x1, x2, y1, y2))
+        arr = self.wimg.image_data()
+        h, w = arr.shape
+        h1, w1 = h-1, w-1
+
+        xmin, xmax = int(floor(min(x1, x2))), int(floor(max(x1, x2)))
+        ymin, ymax = int(floor(min(y1, y2))), int(floor(max(y1, y2)))
+
+        if xmin<0 : xmin = 0
+        if ymin<0 : ymin = 0
+        if xmax<0 : xmax = 0
+        if ymax<0 : ymax = 0
+
+        if xmin>w1: xmin = w1
+        if ymin>h1: ymin = h1
+        if xmax>w1: xmax = w1
+        if ymax>h1: ymax = h1
+
+        arr_win = arr[ymin:ymax, xmin:xmax]
+
+        #log.info('image data shape h=%d w=%d' % (h,w))
+        log.info('%s.on_image_axes_limits_changed xmin: %4d  xmax: %4d  ymin: %4d  ymax: %4d'%\
+              (self._name, xmin, xmax, ymin, ymax))
+        self.wspe.hist.remove_all_graphs()
+        hcolor = Qt.green # Qt.yellow Qt.blue Qt.yellow 
+        self.wspe.hist.add_array_as_hist(arr_win, pen=QtGui.QPen(hcolor, 0), brush=QtGui.QBrush(hcolor))
+
+
+    def on_image_pixmap_is_updated(self):
+        '''Responce on signal:
+        '''
+        log.debug('%s.on_image_pixmap_is_updated' % self._name)
+
+
+    def set_tool_tips(self):
+        pass
+        #self.butStop.setToolTip('Not implemented yet...')
+
+
+    def set_style(self):
+        #self.setGeometry(50, 50, 500, 600)
+        self.setGeometry(self.main_win_pos_x .value(),\
+                         self.main_win_pos_y .value(),\
+                         self.main_win_width .value(),\
+                         self.main_win_height.value())
+
+        self.setContentsMargins(QtCore.QMargins(-9,-9,-9,-9))
+        self.wspe.setMaximumHeight(300)
+
+        #self.setFixedSize(800,500)
+        #self.setMinimumSize(500,800)
+
+        #self.wspe.setFixedSize(500,300)
+        #self.vsplit.setMinimumHeight(700)
+
+        #self.setStyleSheet("background-color:blue; border: 0px solid green")
+        #self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        
+        #self.        setStyleSheet(style.styleBkgd)
+        #self.butSave.setStyleSheet(style.styleButton)
+        #self.butExit.setStyleSheet(style.styleButton)
+        #self.butELog.setStyleSheet(style.styleButton)
+        #self.butFile.setStyleSheet(style.styleButton)
+
+        #self.butELog    .setVisible(False)
+        #self.butFBrowser.setVisible(False)
+
+        #self.but1.raise_()
+
+
+    def closeEvent(self, e):
+        log.debug('%s.closeEvent' % self._name)
+        try : self.wimg.close()
+        except : pass
+
+        try : self.wspe.close()
+        except : pass
+
+        self.on_save()
+
+        QtGui.QWidget.closeEvent(self, e)
+
+ 
+    def resizeEvent(self, e):
+        #log.debug('resizeEvent', self._name) 
+        #log.info('IMVMain.resizeEvent: %s' % str(self.size()))
+        pass
+
+
+    def moveEvent(self, e):
+        #log.debug('moveEvent', self._name) 
+        #self.position = self.mapToGlobal(self.pos())
+        #self.position = self.pos()
+        #log.debug('moveEvent - pos:' + str(self.position), __name__)       
+        #log.info('IMVMain.moveEvent - move window to x,y: ', str(self.mapToGlobal(QtCore.QPoint(0,0))))
+        self.wimg.move(self.pos() + QtCore.QPoint(self.width()+5, 0))
+
+
+    def keyPressEvent(self, e) :
+        log.info('%s.keyPressEvent, key=%d' % (self._name, e.key()))         
+        if   e.key() == Qt.Key_Escape :
+            self.close()
+
+        elif e.key() == Qt.Key_U : 
+            log.info('%s: Test set new image' % self._name)
+            img = image_with_random_peaks((1000, 1000))
+            self.set_image_data(img)
+
+
+
+    def on_save(self):
+
+        point, size = self.mapToGlobal(QtCore.QPoint(-5,-22)), self.size() # Offset (-5,-22) for frame size.
+        x,y,w,h = point.x(), point.y(), size.width(), size.height()
+        msg = 'Save main window x,y,w,h : %d, %d, %d, %d' % (x,y,w,h)
+        log.info(msg, self._name)
+        #print msg
+
+        #Save main window position and size
+        #self.main_win_pos_x .setValue(x)
+        #self.main_win_pos_y .setValue(y)
+        #self.main_win_width .setValue(w)
+        #self.main_win_height.setValue(h)
+
+        cp.printParameters()
+        cp.saveParametersInFile()
+
+        if cp.save_log_at_exit.value() :
+            log.saveLogInFile(cp.log_file.value())
+            #print 'Saved log file: %s' % cp.log_file.value()
+            #log.saveLogTotalInFile(fnm.log_file_total())
+
+
+#------------------------------
+if __name__ == "__main__" :
+    import sys
+
+    log.setPrintBits(0377) 
+
+    app = QtGui.QApplication(sys.argv)
+    ex  = IMVMain(parser=None)
+    ex.show()
+    app.exec_()
+#------------------------------

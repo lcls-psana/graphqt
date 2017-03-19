@@ -1,0 +1,100 @@
+#----------------------------------------
+# File and Version Information:
+#  $Id: ChangeLog 13159 2017-02-18 00:09:27Z dubrovin@SLAC.STANFORD.EDU $
+#
+# Description:
+#  ChangeLog file for package graphqt
+#----------------------------------------
+
+Package author: Mikhail S. Dubrovin
+
+Please describe any modifications that you made to the package in the
+reverse time order.
+
+Tag: V01-00-01
+2017-03-19 Mikhail S. Dubrovin
+- move from svn to github
+
+Tag: V00-01-11
+2017-02-17 Mikhail S. Dubrovin
+- app/imvi renamed to iv, save progress in IMV project
+
+Tag: V00-01-10
+2017-02-07 Mikhail S. Dubrovin
+- continue development from conda
+- rename imv to imvi, fix closeEvent in GUV* modules
+
+Tag: V00-00-09
+2017-02-06 Mikhail S. Dubrovin
+- GUViewImage.py - add methods to save pixmap/image in file
+
+Tag: V00-00-08
+2017-02-06 Mikhail S. Dubrovin
+- Add app/imv and associated src/IMV*.py modules
+
+Tag: V00-00-07
+2017-02-03 Mikhail S. Dubrovin
+- add interaction between image and spectrum objects using signals
+
+Tag: V00-00-06
+2017-02-01 Mikhail S. Dubrovin
+- add QWImageSpectrum mv GUSpectrum to QWSpectrum, tune GUView* modules
+
+Tag: V00-00-05
+2017-01-31 Mikhail S. Dubrovin
+- GUView, GUViewAxes - complete work on full functionality of origin
+- move QIcons and Styles to the package CalibManager
+
+Tag: V00-00-04
+2017-01-26 Mikhail S. Dubrovin
+Replace (bool) origin_up by origin ('UL', 'UR', 'DL', 'DR'). Full functionality still needs TBI.
+Add QWPopupSelectColorBar.py - popup GUI for selection color table index. Use it in GUSpectrum.
+
+Tag: V00-00-03
+2017-01-22 Mikhail S. Dubrovin
+- massive development in progress
+M       doc/ChangeLog
+M       src/AxisLabeling.py
+M       src/ColorTable.py
+A       src/GUSpectrum.py
+M       src/GUUtils.py
+M       src/GUView.py
+M       src/GUViewAxes.py
+A       src/GUViewColorBar.py
+A       src/GUViewFW.py
+A       src/GUViewFWImage.py
+M       src/GUViewGraph.py
+A       src/GUViewHist.py
+M       src/GUViewImage.py
+M       src/Styles.py
+
+Tag: V00-00-02
+2016-12-15 Mikhail S. Dubrovin
+- GUView is split for GUView (without axes) and GUViewAxes, old version  GUView->GUViewAxesDL
+- All objects enherited from GUView now are derived from GUViewAxes
+- GUView now get four controllable margins.
+
+Tag: V00-00-01
+2016-12-11 Mikhail S. Dubrovin
+- move/add methods GU*.py to graphqt package
+
+2016-12-05 Mikhail S. Dubrovin
+- just created this template file, this entry is an example of the change log entry
+- keep it brief and easy to read
+- always include author name and date of the change, provide CVS tag when 
+  appropriate
+
+#------------------------------
+Created in ana-0.19.21
+
+newpkg graphqt
+psvn newpkg graphqt
+addpkg graphqt
+
+cd graphqt
+mkdir src
+mkdir examples
+mkdir app
+
+...
+#------------------------------
