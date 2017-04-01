@@ -14,7 +14,7 @@ source conda_setup
 ### Clone package in conda repository
 **on pslogin:**
 ```
-git clone https://github.com/msdubrovin/graphqt.git
+git clone https://github.com/lcls-psana/graphqt.git
 ```
 
 ## Markup example
@@ -22,8 +22,8 @@ git clone https://github.com/msdubrovin/graphqt.git
 #### header4
 - bul1
 - bul2
- --bul3
- --bul4
+-- bul3
+-- bul4
 **bold?**
 ```
 some code
