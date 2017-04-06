@@ -1,10 +1,10 @@
 #------------------------------
-"""IMVConfigParameters - class supporting configuration parameters for application.
+"""IVConfigParameters - class supporting configuration parameters for application.
 
-@see class :py:class:`graphqt.IMVConfigParameters`
+@see class :py:class:`graphqt.IVConfigParameters`
 
 @see project modules
-    * :py:class:`graphqt.IMVConfigParameters`
+    * :py:class:`graphqt.IVConfigParameters`
     * :py:class:`CalibManager.ConfigParameters`
     * :py:class:`graphqt.Logger`
     * :py:class:`CalibManager.Logger`
@@ -12,7 +12,7 @@
 This software was developed for the SIT project.
 If you use all or part of it, please give an appropriate acknowledgment.
 
-@version $Id:IMVConfigParameters.py 11923 2016-11-22 14:28:00Z dubrovin@SLAC.STANFORD.EDU $
+@version $Id:IVConfigParameters.py 11923 2016-11-22 14:28:00Z dubrovin@SLAC.STANFORD.EDU $
 
 @author Mikhail S. Dubrovin
 """
@@ -24,11 +24,11 @@ from expmon.PSNameManager import nm # It is here for initialization
 
 #------------------------------
 
-class IMVConfigParameters(PSConfigParameters) :
-    """A storage of configuration parameters for Image Vievier (imvi)
+class IVConfigParameters(PSConfigParameters) :
+    """A storage of configuration parameters for Image Vievier (iv)
     """
-    _name = 'IMVConfigParameters'
-
+    _name = 'IVConfigParameters'
+ 
     def __init__(self, fname=None) :
         """fname : str - the file name with configuration parameters, if not specified then use default.
         """
@@ -38,7 +38,7 @@ class IMVConfigParameters(PSConfigParameters) :
         PSConfigParameters.__init__(self)
 
         #self.fname_cp = '%s/%s' % (os.path.expanduser('~'), '.confpars-montool.txt') # Default config file name
-        self.fname_cp = './confpars-imvi.txt' # Default config file name
+        self.fname_cp = './confpars-iv.txt' # Default config file name
 
         self.declareParameters()
         self.readParametersFromFile()
@@ -58,18 +58,21 @@ class IMVConfigParameters(PSConfigParameters) :
         self.save_log_at_exit = self.declareParameter( name='SAVE_LOG_AT_EXIT', val_def=True,  type='bool')
         #self.dir_log_cpo      = self.declareParameter( name='DIR_FOR_LOG_FILE_CPO', val_def='/reg/g/psdm/logs/calibman', type='str')
 
-        self.main_win_pos_x  = self.declareParameter(name='MAIN_WIN_POS_X',  val_def=5,   type='int')
-        self.main_win_pos_y  = self.declareParameter(name='MAIN_WIN_POS_Y',  val_def=5,   type='int')
-        self.main_win_width  = self.declareParameter(name='MAIN_WIN_WIDTH',  val_def=420, type='int')
-        self.main_win_height = self.declareParameter(name='MAIN_WIN_HEIGHT', val_def=530, type='int')
+        self.main_win_pos_x  = self.declareParameter(name='MAIN_WIN_POS_X',  val_def=5,    type='int')
+        self.main_win_pos_y  = self.declareParameter(name='MAIN_WIN_POS_Y',  val_def=5,    type='int')
+        self.main_win_width  = self.declareParameter(name='MAIN_WIN_WIDTH',  val_def=1200, type='int')
+        self.main_win_height = self.declareParameter(name='MAIN_WIN_HEIGHT', val_def=700,  type='int')
+
+        self.current_tab     = self.declareParameter(name='MAIN_CURRENT_TAB', val_def='Status', type='str')
+        self.fname_img       = self.declareParameter(name='FNAME_IMAGE', val_def='',     type='str') # '/reg/d/
 
 #------------------------------
 
-cp = IMVConfigParameters()
+cp = IVConfigParameters()
 
 #------------------------------
 
-def test_IMVConfigParameters() :
+def test_IVConfigParameters() :
     from expmon.Logger import log
 
     log.setPrintBits(0377)
@@ -82,7 +85,7 @@ def test_IMVConfigParameters() :
 
 if __name__ == "__main__" :
     import sys
-    test_IMVConfigParameters()
+    test_IVConfigParameters()
     sys.exit(0)
 
 #------------------------------

@@ -4,14 +4,14 @@ Created on February 1, 2017
 
 @author: Mikhail Dubrovin
 
-Class IMVMain is a QWidget for interactive image.
+Class IVMain is a QWidget for interactive image.
 
 Usage ::
 
     import sys
-    from graphqt.IMVMain import IMVMain
+    from graphqt.IVMain import IVMain
     app = QtGui.QApplication(sys.argv)
-    w = IMVMain(None, app)
+    w = IVMain(None, app)
     w.show()
     app.exec_()
 """
@@ -22,13 +22,17 @@ from math import floor
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt
 
-from graphqt.IMVConfigParameters import cp
+from graphqt.IVConfigParameters import cp
 
 from graphqt.Logger import log
 import graphqt.ColorTable as ct
 from graphqt.GUViewImage import GUViewImage, image_with_random_peaks
 from graphqt.QWSpectrum import QWSpectrum
-from graphqt.IMVMainButtons import IMVMainButtons
+from graphqt.IVMainTabs import IVMainTabs
+from graphqt.IVMainButtons import IVMainButtons
+from graphqt.IVImageCursorInfo import IVImageCursorInfo
+from graphqt.QWLogger import QWLogger
+#from graphqt.IVLogger import IVLogger
 
 from graphqt.QWUtils import selectFromListInPopupMenu
 
@@ -38,10 +42,10 @@ from graphqt.Styles import style
 
 #------------------------------
 
-#class IMVMain(Frame) :
-class IMVMain(QtGui.QWidget) :
+#class IVMain(Frame) :
+class IVMain(QtGui.QWidget) :
 
-    _name = 'IMVMain'
+    _name = 'IVMain'
 
     def __init__(self, parser=None) : # **dict_opts) :
         #Frame.__init__(self, parent=None, mlw=1)
@@ -58,46 +62,48 @@ class IMVMain(QtGui.QWidget) :
         self.arr = self.get_image_array()
         ctab = ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20)
         self.wimg = GUViewImage(None, self.arr, coltab=ctab, origin='UL', scale_ctl='HV', rulers='DL',\
-                                margl=0.10, margr=0.0, margt=0.0, margb=0.05)
+                                margl=0.09, margr=0.0, margt=0.0, margb=0.04)
 
         self.wspe = QWSpectrum(None, self.arr, show_buts=False)
 
         #icon.set_icons()
 
-        self.wbut = IMVMainButtons()
-
-        #self.vsplit = QtGui.QSplitter(QtCore.Qt.Vertical)
-        #self.vsplit.addWidget(self.but_1)
-        
-        #self.vsplit.moveSplitter(0,200)
-        #self.vsplit.addWidget(self.but_2)
-
-        self.hbox = QtGui.QHBoxLayout() 
-        self.hbox.addWidget(self.wbut) 
-        #self.hbox.addWidget(self.wspe) 
+        self.wtab = IVMainTabs()
+        self.wbut = IVMainButtons()
+        self.wcur = IVImageCursorInfo()
+        self.wlog = QWLogger(log, cp, show_buttons=False)
 
         self.vbox = QtGui.QVBoxLayout() 
-        #self.vbox.addWidget(self.guibuttonbar)
-         #self.vbox.addLayout(self.hboxB) 
-        #self.vbox.addStretch(1)
-        #self.vbox.addWidget(self.vsplit) 
-        #self.vbox.addStretch(1)
-        self.vbox.addLayout(self.hbox) 
+        self.vbox.addWidget(self.wtab) 
         self.vbox.addStretch(1)
-        self.vbox.addWidget(self.wspe) 
+        self.vbox.addWidget(self.wbut) 
+        self.vbox.addWidget(self.wcur) 
 
-        self.setLayout(self.vbox)
+        self.wrig = QtGui.QWidget()
+        self.wrig.setLayout(self.vbox)
 
-        #self.move(self.main_win_pos_x.value(), self.main_win_pos_y.value())
+        self.vspl = QtGui.QSplitter(QtCore.Qt.Vertical)
+        self.vspl.addWidget(self.wrig) 
+        self.vspl.addWidget(self.wspe) 
+        self.vspl.addWidget(self.wlog) 
+
+        self.hspl = QtGui.QSplitter(QtCore.Qt.Horizontal)
+        self.hspl.addWidget(self.wimg)
+        self.hspl.addWidget(self.vspl)
+        #self.hspl.addWidget(self.wrig)
+
+        self.mbox = QtGui.QHBoxLayout() 
+        self.mbox.addWidget(self.hspl)
+        self.setLayout(self.mbox)
 
         self.set_style()
-        self.set_tool_tips()
+        #self.set_tool_tips()
 
         self.connect_signals_to_slots()
 
         #self.spectrum_show(self.arr)
         self.move(self.pos()) # + QtCore.QPoint(self.width()+5, 0))
-        self.wimg.show()
+        #self.wimg.show()
 
 
     def connect_signals_to_slots(self):
@@ -121,6 +127,8 @@ class IMVMain(QtGui.QWidget) :
 
         #self.wspe.hist.connect_histogram_updated_to(self.wspe.hist.test_histogram_updated_reception)
 
+        self.wimg.connect_cursor_pos_value_to(self.wcur.set_cursor_pos_value)
+
 #------------------------------
 
     def proc_parser(self, parser=None) :
@@ -135,7 +143,7 @@ class IMVMain(QtGui.QWidget) :
         self.opts = vars(opts)
         self.defs = vars(parser.get_default_values())
 
-        self.verbos = opts.verbos
+        self.verbos = opts.vrb
 
         exp = self.opts['exp']
         run = self.opts['run']
@@ -282,14 +290,24 @@ class IMVMain(QtGui.QWidget) :
                          self.main_win_width .value(),\
                          self.main_win_height.value())
 
+        self.setMinimumSize(1200, 700)
+
+        w = self.main_win_width.value()
+
         self.setContentsMargins(QtCore.QMargins(-9,-9,-9,-9))
-        self.wspe.setMaximumHeight(300)
+        self.wspe.setFixedHeight(280)
+        self.wimg.setMinimumWidth(700)
+        self.wimg.setSizePolicy(QtGui.QSizePolicy.Ignored, QtGui.QSizePolicy.Ignored)
+
+        self.wrig.setContentsMargins(-9,-9,-9,-9)
+        self.wrig.setMinimumWidth(350)
+        self.wrig.setMaximumWidth(450)
+
+        #self.wrig.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Ignored)
+        #self.hspl.moveSplitter(w*0.5,0)
 
         #self.setFixedSize(800,500)
         #self.setMinimumSize(500,800)
-
-        #self.wspe.setFixedSize(500,300)
-        #self.vsplit.setMinimumHeight(700)
 
         #self.setStyleSheet("background-color:blue; border: 0px solid green")
         #self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -321,7 +339,7 @@ class IMVMain(QtGui.QWidget) :
  
     def resizeEvent(self, e):
         #log.debug('resizeEvent', self._name) 
-        #log.info('IMVMain.resizeEvent: %s' % str(self.size()))
+        #log.info('IVMain.resizeEvent: %s' % str(self.size()))
         pass
 
 
@@ -330,8 +348,9 @@ class IMVMain(QtGui.QWidget) :
         #self.position = self.mapToGlobal(self.pos())
         #self.position = self.pos()
         #log.debug('moveEvent - pos:' + str(self.position), __name__)       
-        #log.info('IMVMain.moveEvent - move window to x,y: ', str(self.mapToGlobal(QtCore.QPoint(0,0))))
-        self.wimg.move(self.pos() + QtCore.QPoint(self.width()+5, 0))
+        #log.info('IVMain.moveEvent - move window to x,y: ', str(self.mapToGlobal(QtCore.QPoint(0,0))))
+        #self.wimg.move(self.pos() + QtCore.QPoint(self.width()+5, 0))
+        pass
 
 
     def keyPressEvent(self, e) :
@@ -355,10 +374,10 @@ class IMVMain(QtGui.QWidget) :
         #print msg
 
         #Save main window position and size
-        #self.main_win_pos_x .setValue(x)
-        #self.main_win_pos_y .setValue(y)
-        #self.main_win_width .setValue(w)
-        #self.main_win_height.setValue(h)
+        self.main_win_pos_x .setValue(x)
+        self.main_win_pos_y .setValue(y)
+        self.main_win_width .setValue(w)
+        self.main_win_height.setValue(h)
 
         cp.printParameters()
         cp.saveParametersInFile()
@@ -376,7 +395,7 @@ if __name__ == "__main__" :
     log.setPrintBits(0377) 
 
     app = QtGui.QApplication(sys.argv)
-    ex  = IMVMain(parser=None)
+    ex  = IVMain(parser=None)
     ex.show()
     app.exec_()
 #------------------------------

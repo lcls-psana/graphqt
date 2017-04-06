@@ -13,7 +13,6 @@ Usage ::
     w.connect_axes_limits_changed_to(w.test_axes_limits_changed_reception)
     w.connect_pixmap_is_updated_to(w.test_pixmap_is_updated_reception)
 
-
     import sys
     from PyQt4 import QtGui, QtCore
     from graphqt.GUViewImage import GUViewImage
@@ -65,7 +64,6 @@ class GUViewImage(GUViewAxes) :
 
     def set_style(self) :
         GUViewAxes.set_style(self)
-        self.setWindowTitle("GUViewImage window")
         #w.setContentsMargins(-9,-9,-9,-9)
         #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -86,10 +84,20 @@ class GUViewImage(GUViewAxes) :
         or ix>arr.shape[1]-1 : pass
         else : v = self.arr[iy,ix]
         vstr = 'None' if v is None else '%.1f' % v 
+        #self.setWindowTitle('GUViewImage x=%d y=%d v=%s' % (ix, iy, vstr))
         #print 'mouseMoveEvent, current point: ', e.x(), e.y(), ' on scene: %.1f  %.1f' % (p.x(), p.y()) 
-        self.setWindowTitle('GUViewImage x=%d y=%d v=%s' % (ix, iy, vstr))
         #return ix, iy, v
+        self.emit(QtCore.SIGNAL('cursor_pos_value(int,int,float)'), ix, iy, v if not(v is None) else 0)
 
+    def connect_cursor_pos_value_to(self, recip) :
+        self.connect(self, QtCore.SIGNAL('cursor_pos_value(int,int,float)'), recip)
+
+    def disconnect_cursor_pos_value_from(self, recip) :
+        self.disconnect(self, QtCore.SIGNAL('cursor_pos_value(int,int,float)'), recip)
+
+    def test_cursor_pos_value_reception(self, ix, iy, v) :
+        #print 'GUView.test_cursor_pos_value_reception x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f' % (x1, x2, y1, y2)
+        self.setWindowTitle('GUViewImage x=%d y=%d v=%.1f' % (ix, iy, v))
 
     def mouseMoveEvent(self, e):
         GUViewAxes.mouseMoveEvent(self, e)
@@ -262,6 +270,9 @@ def test_guiviewimage(tname) :
 
     w.connect_pixmap_is_updated_to(w.test_pixmap_is_updated_reception)
     #w.disconnect_pixmap_is_updated_from(w.test_pixmap_is_updated_reception)
+    
+    w.connect_cursor_pos_value_to(w.test_cursor_pos_value_reception)
+    #w.disconnect_cursor_pos_value_from(w.test_cursor_pos_value_reception)
 
     w.show()
     app.exec_()

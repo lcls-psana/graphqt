@@ -11,6 +11,20 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V01-00-02
+2017-04-06 Mikhail S. Dubrovin
+- work in progress -
+  update application iv to make it usable to view images from files
+  of different types e.g. *.h5 from CrystFEL pattern_sim, etc
+  GUViewImage.py
+  IVConfigParameters.py
+  IVFileName.py
+  IVImageCursorInfo.py
+  IVMain.py
+  IVMainButtons.py
+  IVMainTabs.py
+  QWLogger.py
+
 Tag: V01-00-01
 2017-03-19 Mikhail S. Dubrovin
 - move from svn to github
