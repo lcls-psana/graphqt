@@ -52,6 +52,8 @@ class IVMain(QtGui.QWidget) :
         QtGui.QWidget.__init__(self, parent=None)
         #self._name = self.__class__.__name__
 
+        cp.ivmain = self
+
         self.proc_parser(parser)
             
         self.main_win_width  = cp.main_win_width 
@@ -135,32 +137,48 @@ class IVMain(QtGui.QWidget) :
         self.parser=parser
 
         if parser is None :
-            self.ifname = None
+            cp.fname_img.setValue('')
             return
 
-        (opts, args) = parser.parse_args()
-        self.args = args
-        self.opts = vars(opts)
+        (popts, pargs) = parser.parse_args()
+        self.args = pargs
+        self.opts = vars(popts)
         self.defs = vars(parser.get_default_values())
 
-        self.verbos = opts.vrb
+        nargs =len(self.args)
 
-        exp = self.opts['exp']
-        run = self.opts['run']
+        exp = popts.exp # self.opts['exp']
+        run = popts.run # self.opts['run']
+        nev = popts.nev
+        clb = popts.clb
+        ifn = popts.ifn
+        vrb = popts.vrb
 
-        nargs =len(self.args) 
-        self.ifname = self.args[0] if nargs > 0 else None
-  
-        log.info('Input image file name: %s' % self.ifname)
+        #cp.instr_dir .setValue() # val_def='/reg/d/psdm'
+        cp.instr_name.setValue(exp[:3].upper())
+        cp.exp_name  .setValue(exp)
+        cp.str_runnum.setValue('%d'%run)
+        cp.calib_dir .setValue(clb)
+
+        self.verbos = vrb
+ 
+        ifname = ifn          if ifn != self.defs['ifn'] else\
+                 self.args[0] if nargs > 0 else\
+                 None
+        
+        if ifname is not None :
+            log.info('Input image file name: %s' % ifname)
+            cp.fname_img.setValue(ifname)
+            cp.current_tab.setValue('File')
 
 #------------------------------
 
     def get_image_array(self) :
         import expmon.PSUtils as psu
-
-        arr = psu.get_image_array_from_file(self.ifname)
+        ifname = cp.fname_img.value()
+        arr = psu.get_image_array_from_file(ifname)
         if arr is None :
-            log.warning('%s Can not get image from file: %s Substitute simulated image' % (self._name, self.ifname))
+            log.warning('%s Can not get image from file: %s Substitute simulated image' % (self._name, ifname))
             arr = image_with_random_peaks((1000, 1000))
 
         log.info('Image array shape: %s' % str(arr.shape))
@@ -278,6 +296,19 @@ class IVMain(QtGui.QWidget) :
         log.debug('%s.on_image_pixmap_is_updated' % self._name)
 
 
+    def on_image_file_is_changed(self, fname):
+        '''Responce on signal from IVFileName
+        '''
+        print 'YYY: IVMain.on_image_file_is_changed %s'%fname
+        self.arr = self.get_image_array()
+        #h,w = self.arr.shape
+        #print 'ZZZ:shape', self.arr.shape
+        #self.on_image_axes_limits_changed(0, w, 0, h)
+        self.set_image_data(self.arr)
+        #self.on_but_reset()
+        #self.wimg.update_my_scene()
+
+
     def set_tool_tips(self):
         pass
         #self.butStop.setToolTip('Not implemented yet...')
@@ -335,6 +366,7 @@ class IVMain(QtGui.QWidget) :
         self.on_save()
 
         QtGui.QWidget.closeEvent(self, e)
+        cp.ivmain = None
 
  
     def resizeEvent(self, e):

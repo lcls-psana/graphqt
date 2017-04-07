@@ -58,6 +58,8 @@ class IVFileName(Frame) :
         self.w_calib.connect_path_is_changed_to_recipient(self.on_but_calib)
         #self.connect(self.but_run, QtCore.SIGNAL('clicked()'), self.on_but_run)
 
+        self.w_fname.connect_path_is_changed_to_recipient(cp.ivmain.on_image_file_is_changed)
+
 
     def set_tool_tips(self):
         self.setToolTip('Image file name selection')
@@ -110,6 +112,13 @@ class IVFileName(Frame) :
         par = self.calib_dir
         par.setValue(cdir)
         #w.edi.setText(par.value())
+
+
+    def closeEvent(self, e):
+        log.debug('%s.closeEvent' % self._name)
+        try : self.w_fname.disconnect_path_is_changed_from_recipient(cp.ivmain.on_image_file_is_changed)
+        except : pass
+        QtGui.QWidget.closeEvent(self, e)
 
 
     def test_signal_reception(self, s) :

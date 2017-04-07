@@ -12,7 +12,7 @@ from graphqt.IVMain import IVMain
 
 class IMAGE_VIEWER :
     def __init__(self) :
-        """Image Viever (imvi)"""
+        """Image Viever (iv)"""
 
         log.setPrintBits(0377) 
 

@@ -11,6 +11,11 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V01-00-03
+2017-04-07 Mikhail S. Dubrovin
+- image input from file is completed as beta version
+  modified: iv, IVFileName.py, IVMain.py
+
 Tag: V01-00-02
 2017-04-06 Mikhail S. Dubrovin
 - work in progress -
