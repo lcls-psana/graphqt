@@ -1,6 +1,6 @@
 #------------------------------
 """
-@version $Id: IVFileName.py 13157 2017-02-18 00:05:34Z dubrovin@SLAC.STANFORD.EDU $
+@version $Id: IVTabFileName.py 13157 2017-02-18 00:05:34Z dubrovin@SLAC.STANFORD.EDU $
 
 @author Mikhail S. Dubrovin
 """
@@ -18,8 +18,8 @@ from graphqt.Frame              import Frame
 
 #------------------------------
 
-#class IVFileName(QtGui.QWidget) :
-class IVFileName(Frame) :
+#class IVTabFileName(QtGui.QWidget) :
+class IVTabFileName(Frame) :
     """ File name input GUI
     """
     def __init__(self, parent=None, show_mode=01) :
@@ -38,7 +38,7 @@ class IVFileName(Frame) :
 
         self.w_fname = QWFileName(None, butname='Select', label='File:',\
                                   path=self.fname_img.value(), 
-                                  fltr='*.txt *.bin *.npy *.h5 *.data\n *',\
+                                  fltr='*.txt *.bin *.npy *.h5 *.dat *.data\n *',\
                                   show_frame=False)
 
         self.w_calib = QWDirName(None, butname='Select', label='Clb:',\
@@ -58,6 +58,7 @@ class IVFileName(Frame) :
         self.w_calib.connect_path_is_changed_to_recipient(self.on_but_calib)
         #self.connect(self.but_run, QtCore.SIGNAL('clicked()'), self.on_but_run)
 
+        if cp.ivmain is None : return
         self.w_fname.connect_path_is_changed_to_recipient(cp.ivmain.on_image_file_is_changed)
 
 
@@ -131,7 +132,7 @@ class IVFileName(Frame) :
 
 if __name__ == "__main__" :
     app = QtGui.QApplication(sys.argv)
-    w = IVFileName(show_mode=03)
+    w = IVTabFileName(show_mode=03)
     w.move(QtCore.QPoint(50,50))
     w.setWindowTitle(w._name)
     w.w_fname.connect_path_is_changed_to_recipient(w.test_signal_reception)

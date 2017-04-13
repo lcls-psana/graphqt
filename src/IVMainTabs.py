@@ -13,8 +13,9 @@ from PyQt4 import QtGui, QtCore
 
 from graphqt.IVConfigParameters import cp
 from graphqt.Logger             import log
-from expmon.QWInsExpRun         import QWInsExpRun
-from graphqt.IVFileName         import IVFileName
+#from expmon.QWInsExpRun         import QWInsExpRun
+from graphqt.IVTabDataControl   import IVTabDataControl
+from graphqt.IVTabFileName      import IVTabFileName
 
 #from graphqt.QIcons            import icon
 #from graphqt.Frame             import Frame
@@ -124,8 +125,8 @@ class IVMainTabs(QtGui.QWidget) :
         for itab in range(len(self.tab_names)) :
             tab_name = self.current_tab.value()
             if tab_name == self.tab_names[itab] :
-               self.gui_win = QWInsExpRun(cp, parent=None, orient='V') if tab_name=='Data' else\
-                              IVFileName(parent=None, show_mode=01)    if tab_name=='File' else\
+               self.gui_win = IVTabDataControl(cp, log, parent=None, show_mode=7) if tab_name=='Data' else\
+                              IVTabFileName(parent=None, show_mode=01)    if tab_name=='File' else\
                               QtGui.QTextEdit('Window for %s'%self.tab_names[itab])
 
         self.hboxW.addWidget(self.gui_win)

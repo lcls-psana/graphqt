@@ -53,6 +53,7 @@ class IVMain(QtGui.QWidget) :
         #self._name = self.__class__.__name__
 
         cp.ivmain = self
+        self.improd = None
 
         self.proc_parser(parser)
             
@@ -62,6 +63,7 @@ class IVMain(QtGui.QWidget) :
         self.main_win_pos_y  = cp.main_win_pos_y  
 
         self.arr = self.get_image_array()
+
         ctab = ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20)
         self.wimg = GUViewImage(None, self.arr, coltab=ctab, origin='UL', scale_ctl='HV', rulers='DL',\
                                 margl=0.09, margr=0.0, margt=0.0, margb=0.04)
@@ -155,10 +157,10 @@ class IVMain(QtGui.QWidget) :
         vrb = popts.vrb
 
         #cp.instr_dir .setValue() # val_def='/reg/d/psdm'
-        cp.instr_name.setValue(exp[:3].upper())
-        cp.exp_name  .setValue(exp)
-        cp.str_runnum.setValue('%d'%run)
-        cp.calib_dir .setValue(clb)
+        if exp != self.defs['exp'] : cp.instr_name.setValue(exp[:3].upper())
+        if exp != self.defs['exp'] : cp.exp_name  .setValue(exp)
+        if run != self.defs['run'] : cp.str_runnum.setValue('%d'%run)
+        if clb != self.defs['clb'] : cp.calib_dir .setValue(clb)
 
         self.verbos = vrb
  
@@ -170,6 +172,9 @@ class IVMain(QtGui.QWidget) :
             log.info('Input image file name: %s' % ifname)
             cp.fname_img.setValue(ifname)
             cp.current_tab.setValue('File')
+        else :
+            cp.current_tab.setValue('Data')
+
 
 #------------------------------
 
@@ -307,6 +312,19 @@ class IVMain(QtGui.QWidget) :
         self.set_image_data(self.arr)
         #self.on_but_reset()
         #self.wimg.update_my_scene()
+
+
+    def on_new_event_number(self, num):
+        '''Responce on signal from QWEventControl -> QWInsExpRun
+        '''
+        log.debug('%s.on_new_event_number %d' % (self._name, num))
+
+        if self.improd is None : 
+            from expmon.PSImageProducer import PSImageProducer
+            self.improd = PSImageProducer(cp, log)
+
+        self.arr = self.improd.image(num)
+        self.set_image_data(self.arr)
 
 
     def set_tool_tips(self):

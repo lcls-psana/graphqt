@@ -19,6 +19,7 @@ If you use all or part of it, please give an appropriate acknowledgment.
 #------------------------------
 
 # import os
+#from graphqt.Logger import log
 from expmon.PSConfigParameters import PSConfigParameters
 from expmon.PSNameManager import nm # It is here for initialization
 
@@ -32,16 +33,20 @@ class IVConfigParameters(PSConfigParameters) :
     def __init__(self, fname=None) :
         """fname : str - the file name with configuration parameters, if not specified then use default.
         """
+        #log.setPrintBits(0377)
         #log.debug('In c-tor', self._name)
         print 'In %s c-tor' % self._name
 
         PSConfigParameters.__init__(self)
 
         #self.fname_cp = '%s/%s' % (os.path.expanduser('~'), '.confpars-montool.txt') # Default config file name
-        self.fname_cp = './confpars-iv.txt' # Default config file name
+        self.fname_cp = './iv-confpars.txt' # Default config file name
 
         self.declareParameters()
         self.readParametersFromFile()
+        #self.printParameters()
+
+        self.ivmain = None
 
         self.list_of_sources = None # if None - updated in the ThreadWorker
 
@@ -53,7 +58,7 @@ class IVConfigParameters(PSConfigParameters) :
         # Possible typs for declaration : 'str', 'int', 'long', 'float', 'bool'
         self.log_level = self.declareParameter(name='LOG_LEVEL_OF_MSGS', val_def='info', type='str')
         #self.log_file  = self.declareParameter(name='LOG_FILE_NAME', val_def='/reg/g/psdm/logs/montool/log.txt', type='str')
-        self.log_file  = self.declareParameter(name='LOG_FILE_NAME', val_def='log.txt', type='str')
+        self.log_file  = self.declareParameter(name='LOG_FILE_NAME', val_def='iv-log.txt', type='str')
 
         self.save_log_at_exit = self.declareParameter( name='SAVE_LOG_AT_EXIT', val_def=True,  type='bool')
         #self.dir_log_cpo      = self.declareParameter( name='DIR_FOR_LOG_FILE_CPO', val_def='/reg/g/psdm/logs/calibman', type='str')

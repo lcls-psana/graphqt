@@ -6,8 +6,9 @@ from optparse import OptionParser
 from PyQt4 import QtGui
 from graphqt.Logger import log
 from graphqt.IVMain import IVMain
+from graphqt.IVConfigParameters import cp
 
-#from expmon.PSQThreadWorker import PSQThreadWorker
+from expmon.PSQThreadWorker import PSQThreadWorker
 #------------------------------
 
 class IMAGE_VIEWER :
@@ -28,8 +29,8 @@ class IMAGE_VIEWER :
 
         app = QtGui.QApplication(sys.argv)
 
-        #t1 = PSQThreadWorker(cp, parent=None, dt_msec=5000, pbits=0) #0177777)
-        #t1.start()
+        t1 = PSQThreadWorker(cp, parent=None, dt_msec=5000, pbits=0) #0177777)
+        t1.start()
 
         w = IVMain(self.parser)
         #w = QtGui.QWidget()
@@ -37,7 +38,7 @@ class IMAGE_VIEWER :
         w.show()
 	stat = app.exec_()
 
-	#statt1 = t1.quit() # t1.exit(0)
+	statt1 = t1.quit() # t1.exit(0)
 
 #------------------------------
 
@@ -82,8 +83,8 @@ def usage() :
 
 def option_parser() :
 
-    def_exp = 'mfxn8316' 
-    def_run = 1
+    def_exp = '' # 'mfxn8316' 
+    def_run = 0
     def_nev = 0
     def_clb = '' 
     def_ifn = '' 

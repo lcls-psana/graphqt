@@ -20,7 +20,6 @@ from graphqt.Logger import log
 #from graphqt.Styles import style
 
 from graphqt.IVConfigParameters import cp
-#from expmon.QWInsExpRun import QWInsExpRun
 
 #class IVMainButtons(Frame) :
 class IVMainButtons(QtGui.QWidget) :
@@ -34,17 +33,6 @@ class IVMainButtons(QtGui.QWidget) :
 
         self.but_save = QtGui.QPushButton('&Save')
         self.but_reset= QtGui.QPushButton('&Reset')
-
-        #self.qwinsexprun = QWInsExpRun(cp, parent=None, orient='V') # QtGui.QPushButton('button')
-        
-        #self.lab_stat = QtGui.QLabel('    Histogram\n    statistics')
-        #self.lab_ibin = QtGui.QLabel('Bin info')
-
-        #grid = QtGui.QGridLayout()
-        #grid.addWidget(self.qwinsexprun, 0, 0,   1,  10)
-        #grid.addWidget(self.but_reset,   1, 0)
-        #grid.addWidget(self.but_save,    1, 1)
-        #self.setLayout(grid) 
 
         self.hbox = QtGui.QHBoxLayout() 
         self.hbox.addWidget(self.but_reset) 
@@ -69,6 +57,12 @@ class IVMainButtons(QtGui.QWidget) :
         self.setMinimumSize(300,40)
         self.setContentsMargins(-9,-9,-9,-9)
  
+        self.but_reset.setFixedSize(60,30)
+        self.but_save .setFixedSize(60,30)
+
+        self.but_reset.setVisible(self.show_buts)
+        self.but_save .setVisible(self.show_buts)
+
         #self.setGeometry(50, 50, 500, 300)
         #self.cbar.setMinimumSize(300, 22)
         #self.cbar.setMinimumSize(200, 2)
@@ -78,12 +72,6 @@ class IVMainButtons(QtGui.QWidget) :
         #self.lab_stat.setStyleSheet(style.styleStat)
         #self.lab_ibin.setStyleSheet(style.styleStat)
         #self.lab_ibin.setFixedSize(150,20)
-
-        self.but_reset.setFixedSize(60,30)
-        self.but_save .setFixedSize(60,30)
-
-        self.but_reset.setVisible(self.show_buts)
-        self.but_save .setVisible(self.show_buts)
 
 #------------------------------
 
