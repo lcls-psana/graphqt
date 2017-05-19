@@ -115,23 +115,39 @@ class IVMain(QtGui.QWidget) :
         self.connect(self.wbut.but_reset, QtCore.SIGNAL('clicked()'), self.on_but_reset)
         self.connect(self.wbut.but_save,  QtCore.SIGNAL('clicked()'), self.on_but_save)
 
-        #self.wimg.disconnect_axes_limits_changed_from(self.wimg.test_axes_limits_changed_reception)
-        #self.wimg.connect_axes_limits_changed_to(self.wimg.test_axes_limits_changed_reception)
-        self.wimg.connect_axes_limits_changed_to(self.on_image_axes_limits_changed)
-
-        #self.wimg.disconnect_pixmap_is_updated_from(self.wimg.test_pixmap_is_updated_reception)
-        #self.wimg.connect_pixmap_is_updated_to(self.wimg.test_pixmap_is_updated_reception)
-        self.wimg.connect_pixmap_is_updated_to(self.on_image_pixmap_is_updated)
-
-        #self.wspe.hist.connect_axes_limits_changed_to(self.wspe.hist.test_axes_limits_changed_reception)
-        self.wspe.hist.connect_axes_limits_changed_to(self.on_hist_axes_limits_changed)
-
-        #self.wspe.connect_color_table_is_changed_to(self.wspe.test_color_table_is_changed_reception)
         self.wspe.connect_color_table_is_changed_to(self.on_spectrum_color_table_is_changed)
 
+        self.connect_signals_from_img()
+        self.connect_signals_from_hist()
+
+        #self.wspe.hist.connect_axes_limits_changed_to(self.wspe.hist.test_axes_limits_changed_reception)
+        #self.wspe.connect_color_table_is_changed_to(self.wspe.test_color_table_is_changed_reception)
         #self.wspe.hist.connect_histogram_updated_to(self.wspe.hist.test_histogram_updated_reception)
 
+        #self.wimg.disconnect_axes_limits_changed_from(self.wimg.test_axes_limits_changed_reception)
+        #self.wimg.connect_axes_limits_changed_to(self.wimg.test_axes_limits_changed_reception)
+
+        #self.wimg.connect_pixmap_is_updated_to(self.wimg.test_pixmap_is_updated_reception)
+        #self.wimg.disconnect_pixmap_is_updated_from(self.wimg.test_pixmap_is_updated_reception)
+
+    def connect_signals_from_img(self):
+        self.wimg.connect_axes_limits_changed_to(self.on_image_axes_limits_changed)
+        self.wimg.connect_pixmap_is_updated_to(self.on_image_pixmap_is_updated)
         self.wimg.connect_cursor_pos_value_to(self.wcur.set_cursor_pos_value)
+
+
+    def disconnect_signals_from_img(self):
+        self.wimg.disconnect_axes_limits_changed_from(self.on_image_axes_limits_changed)
+        self.wimg.disconnect_pixmap_is_updated_from(self.on_image_pixmap_is_updated)
+        self.wimg.disconnect_cursor_pos_value_from(self.wcur.set_cursor_pos_value)
+
+
+    def connect_signals_from_hist(self):
+        self.wspe.hist.connect_axes_limits_changed_to(self.on_hist_axes_limits_changed)
+
+
+    def disconnect_signals_from_hist(self):
+        self.wspe.hist.disconnect_axes_limits_changed_from(self.on_hist_axes_limits_changed)
 
 #------------------------------
 
@@ -174,7 +190,6 @@ class IVMain(QtGui.QWidget) :
             cp.current_tab.setValue('File')
         else :
             cp.current_tab.setValue('Data')
-
 
 #------------------------------
 
@@ -259,15 +274,20 @@ class IVMain(QtGui.QWidget) :
         '''
         log.info('%s.on_hist_axes_limits_changed x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f'%\
                  (self._name, x1, x2, y1, y2))
+
+        self.disconnect_signals_from_hist()
+
         self.wimg.set_intensity_limits(amin=x1, amax=x2)
         self.wimg.set_pixmap_from_arr()
 
+        self.connect_signals_from_hist()
+
 
     def on_image_axes_limits_changed(self, x1, x2, y1, y2) :
-        '''Responce on signal:
+        '''Responce on signal.
         '''
-        log.info('%s.on_image_axes_limits_changed x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f'%\
-                 (self._name, x1, x2, y1, y2))
+        #log.info('%s.on_image_axes_limits_changed x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f'%\
+        #         (self._name, x1, x2, y1, y2))
         arr = self.wimg.image_data()
         h, w = arr.shape
         h1, w1 = h-1, w-1
@@ -289,10 +309,15 @@ class IVMain(QtGui.QWidget) :
 
         #log.info('image data shape h=%d w=%d' % (h,w))
         log.info('%s.on_image_axes_limits_changed xmin: %4d  xmax: %4d  ymin: %4d  ymax: %4d'%\
-              (self._name, xmin, xmax, ymin, ymax))
+                (self._name, xmin, xmax, ymin, ymax))
+
+        self.disconnect_signals_from_img()
+
         self.wspe.hist.remove_all_graphs()
         hcolor = Qt.green # Qt.yellow Qt.blue Qt.yellow 
         self.wspe.hist.add_array_as_hist(arr_win, pen=QtGui.QPen(hcolor, 0), brush=QtGui.QBrush(hcolor))
+
+        self.connect_signals_from_img()
 
 
     def on_image_pixmap_is_updated(self):
@@ -315,7 +340,7 @@ class IVMain(QtGui.QWidget) :
 
 
     def on_new_event_number(self, num):
-        '''Responce on signal from QWEventControl -> QWInsExpRun
+        '''Responce on signal from QWEventControl -> QWDataControl
         '''
         log.debug('%s.on_new_event_number %d' % (self._name, num))
 

@@ -1,14 +1,9 @@
 #!@PYTHON@
-"""
-Created on September 9, 2016
-
-@author: Mikhail Dubrovin
-
-Class GUViewGraph is a QWidget for interactive image.
+"""Class GUViewGraph is a QWidget for interactive image.
+Created: 2016-09-09
+Author : Mikhail Dubrovin
 
 Usage ::
-
-
 """
 
 #import os
@@ -16,6 +11,7 @@ Usage ::
 #import math
 from math import floor
 from graphqt.GUViewAxes import *
+from PyQt4.QtCore import QRectF, QPointF
 
 class GUViewGraph(GUViewAxes) :
     
@@ -119,15 +115,19 @@ class GUViewGraph(GUViewAxes) :
 
 
     def add_graph(self, x, y, pen=QtGui.QPen(Qt.yellow), brush=QtGui.QBrush()) :
-        path = QtGui.QPainterPath()
-        polygon = QtGui.QPolygonF([QtCore.QPointF(px,py) for px,py in zip(x, y)])
-        path.addPolygon(polygon)
+        path = QtGui.QPainterPath(QPointF(x[0],y[0]))
+        #polygon = QtGui.QPolygonF([QtCore.QPointF(px,py) for px,py in zip(x, y)])
+        #path.addPolygon(polygon)
+        #path.moveTo(QPointF(x[0],y[0]))
+        for px,py in zip(x, y)[:-1] :
+            path.lineTo(QPointF(px,py))
         self._add_path_to_scene(path, pen, brush)
 
 
     def remove_all_graphs(self) :
         for item in self.lst_items :
             self.scene().removeItem(item)
+            self.lst_items.remove(item)
 
 
     def __del__(self) :

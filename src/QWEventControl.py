@@ -67,13 +67,13 @@ class QWEventControl(Frame) :
         self.hbox.addWidget(self.edi_evt)
         self.hbox.addSpacing(-5)
         self.hbox.addWidget(self.but_fwd)
-        self.hbox.addStretch(1)
+        self.hbox.addSpacing(10)
         self.hbox.addWidget(self.lab_stp)
         self.hbox.addWidget(self.edi_stp)
-        self.hbox.addStretch(1)
+        self.hbox.addSpacing(10)
         self.hbox.addWidget(self.lab_dtw)
         self.hbox.addWidget(self.edi_dtw)
-        self.hbox.addStretch(1)
+        self.hbox.addSpacing(10)
         self.hbox.addWidget(self.but_ctl)
         self.hbox.addStretch(1)
         self.setLayout(self.hbox)
@@ -160,11 +160,11 @@ class QWEventControl(Frame) :
         self.emit(QtCore.SIGNAL('new_event_number(int)'), num)
 
 
-    def connect_new_event_number_to_recipient(self, recip) :
+    def connect_new_event_number_to(self, recip) :
         self.connect(self, QtCore.SIGNAL('new_event_number(int)'), recip)
 
 
-    def disconnect_new_event_number_from_recipient(self, recip) :
+    def disconnect_new_event_number_from(self, recip) :
         self.disconnect(self, QtCore.SIGNAL('new_event_number(int)'), recip)
 
 
@@ -177,16 +177,46 @@ class QWEventControl(Frame) :
         self.timer.start(self.wait_msec.value()) 
 
 
+    def on_timer_stop(self) :
+        self.timer.stop()
+
+
     def on_but_ctl(self):
         s = self.but_ctl.text()
         if s=='Start' :
+            self.emit(QtCore.SIGNAL('start_button()'))
             self.but_ctl.setText('Stop')
             self.but_ctl.setStyleSheet(style.styleButtonBad)
-            self.on_timeout()
+            #self.on_timeout() # connected on signal
         else :
+            self.emit(QtCore.SIGNAL('stop_button()'))
             self.but_ctl.setText('Start')
             self.but_ctl.setStyleSheet(style.styleButtonGood)
-            self.timer.stop()
+            #self.timer_stop() # connected on signal
+
+
+    def connect_start_button_to(self, recip) :
+        self.connect(self, QtCore.SIGNAL('start_button()'), recip)
+
+
+    def disconnect_start_button_from(self, recip) :
+        self.disconnect(self, QtCore.SIGNAL('start_button()'), recip)
+
+
+    def test_start_button_reception(self) :
+        print '%s.test_start_button_reception' % (self._name)
+
+
+    def connect_stop_button_to(self, recip) :
+        self.connect(self, QtCore.SIGNAL('stop_button()'), recip)
+
+
+    def disconnect_stop_button_from(self, recip) :
+        self.disconnect(self, QtCore.SIGNAL('stop_button()'), recip)
+
+
+    def test_stop_button_reception(self) :
+        print '%s.test_stop_button_reception' % (self._name)
 
 #------------------------------
 #------------------------------
@@ -202,7 +232,9 @@ if __name__ == "__main__" :
     w = QWEventControl(cp, log, parent=None, show_mode=2)
     w.setWindowTitle(w._name)
     w.move(QtCore.QPoint(50,50))
-    w.connect_new_event_number_to_recipient(w.test_new_event_number_reception)
+    w.connect_new_event_number_to(w.test_new_event_number_reception)
+    w.connect_start_button_to(w.test_start_button_reception)
+    w.connect_stop_button_to(w.test_stop_button_reception)
     w.show()
     app.exec_()
 

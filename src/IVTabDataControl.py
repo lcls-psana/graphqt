@@ -6,19 +6,22 @@
 """
 #------------------------------
 
-from expmon.QWInsExpRun import QWInsExpRun
+from expmon.QWDataControl import QWDataControl
 
 #------------------------------
 
-class IVTabDataControl(QWInsExpRun) :
+class IVTabDataControl(QWDataControl) :
     """ Data control parameters window for tab "Data"
+        derived from QWDataControl to connect signals with IV-app recipients
     """
     def __init__(self, cp, log, parent=None, show_mode=7) :
-        QWInsExpRun.__init__(self, cp, log, parent=None, orient='V', show_mode=show_mode)
+        QWDataControl.__init__(self, cp, log, parent=None, orient='V', show_mode=show_mode)
         self._name = self.__class__.__name__
 
         if cp.ivmain is None : return
-        self.w_evt.connect_new_event_number_to_recipient(cp.ivmain.on_new_event_number)
+        self.w_evt.connect_new_event_number_to(cp.ivmain.on_new_event_number)
+        self.w_evt.connect_start_button_to(self.w_evt.on_timeout)
+        self.w_evt.connect_stop_button_to(self.w_evt.on_timer_stop)
 
 
     def test_on_new_event_number_reception(self, num) :
@@ -40,7 +43,7 @@ if __name__ == "__main__" :
     w = IVTabDataControl(cp, log, show_mode=0377)
     w.move(QtCore.QPoint(50,50))
     w.setWindowTitle(w._name)
-    w.w_evt.connect_new_event_number_to_recipient(w.test_on_new_event_number_reception)
+    w.w_evt.connect_new_event_number_to(w.test_on_new_event_number_reception)
     w.show()
     app.exec_()
 

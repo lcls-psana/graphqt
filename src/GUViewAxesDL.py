@@ -233,10 +233,10 @@ class GUView(QtGui.QGraphicsView) :
         self.invscalex = 1./self.transform().m11()
         self.invscaley = 1./self.transform().m22()
 
-        self.selectFurtherAction(e)
+        self._select_further_action(e)
 
         
-    def selectFurtherAction(self, e):
+    def _select_further_action(self, e):
         if self._scale_ctl != 3 :
             self.scalebw = self._scale_ctl
             return
@@ -248,7 +248,7 @@ class GUView(QtGui.QGraphicsView) :
         elif item == self.rslefi : self.scalebw = 2 # print 'left rect' # |= 2
         else                     : self.scalebw = 3
         #elif item == self.raxesi   : self.scalebw = 3 # print 'axes rect'
-        #print 'selectFurtherAction scalebw:', self.scalebw
+        #print '_select_further_action scalebw:', self.scalebw
 
 
     def display_pixel_pos(self, e):
@@ -286,7 +286,7 @@ class GUView(QtGui.QGraphicsView) :
 
         if self._scale_ctl==0 : return
 
-        self.selectFurtherAction(e)
+        self._select_further_action(e)
 
         #print 'wheelEvent: ', e.delta()
         f = 1 + 0.4 * (1 if e.delta()>0 else -1)

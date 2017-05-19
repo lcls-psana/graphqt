@@ -5,16 +5,52 @@
 
 Usage ::
 
-    Emits signals
-    -------------
+    Create GUViewHist object within pyqt QApplication
+    --------------------------------------------------
+    import sys
+    from PyQt4 import QtGui, QtCore
+    from graphqt.QWSpectrum import QWSpectrum
+
+    arr = image_with_random_peaks((50, 50))
+    app = QtGui.QApplication(sys.argv)
+    w = QWSpectrum(None, arr, show_frame=False) #, show_buts=False)
+
+    Connect/disconnecr recipient to signals
+    ---------------------------------------
+
+    w.connect_color_table_is_changed_to(recipient)
+    w.disconnect_color_table_is_changed_from(recipient) :
+    w.test_color_table_is_changed_reception(self)
+
+    For self.hist:
     self.hist.connect_axes_limits_changed_to(recipient)
-    self.hist.connect_axes_limits_changed_to(self.hist.test_axes_limits_changed_reception)
+    self.hist.connect_histogram_updated_to(recipient)
+    self.hist.disconnect_histogram_updated_from(recipient)
 
-    self.hist.connect_histogram_updated_to(self.hist.test_histogram_updated_reception())
-    #self.hist.disconnect_histogram_updated_from(self.hist.test_histogram_updated_reception())
 
-    self.connect_color_table_is_changed_to(recipient) :
-    self.connect_color_table_is_changed_to(self.test_color_table_is_changed_reception)
+    Methods
+    -------
+    w.on_but_save()
+    w.on_but_reset()
+    ctab = w.color_table(self)
+    w.on_colorbar() # emits signal color_table_is_changed
+    w.draw_mean_std(mean, std)
+    w.draw_stat(mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w)
+    w.draw_cursor_locator(x, y, ibin, value)
+    w.set_tool_tips()
+    w.set_style()
+
+    Internal methods
+    -----------------
+
+    Re-defines methods
+    ------------------
+    closeEvent
+
+    Global scope methods
+    --------------------
+    test_guspectrum(tname)
+
 """
 #------------------------------
 

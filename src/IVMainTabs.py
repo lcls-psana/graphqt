@@ -13,7 +13,6 @@ from PyQt4 import QtGui, QtCore
 
 from graphqt.IVConfigParameters import cp
 from graphqt.Logger             import log
-#from expmon.QWInsExpRun         import QWInsExpRun
 from graphqt.IVTabDataControl   import IVTabDataControl
 from graphqt.IVTabFileName      import IVTabFileName
 

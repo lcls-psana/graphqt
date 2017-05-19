@@ -4,36 +4,72 @@ Created on September 9, 2016
 
 @author: Mikhail Dubrovin
 
-Class GUView is a QGraphicsView / QWidget with interactive scalable scene with axes.
+Class GUView is a QGraphicsView / QWidget with interactive scene having scalable axes box.
 
 Usage ::
 
-    Emits signals
-    -------------
-    self.connect_wheel_is_stopped_to(recipient)
-    self.connect_axes_limits_changed_to(recipient)
-
+    Create GUView object within pyqt QApplication
+    ---------------------------------------------
     import sys
     from PyQt4 import QtGui, QtCore
     from graphqt.GUView import GUView
-
     app = QtGui.QApplication(sys.argv)
     w = GUView(None, raxes=QtCore.QRectF(0, 0, 100, 100), origin='UL',\
                scale_ctl='HV', margl=0.12, margr=0.10, margt=0.06, margb=0.06)
     w.show()
     app.exec_()
+
+    Connect/disconnecr recipient to signals
+    ----------------------------
+    w.connect_axes_limits_changed_to(recipient)
+    w.disconnect_axes_limits_changed_from(recipient)
+    w.test_axes_limits_changed_reception(self, x1, x2, y1, y2)
+
+    w.connect_wheel_is_stopped_to(recipient)
+    w.disconnect_wheel_is_stopped_from(recipient)
+    w.test_wheel_is_stopped_reception(self)
+
+    w.connect_view_is_closed_to(recipient)
+    w.disconnect_view_is_closed_from(recipient)
+    w.test_view_is_closed_reception(self)
+
+    Methods
+    -------
+    w.set_rect_axes_default(rectax)
+    w.set_origin(origin='UL')
+    w.set_transform_orientation() # if origin is changed
+    w.set_scale_control(scale_ctl='HV') # sets dynamically controlled axes
+    sc = w.scale_control()
+    w.set_margins(margl=None, margr=None, margt=None, margb=None)
+
+    w.check_limits()
+    w.check_axes_limits_changed() # compare axes box with old and sends signal if changed
+    w.update_my_scene()
+    w.set_view()
+    w.reset_original_size() # calls sequence of methods: set_view, update_my_scene, check_axes_limits_changed
+    w.add_rect_to_scene_v1(rect, brush=QtGui.QBrush(), pen=QtGui.QPen(Qt.yellow, 4, Qt.DashLine)) # returns QGraphicsRectItem
+    w.add_rect_to_scene(rect, brush=QtGui.QBrush(), pen=QtGui.QPen(Qt.yellow, 4, Qt.DashLine))  # returns GUQGraphicsRectItem
+    r = w.rect_axes()
+    xmin, xmax, ymin, ymax = w.axes_limits()
+
+    Internal methods
+    -----------------
+    w._select_further_action(e) # checks cursor position relative to margin box items and sets w.scalebw
+    w._continue_wheel_event(t_msec=500)
+    w.on_timeout(self)
+
+
+    Re-defines methods
+    ------------------
+    __del__
+    enterEvent, leaveEvent, closeEvent, resizeEvent, keyPressEvent, 
+    mouseReleaseEvent, mousePressEvent, mouseMoveEvent, wheelEvent
 """
 #------------------------------
 
-from math import floor
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt
-
-#------------------------------
-
-def print_rect(r, cmt='') :
-    x, y, w, h = r.x(), r.y(), r.width(), r.height()
-    print '%s x=%8.2f  y=%8.2f  w=%8.2f  h=%8.2f' % (cmt, x, y, w, h)
+#from graphqt.GUUtils import print_rect
 
 #------------------------------
 
@@ -42,31 +78,24 @@ class GUView(QtGui.QGraphicsView) :
     def __init__(self, parent=None, rectax=QtCore.QRectF(0, 0, 10, 10), origin='UL', scale_ctl='HV',\
                  margl=None, margr=None, margt=None, margb=None, show_mode=0) :
 
+        # set initial parameters, no graphics yet
         self._name = self.__class__.__name__
-        #self.rectax = rectax
-        self.raxes = rectax
+        self.set_rect_axes_default(rectax) # sets self.rectax
         self.show_mode = show_mode
         self.set_origin(origin)
         self.set_scale_control(scale_ctl)
+        self.set_margins(margl, margr, margt, margb)
 
+        # begin graphics
         sc = QtGui.QGraphicsScene() # rectax
         #print 'scene rect=', sc.sceneRect()        
         #print 'rect img=', self.rectax
 
         QtGui.QGraphicsView.__init__(self, sc, parent)
         
-        self.set_style()
-        self.set_margins(margl, margr, margt, margb)
+        self.set_transform_orientation() 
         self.set_view()
-
-        #pen=QtGui.QPen(colfld, 0, Qt.SolidLine)
-
-        if not self._origin_ul :
-            t = self.transform()
-            sx = 1 if self._origin_l else -1
-            sy = 1 if self._origin_u else -1
-            t2 = t.scale(sx, sy)
-            self.setTransform(t2)
+        self.set_style()
 
         self.rslefv = None
         self.rsbotv = None
@@ -83,6 +112,24 @@ class GUView(QtGui.QGraphicsView) :
         self.pos_click = None
         self.scalebw = 3
 
+        self.update_my_scene()
+
+        self.timer = QtCore.QTimer()
+        self.connect(self.timer, QtCore.SIGNAL('timeout()'), self.on_timeout)
+
+        #self.connect_wheel_is_stopped_to(self.check_axes_limits_changed)
+        #self.disconnect_wheel_is_stopped_from(self.check_axes_limits_changed)
+        
+        #self.connect_axes_limits_changed_to(self.test_axes_limits_changed_reception)
+        #self.disconnect_axes_limits_changed_from(self.test_axes_limits_changed_reception)
+
+
+    def set_rect_axes_default(self, rectax) :
+        #print 'XXX: In GUIView.set_rect_axes_default rectax', rectax
+
+        #self.rectax = rectax # self.rectax is a current window which is set later
+        self.raxes = rectax
+
         self._xmin = None
         self._xmax = None
         self._ymin = None
@@ -92,16 +139,6 @@ class GUView(QtGui.QGraphicsView) :
         self._x2_old = None
         self._y1_old = None
         self._y2_old = None
-
-        self.update_my_scene()
-        self.timer = QtCore.QTimer()
-        self.connect(self.timer, QtCore.SIGNAL('timeout()'), self.on_timeout)
-
-        #self.connect_wheel_is_stopped_to(self.check_axes_limits)
-        #self.disconnect_wheel_is_stopped_from(self.check_axes_limits)
-        
-        #self.connect_axes_limits_changed_to(self.test_axes_limits_changed_reception)
-        #self.disconnect_axes_limits_changed_from(self.test_axes_limits_changed_reception)
 
 
     def set_origin(self, origin='UL') :
@@ -118,6 +155,19 @@ class GUView(QtGui.QGraphicsView) :
         self._origin_ur = self._origin_u and self._origin_r
         self._origin_dl = self._origin_d and self._origin_l
         self._origin_dr = self._origin_d and self._origin_r
+
+        #self.set_transform_orientation()
+
+
+    def set_transform_orientation(self) :
+        """Flips signs of scalex, scaley depending on origin.
+        """
+        if not self._origin_ul :
+            t = self.transform()
+            sx = 1 if self._origin_l else -1
+            sy = 1 if self._origin_u else -1
+            t2 = t.scale(sx, sy)
+            self.setTransform(t2)
 
 
     def set_scale_control(self, scale_ctl='HV') :
@@ -137,8 +187,6 @@ class GUView(QtGui.QGraphicsView) :
 
 
     def set_style(self) :
-        self.setGeometry(20, 20, 600, 600)
-        self.setWindowTitle("GUView window")
         self.setStyleSheet("background-color:black; border: 0px solid green")
         #w.setContentsMargins(-9,-9,-9,-9)
         #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
@@ -151,9 +199,8 @@ class GUView(QtGui.QGraphicsView) :
         self.pendf = QtGui.QPen()
         self.pendf.setStyle(Qt.NoPen)
         self.penbx = QtGui.QPen(Qt.black, 6, Qt.SolidLine)
-        self.pen_gr=QtGui.QPen(Qt.green, 0, Qt.SolidLine)
-        self.pen_bl=QtGui.QPen(Qt.blue, 0, Qt.SolidLine)
-
+        self.pen_gr= QtGui.QPen(Qt.green, 0, Qt.SolidLine)
+        self.pen_bl= QtGui.QPen(Qt.blue,  0, Qt.SolidLine)
 
 
     def set_margins(self, margl=None, margr=None, margt=None, margb=None) :
@@ -185,6 +232,23 @@ class GUView(QtGui.QGraphicsView) :
         self.fitInView(rs, Qt.IgnoreAspectRatio) # Qt.IgnoreAspectRatio Qt.KeepAspectRatioByExpanding Qt.KeepAspectRatio
 
 
+    def check_axes_limits_changed(self):
+        """Checks if axes limits have changed and submits signal with new limits.
+        """
+        r = self.rectax
+        x1, x2 = r.left(), r.right()
+        y1, y2 = r.bottom(), r.top()
+
+        if x1 != self._x1_old or x2 != self._x2_old \
+        or y1 != self._y1_old or y2 != self._y2_old :
+            self._x1_old = x1
+            self._x2_old = x2
+            self._y1_old = y1
+            self._y2_old = y2
+            #self.evaluate_hist_statistics()
+            self.emit(QtCore.SIGNAL('axes_limits_changed(float,float,float,float)'), x1, x2, y1, y2)
+
+
     def check_limits(self) :
 
         if all(v is None for v in (self._xmin, self._xmax, self._ymin, self._ymax)) : return  
@@ -204,7 +268,9 @@ class GUView(QtGui.QGraphicsView) :
 
 
     def update_my_scene(self) :
-        #print 'In GUIView.update_my_scene'
+        """ Draws content on scene
+        """
+        #print 'In %s.update_my_scene' % self._name
         self.check_limits()
 
         sc = self.scene()
@@ -311,7 +377,7 @@ class GUView(QtGui.QGraphicsView) :
 
         #self.updateScene([self.rsbot, self.rslef, self.rectax])
 
-        #self.check_axes_limits()
+        #self.check_axes_limits_changed()
 
         if self.show_mode & 1 :
             colfld = Qt.magenta
@@ -322,23 +388,49 @@ class GUView(QtGui.QGraphicsView) :
             colori = Qt.red
             self.rori = self.add_rect_to_scene(ror, pen=QtGui.QPen(colori, 0, Qt.SolidLine), brush=QtGui.QBrush(colori))
 
-#------------------------------
 
-    def check_axes_limits(self):
-        """Checks if axes limits have changed and submits signal with new limits
+    def add_rect_to_scene_v1(self, rect, brush=QtGui.QBrush(), pen=QtGui.QPen(Qt.yellow, 4, Qt.DashLine)) :
+        """Adds rect to scene, returns QGraphicsRectItem"""
+        pen.setCosmetic(True)
+        return self.scene().addRect(rect, pen, brush)
+
+
+    def add_rect_to_scene(self, rect, brush=QtGui.QBrush(), pen=QtGui.QPen(Qt.yellow, 4, Qt.DashLine)) :
+        """Adds rect to scene, returns GUQGraphicsRectItem - for interactive stuff"""
+        from graphqt.GUQGraphicsRectItem import GUQGraphicsRectItem
+        pen.setCosmetic(True)
+        item = GUQGraphicsRectItem(rect, parent=None, scene=self.scene())
+        item.setPen(pen)
+        item.setBrush(brush)
+        return item
+
+
+    def reset_original_size(self) :
+        """call sequence of methods
         """
-        rax = self.rectax
-        x1, x2 = rax.left(),   rax.right()
-        y1, y2 = rax.bottom(), rax.top()
+        self.set_view()
+        self.update_my_scene()
+        self.check_axes_limits_changed()
 
-        if x1 != self._x1_old or x2 != self._x2_old \
-        or y1 != self._y1_old or y2 != self._y2_old :
-            self._x1_old = x1
-            self._x2_old = x2
-            self._y1_old = y1
-            self._y2_old = y2
-            #self.evaluate_hist_statistics()
-            self.emit(QtCore.SIGNAL('axes_limits_changed(float,float,float,float)'), x1, x2, y1, y2)
+
+    def display_pixel_pos(self, e):
+        p = self.mapToScene(e.pos())
+        #print 'mouseMoveEvent, current point: ', e.x(), e.y(), ' on scene: %.1f  %.1f' % (p.x(), p.y()) 
+        self.setWindowTitle('GUView: x=%.1f y=%.1f' % (p.x(), p.y()))
+
+
+    def rect_axes(self) :
+        return self.rectax
+        #return self.raxes
+
+
+    def axes_limits(self) :
+        r = self.rectax
+        x1, x2 = r.left(), r.right()
+        y1, y2 = r.bottom(), r.top()
+        return min(x1, x2), max(x1, x2), min(y1, y2), max(y1, y2)
+ 
+#------------------------------
 
     def connect_axes_limits_changed_to(self, recip) :
         self.connect(self, QtCore.SIGNAL('axes_limits_changed(float,float,float,float)'), recip)
@@ -376,7 +468,7 @@ class GUView(QtGui.QGraphicsView) :
         #print 'GUView.mouseReleaseEvent, at point: ', e.pos(), ' diff:', e.pos() - self.pos_click
         #self.pos_click = e.pos()
         self.pos_click = None
-        self.check_axes_limits()
+        self.check_axes_limits_changed()
 
 
 #    def mouseDoubleCkickEvent(self, e):
@@ -395,10 +487,10 @@ class GUView(QtGui.QGraphicsView) :
         self.invscalex = 1./self.transform().m11()
         self.invscaley = 1./self.transform().m22()
 
-        self.selectFurtherAction(e)
+        self._select_further_action(e)
 
         
-    def selectFurtherAction(self, e):
+    def _select_further_action(self, e):
         if self._scale_ctl != 3 :
             self.scalebw = self._scale_ctl
             return
@@ -412,19 +504,13 @@ class GUView(QtGui.QGraphicsView) :
         elif item == self.rsrigi : self.scalebw = 2 # print 'left rect' # |= 2
         else                     : self.scalebw = 3
         #elif item == self.raxesi   : self.scalebw = 3 # print 'axes rect'
-        #print 'selectFurtherAction scalebw:', self.scalebw
-
-
-    def display_pixel_pos(self, e):
-        p = self.mapToScene(e.pos())
-        #print 'mouseMoveEvent, current point: ', e.x(), e.y(), ' on scene: %.1f  %.1f' % (p.x(), p.y()) 
-        self.setWindowTitle('GUView: x=%.1f y=%.1f' % (p.x(), p.y()))
+        #print '_select_further_action scalebw:', self.scalebw
 
 
     def mouseMoveEvent(self, e):
         QtGui.QGraphicsView.mouseMoveEvent(self, e)
         #print 'GUView.mouseMoveEvent, at point: ', e.pos()
-        self.display_pixel_pos(e)
+        self.display_pixel_pos(e) # re-defined in GUViewImage, GUViewHist, etc.
 
         if self._scale_ctl==0 : return
 
@@ -450,7 +536,7 @@ class GUView(QtGui.QGraphicsView) :
 
         if self._scale_ctl==0 : return
 
-        self.selectFurtherAction(e)
+        self._select_further_action(e)
 
         #print 'wheelEvent: ', e.delta()
         f = 1 + 0.4 * (1 if e.delta()>0 else -1)
@@ -487,10 +573,10 @@ class GUView(QtGui.QGraphicsView) :
 
         #self.scalebw = 3
 
-        self.continue_wheel_event()
+        self._continue_wheel_event()
 
 
-    def continue_wheel_event(self, t_msec=500) :
+    def _continue_wheel_event(self, t_msec=500) :
         """Reset time interval for timer in order to catch wheel stop
         """
         self.timer.start(t_msec)
@@ -502,7 +588,7 @@ class GUView(QtGui.QGraphicsView) :
         """
         #print 'on_timeout'
         self.timer.stop()
-        self.check_axes_limits()
+        self.check_axes_limits_changed()
         self.emit(QtCore.SIGNAL('wheel_is_stopped()'))
 
 #------------------------------
@@ -531,9 +617,23 @@ class GUView(QtGui.QGraphicsView) :
 
 
     def closeEvent(self, e) :
+        print 'In %s.closeEvent' % (self._name) #, sys._getframe().f_code.co_name)
         QtGui.QGraphicsView.closeEvent(self, e)
         #print 'GUView.closeEvent' #% self._name
-        
+        self.emit(QtCore.SIGNAL('view_is_closed()'))
+
+
+    def connect_view_is_closed_to(self, recip) :
+        self.connect(self, QtCore.SIGNAL('view_is_closed()'), recip)
+
+
+    def disconnect_view_is_closed_from(self, recip) :
+        self.disconnect(self, QtCore.SIGNAL('view_is_closed()'), recip)
+
+
+    def test_view_is_closed_reception(self) :
+        print '%s.test_view_is_closed_reception' % self._name
+
 
     #def moveEvent(self, e) :
     #    print 'moveEvent'
@@ -552,12 +652,6 @@ class GUView(QtGui.QGraphicsView) :
     #def paintEvent(e):
     #    pass
 
-    def reset_original_size(self) :
-        self.set_view()
-        self.update_my_scene()
-        self.check_axes_limits()
-
-
     def keyPressEvent(self, e) :
         #print 'keyPressEvent, key=', e.key()         
         if   e.key() == Qt.Key_Escape :
@@ -566,22 +660,6 @@ class GUView(QtGui.QGraphicsView) :
         elif e.key() == Qt.Key_R : 
             print '%s: Reset original size' % self._name
             self.reset_original_size()
-
-
-    def add_rect_to_scene_v1(self, rect, brush=QtGui.QBrush(), pen=QtGui.QPen(Qt.yellow, 4, Qt.DashLine)) :
-        """Adds rect to scene, returns QGraphicsRectItem"""
-        pen.setCosmetic(True)
-        return self.scene().addRect(rect, pen, brush)
-
-
-    def add_rect_to_scene(self, rect, brush=QtGui.QBrush(), pen=QtGui.QPen(Qt.yellow, 4, Qt.DashLine)) :
-        """Adds rect to scene, returns GUQGraphicsRectItem - for interactive stuff"""
-        from graphqt.GUQGraphicsRectItem import GUQGraphicsRectItem
-        pen.setCosmetic(True)
-        item = GUQGraphicsRectItem(rect, parent=None, scene=self.scene())
-        item.setPen(pen)
-        item.setBrush(brush)
-        return item
 
 #-----------------------------
 
@@ -602,6 +680,8 @@ def test_guiview(tname) :
         print 'test %s is not implemented' % tname
         return
 
+    w.setGeometry(20, 20, 600, 600)
+    w.setWindowTitle("GUView window")
     w.connect_axes_limits_changed_to(w.test_axes_limits_changed_reception)
     #w.disconnect_axes_limits_changed_from(w.test_axes_limits_changed_reception)
 

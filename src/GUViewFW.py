@@ -1,8 +1,7 @@
 #!@PYTHON@
 """
-Created on January 3, 2017
-
-@author: Mikhail Dubrovin
+Created: 2017-01-03
+Author : Mikhail Dubrovin
 
 Class GUViewFW is a QGraphicsView / QWidget with interactive scalable scene with axes.
 FW stands for Full Window - no margins for axes
@@ -185,10 +184,10 @@ class GUViewFW(QtGui.QGraphicsView) :
         self.invscalex = 1./self.transform().m11()
         self.invscaley = 1./self.transform().m22()
 
-        self.selectFurtherAction(e)
+        self._select_further_action(e)
 
         
-    def selectFurtherAction(self, e):
+    def _select_further_action(self, e):
         if self._scale_ctl != 3 :
             self.scalebw = self._scale_ctl
             return
@@ -199,7 +198,7 @@ class GUViewFW(QtGui.QGraphicsView) :
         self.scalebw = 3
 
         #elif item == self.raxesi   : self.scalebw = 3 # print 'axes rect'
-        #print 'selectFurtherAction scalebw:', self.scalebw
+        #print '_select_further_action scalebw:', self.scalebw
 
 
     def display_pixel_pos(self, e):
@@ -237,7 +236,7 @@ class GUViewFW(QtGui.QGraphicsView) :
 
         if self._scale_ctl==0 : return
 
-        self.selectFurtherAction(e)
+        self._select_further_action(e)
 
         #print 'wheelEvent: ', e.delta()
         f = 1 + 0.4 * (1 if e.delta()>0 else -1)

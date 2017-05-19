@@ -13,6 +13,10 @@ Usage::
     lst = ('apple', 'orange', 'pear', 'peache', 'plum') 
     item = select_item_in_popup_menu(lst)
     print 'selected: %s' % item
+
+    from graphqt.GUUtils import print_rect
+    print_rect(r, cmt='')
+
 """
 #------------------------------
 
@@ -30,6 +34,12 @@ import math
 #class GUUtils() :
 #    def __init__(self) :
 #        pass
+
+#------------------------------
+
+def print_rect(r, cmt='') :
+    x, y, w, h = r.x(), r.y(), r.width(), r.height()
+    print '%s x=%8.2f  y=%8.2f  w=%8.2f  h=%8.2f' % (cmt, x, y, w, h)
 
 #------------------------------
 

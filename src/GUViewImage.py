@@ -4,15 +4,12 @@ Created on September 9, 2016
 
 @author: Mikhail Dubrovin
 
-Class GUViewImage is a QWidget for interactive image.
+Class GUViewImage is a GUViewAxes/QWidget for interactive image.
 
 Usage ::
 
-    Emits signals
-    -------------
-    w.connect_axes_limits_changed_to(w.test_axes_limits_changed_reception)
-    w.connect_pixmap_is_updated_to(w.test_pixmap_is_updated_reception)
-
+    Create GUViewImage object within pyqt QApplication
+    --------------------------------------------------
     import sys
     from PyQt4 import QtGui, QtCore
     from graphqt.GUViewImage import GUViewImage
@@ -22,6 +19,49 @@ Usage ::
     w = GUViewImage(None, arr, origin='UL', scale_ctl='HV', coltab=ctab)
     w.show()
     app.exec_()
+
+    Connect/disconnecr recipient to signals
+    ---------------------------------------
+    w.connect_cursor_pos_value_to(recipient)
+    w.disconnect_cursor_pos_value_from(recipient)
+    w.test_cursor_pos_value_reception(self, ix, iy, v)
+
+    w.connect_pixmap_is_updated_to(recip)
+    w.disconnect_pixmap_is_updated_from(recip)
+    w.test_pixmap_is_updated_reception(self)
+
+    Enherited:
+    w.connect_axes_limits_changed_to(w.test_axes_limits_changed_reception)
+    w.connect_pixmap_is_updated_to(w.test_pixmap_is_updated_reception)
+
+    Methods
+    -------
+    w.set_color_table(coltab=None)
+    w.set_style(self) # sets GUViewAxes.set_style(self) + transparent background
+    arr = w.image_data()
+    w.reset_original_image_size() # calls set_view(), update_my_scene(), check_axes_limits_changed()
+    w.set_intensity_limits(amin=None, amax=None) # sets attributes, nothing else
+    w.add_pixmap_to_scene(self, pixmap, flag=Qt.IgnoreAspectRatio, mode=Qt.FastTransformation)
+    w.set_pixmap_from_arr(arr=None) # adds pixmap to scene, sends signal 
+    w.set_pixmap_random(shape=(512,512))
+    w.save_pixmap_in_file(fname='fig-image.xpm')
+    w.save_qimage_in_file(fname='fig-image.gif') 
+    w.save_window_in_file(fname='fig-image.png') 
+    w.on_but_reset() # calls w.reset_original_image_size()
+
+    Internal methods
+    -----------------
+    w.display_pixel_pos(self, e) # submits signal when coursor hovering pixel
+    w.on_but_save(self, at_obj=None)
+
+    Re-defines methods
+    ------------------
+    mouseMoveEvent, closeEvent, keyPressEvent
+
+    Global scope methods
+    --------------------
+    img = image_with_random_peaks(shape=(500, 500)) : 
+    test_guiviewimage(tname)
 """
 
 #import os
@@ -39,6 +79,11 @@ class GUViewImage(GUViewAxes) :
                  origin='UL', scale_ctl='HV', rulers='TBLR',\
                  margl=None, margr=None, margt=None, margb=None) :
 
+        if arr is None :
+            import numpy as np
+            arr = np.arange(100); arr.shape = (10,10)
+            #import pyimgalgos.NDArrGenerators as ag
+            #arr = ag.random_standard((10,10), mu=0, sigma=10)
         h, w  = arr.shape
         rectax = QtCore.QRectF(0, 0, w, h)
 
@@ -48,6 +93,7 @@ class GUViewImage(GUViewAxes) :
 
         #self.scene().removeItem(self.raxi)
         self.pmi  = None
+        self.arr  = None
 
         mean, std = arr.mean(), arr.std()
         amin, amax = mean-2*std, mean+10*std # None, None
@@ -85,9 +131,11 @@ class GUViewImage(GUViewAxes) :
         else : v = self.arr[iy,ix]
         vstr = 'None' if v is None else '%.1f' % v 
         #self.setWindowTitle('GUViewImage x=%d y=%d v=%s' % (ix, iy, vstr))
-        #print 'mouseMoveEvent, current point: ', e.x(), e.y(), ' on scene: %.1f  %.1f' % (p.x(), p.y()) 
+        #print 'display_pixel_pos, current point: ', e.x(), e.y(), ' on scene: %.1f  %.1f' % (p.x(), p.y()) 
         #return ix, iy, v
         self.emit(QtCore.SIGNAL('cursor_pos_value(int,int,float)'), ix, iy, v if not(v is None) else 0)
+
+#------------------------------
 
     def connect_cursor_pos_value_to(self, recip) :
         self.connect(self, QtCore.SIGNAL('cursor_pos_value(int,int,float)'), recip)
@@ -99,38 +147,13 @@ class GUViewImage(GUViewAxes) :
         #print 'GUView.test_cursor_pos_value_reception x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f' % (x1, x2, y1, y2)
         self.setWindowTitle('GUViewImage x=%d y=%d v=%.1f' % (ix, iy, v))
 
-    def mouseMoveEvent(self, e):
-        GUViewAxes.mouseMoveEvent(self, e)
-
-#------------------------------
- 
-    def closeEvent(self, e):
-        GUViewAxes.closeEvent(self, e)
-        #print '%s.closeEvent' % self._name
-
 #------------------------------
 
     def reset_original_image_size(self) :
         self.set_view()
         self.update_my_scene()
-        self.check_axes_limits()
-
-
-    def keyPressEvent(self, e) :
-        #print 'keyPressEvent, key=', e.key()         
-        if   e.key() == Qt.Key_Escape :
-            self.close()
-
-        elif e.key() == Qt.Key_R : 
-            print '%s: Reset original size' % self._name
-            self.reset_original_image_size()
-
-        elif e.key() == Qt.Key_N : 
-            print '%s: Test set new pixel map' % self._name
-            s = self.pmi.pixmap().size()
-            #self.set_pixmap_random((s.width(), s.height()))
-            img = image_with_random_peaks((s.height(), s.width()))
-            self.set_pixmap_from_arr(img)
+        self.check_axes_limits_changed()
+        #self.set_intensity_limits()
 
 
     def set_intensity_limits(self, amin=None, amax=None) :
@@ -139,7 +162,7 @@ class GUViewImage(GUViewAxes) :
 
 
     def add_pixmap_to_scene(self, pixmap, flag=Qt.IgnoreAspectRatio,\
-                            mode = Qt.FastTransformation) : # Qt.KeepAspectRatio, IgnoreAspectRatio
+                            mode=Qt.FastTransformation) : # Qt.KeepAspectRatio, IgnoreAspectRatio
         #self.scene().clear()
         #if self.pmi is not None : self.scene().removeItem(self.pmi)
         size = pixmap.size()
@@ -152,17 +175,28 @@ class GUViewImage(GUViewAxes) :
 
         #self.pmi.setFlags(self.pmi.ItemIsSelectable)
         self.update_my_scene() # ->
-        self.check_axes_limits()
+        self.check_axes_limits_changed()
 
 
     def set_pixmap_from_arr(self, arr=None) :
-        if arr is not None: self.arr = arr
+        #print 'XXXX: set_pixmap_from_arr'#, arr
+        need_to_update_rectax = False
+        if arr is not None:
+            if self.arr is not None and arr.shape != self.arr.shape: need_to_update_rectax = True
+            self.arr = arr
         anorm = self.arr if self.coltab is None else\
                 ct.apply_color_table(self.arr, self.coltab, self.amin, self.amax) 
         h, w = self.arr.shape
         image = QtGui.QImage(anorm, w, h, QtGui.QImage.Format_ARGB32)
         pixmap = QtGui.QPixmap.fromImage(image)
         self.add_pixmap_to_scene(pixmap)
+        if need_to_update_rectax : 
+            self.set_rect_axes_default(QtCore.QRectF(0, 0, w, h))
+            self.reset_original_image_size()
+            #self.set_view()
+            #self.update_my_scene()
+            #self.check_axes_limits_changed()
+
         self.emit(QtCore.SIGNAL('pixmap_is_updated()'))
 
 #------------------------------
@@ -180,7 +214,7 @@ class GUViewImage(GUViewAxes) :
 
     def set_pixmap_random(self, shape=(512,512)) :
         from NDArrGenerators import random_array_xffffffff
-        w, h = shape # corresponds to row, col i.e. non-matrix...
+        h, w = shape # corresponds to row, col i.e. non-matrix...
         arr = random_array_xffffffff(shape)
         image = QtGui.QImage(arr, w, h, QtGui.QImage.Format_ARGB32)
         pixmap = QtGui.QPixmap.fromImage(image)
@@ -226,6 +260,33 @@ class GUViewImage(GUViewAxes) :
     def on_but_reset(self) :
         log.debug('%s.on_but_reset - reset original image size' % self._name)
         self.reset_original_image_size()
+
+#------------------------------
+ 
+    def mouseMoveEvent(self, e):
+        GUViewAxes.mouseMoveEvent(self, e)
+
+
+    def closeEvent(self, e):
+        GUViewAxes.closeEvent(self, e)
+        #print '%s.closeEvent' % self._name
+
+
+    def keyPressEvent(self, e) :
+        #print 'keyPressEvent, key=', e.key()         
+        if   e.key() == Qt.Key_Escape :
+            self.close()
+
+        elif e.key() == Qt.Key_R : 
+            print '%s: Reset original size' % self._name
+            self.reset_original_image_size()
+
+        elif e.key() == Qt.Key_N : 
+            print '%s: Test set new pixel map' % self._name
+            s = self.pmi.pixmap().size()
+            #self.set_pixmap_random((s.width(), s.height()))
+            img = image_with_random_peaks((s.height(), s.width()))
+            self.set_pixmap_from_arr(img)
 
 #------------------------------
 

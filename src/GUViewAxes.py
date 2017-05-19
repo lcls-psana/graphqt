@@ -4,10 +4,12 @@ Created on December 14, 2016
 
 @author: Mikhail Dubrovin
 
-Class GUView is a QGraphicsView / QWidget with interactive scalable scene with axes.
+Class GUViewAxes is a QGraphicsView / QWidget with interactive scalable scene with axes.
 
 Usage ::
 
+    Create GUViewAxes object within pyqt QApplication
+    --------------------------------------------------
     import sys
     from PyQt4 import QtGui, QtCore
     from graphqt.GUViewAxes import GUViewAxes
@@ -17,10 +19,27 @@ Usage ::
                    scale_ctl='HV', rulers='TR', margl=0.02, margr=0.12, margt=0.06, margb=0.02)
     w.show()
     app.exec_()
+
+    Connect/disconnecr recipient to signals
+    ---------------------------------------
+
+    Methods
+    -------
+    w.set_show_rulers(rulers='TBLR')
+
+    Internal methods
+    -----------------
+
+    Re-defines methods
+    ------------------
+    w.update_my_scene() # GUView.update_my_scene() + draw rulers
+    w.set_style()       # sets GUView.set_style() + color, font, pen
+    w.closeEvent()      # removes rulers, GUView.closeEvent()
 """
 
-from graphqt.GUView  import GUView, QtGui, QtCore, Qt, print_rect
+from graphqt.GUView  import GUView, QtGui, QtCore, Qt
 from graphqt.GURuler import GURuler
+#from graphqt.GUUtils import print_rect
 
 class GUViewAxes(GUView) :
     
