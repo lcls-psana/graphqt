@@ -124,10 +124,20 @@ class GUViewGraph(GUViewAxes) :
         self._add_path_to_scene(path, pen, brush)
 
 
+    def add_points(self, x, y, pen=QtGui.QPen(Qt.black), brush=QtGui.QBrush(Qt.cyan), fsize=0.01) :
+        rect = self.rectax
+        rx, ry = fsize*rect.width(), fsize*rect.height()
+        path = QtGui.QPainterPath()
+        for px,py in zip(x, y) :
+            path.addEllipse(QPointF(px,py), rx, ry)
+        self._add_path_to_scene(path, pen, brush)
+
+
     def remove_all_graphs(self) :
         for item in self.lst_items :
             self.scene().removeItem(item)
             self.lst_items.remove(item)
+        self.scene().update()
 
 
     def __del__(self) :

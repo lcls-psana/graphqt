@@ -617,7 +617,7 @@ class GUView(QtGui.QGraphicsView) :
 
 
     def closeEvent(self, e) :
-        print 'In %s.closeEvent' % (self._name) #, sys._getframe().f_code.co_name)
+        #print 'In %s.closeEvent' % (self._name) #, sys._getframe().f_code.co_name)
         QtGui.QGraphicsView.closeEvent(self, e)
         #print 'GUView.closeEvent' #% self._name
         self.emit(QtCore.SIGNAL('view_is_closed()'))

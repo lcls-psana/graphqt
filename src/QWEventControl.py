@@ -17,20 +17,21 @@ class QWEventControl(Frame) :
     """GUI control on event number
     """
     def __init__ (self, cp, log, parent=None, show_mode=0) :
-        """show_mode & 1 - frame
-                     & 2 - dt(msec) button
+        """show_mode & 1 - event number
+                     & 2 - step in number of events
+                     & 4 - dt(msec) button
+                     & 8 - start/stop button
         """
-        Frame.__init__(self, parent, mlw=1, vis=show_mode & 1)
+        Frame.__init__(self, parent, mlw=1, vis=False) # show_mode & 1)
         self._name = self.__class__.__name__
 
         self.cp  = cp
         self.log = log
-        self.show_mode = show_mode
 
         self.event_number = cp.event_number
         self.event_step   = cp.event_step
         self.wait_msec    = cp.wait_msec
-        self.max_evt_num = None
+        self.max_evt_num  = None
 
         #self.char_expand = cp.char_expand
 
@@ -57,6 +58,25 @@ class QWEventControl(Frame) :
 
         self.timer = QtCore.QTimer()
         self.connect(self.timer, QtCore.SIGNAL('timeout()'), self.on_timeout)
+
+        self.set_show_mode(show_mode)
+
+
+    def set_show_mode(self, show_mode=0377):
+        self.show_mode = show_mode
+
+        self.lab_evt.setVisible(show_mode & 1)
+        self.but_bwd.setVisible(show_mode & 1)
+        self.edi_evt.setVisible(show_mode & 1)
+        self.but_fwd.setVisible(show_mode & 1)
+
+        self.lab_stp.setVisible(show_mode & 2)
+        self.edi_stp.setVisible(show_mode & 2)
+
+        self.lab_dtw.setVisible(show_mode & 4)
+        self.edi_dtw.setVisible(show_mode & 4)
+
+        self.but_ctl.setVisible(show_mode & 8)
 
 
     def set_layout(self):
@@ -106,9 +126,6 @@ class QWEventControl(Frame) :
         self.but_ctl.setFixedWidth(50)
         self.but_ctl.setStyleSheet(style.styleButtonGood)
 
-        self.lab_dtw.setVisible(self.show_mode & 2)
-        self.edi_dtw.setVisible(self.show_mode & 2)
-        
 
     #def on_but(self):
     #    if self.but_ins.hasFocus() : print 'on_but ins'
@@ -229,7 +246,7 @@ if __name__ == "__main__" :
     from graphqt.IVConfigParameters import cp
 
     app = QtGui.QApplication(sys.argv)
-    w = QWEventControl(cp, log, parent=None, show_mode=2)
+    w = QWEventControl(cp, log, parent=None, show_mode=0377)
     w.setWindowTitle(w._name)
     w.move(QtCore.QPoint(50,50))
     w.connect_new_event_number_to(w.test_new_event_number_reception)

@@ -14,7 +14,7 @@ class IVTabDataControl(QWDataControl) :
     """ Data control parameters window for tab "Data"
         derived from QWDataControl to connect signals with IV-app recipients
     """
-    def __init__(self, cp, log, parent=None, show_mode=7) :
+    def __init__(self, cp, log, parent=None, show_mode=017) :
         QWDataControl.__init__(self, cp, log, parent=None, orient='V', show_mode=show_mode)
         self._name = self.__class__.__name__
 
