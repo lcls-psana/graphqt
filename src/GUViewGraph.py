@@ -68,6 +68,8 @@ class GUViewGraph(GUViewAxes) :
 #        #return ix, iy, v
 
 
+#------------------------------
+
     def mouseMoveEvent(self, e):
         GUViewAxes.mouseMoveEvent(self, e) # calls display_pixel_pos(e)
         p = self.mapToScene(e.pos())
@@ -129,6 +131,7 @@ class GUViewGraph(GUViewAxes) :
         rx, ry = fsize*rect.width(), fsize*rect.height()
         path = QtGui.QPainterPath()
         for px,py in zip(x, y) :
+            if None in (px,py) : continue
             path.addEllipse(QPointF(px,py), rx, ry)
         self._add_path_to_scene(path, pen, brush)
 
@@ -139,9 +142,19 @@ class GUViewGraph(GUViewAxes) :
             self.lst_items.remove(item)
         self.scene().update()
 
+#------------------------------
+ 
+    def closeEvent(self, e):
+        #print 'GUViewHist.closeEvent'
+        self.lst_items = []
+        #self.lst_hbins = []
+        GUViewAxes.closeEvent(self, e)
+        #print '%s.closeEvent' % self._name
 
-    def __del__(self) :
-        self.remove_all_graphs()
+#------------------------------ 
+
+#    def __del__(self) :
+#        self.remove_all_graphs()
 
 #-----------------------------
 

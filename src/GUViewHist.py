@@ -93,6 +93,7 @@ def image_to_hist_arr(arr, vmin=None, vmax=None, nbins=None) :
     amax = math.ceil (arr.max() if vmax is None else vmax)
     #mean, std = arr.mean(), arr.std()
     #amin, amax = mean-2*std, mean+10*std
+    if amin == amax : amax += 1
     nhbins = int(amax-amin) if nbins is None else nbins
 
     NBINS_MAX = (1<<15) - 1
@@ -225,14 +226,22 @@ class GUViewHist(GUViewAxes) :
 
         hb = self.lst_hbins[ihis]
         i1,i2 = hb.bin_indexes((x1,x2))
-        if i1 == i2 :
-            if i2<hb.nbins()-1 : i2+=1
-            else               : i1-=1
-        
+
+        if i1 == i2 : i2+=1
+        #    if i2<hb.nbins()-1 : i2+=1
+        #    else               : i1-=1
+
+        #from pyimgalgos.GlobalUtils import print_ndarr
+        #print_ndarr(hb.values, name='XXX: hb.values()', first=0, last=10)
+        #print_ndarr(hb.bincenters(), name='XXX: hb.bincenters()', first=0, last=10)
+        #print_ndarr(hb.binedges(), name='XXX: hb.binedges()', first=0, last=10)
+       
         values  = hb.values[i1:i2]
         centers = hb.bincenters()[i1:i2]
         edges   = hb.binedges()[i1:i2+1] 
 
+        #print 'XXX: GUViewHist.visible_hist_vce'
+        #print 'XXX: hb.nbins()', hb.nbins()
         #print 'XXX: i1,i2', i1,i2
         #print 'XXX: values', values
         #print 'XXX: edges', edges
@@ -258,6 +267,11 @@ class GUViewHist(GUViewAxes) :
 
         values, centers, edges = self.visible_hist_vce(ihis)
         mean, std = proc_stat_v2(values, centers)
+
+        #from pyimgalgos.GlobalUtils import print_ndarr
+        #print_ndarr(values, name='XXX: values', first=0, last=10)
+        #print_ndarr(centers, name='XXX: centers', first=0, last=10)
+        #print 'XXX visible_hist_mean_std:', mean, std
         return mean, std
 
 #------------------------------
@@ -460,7 +474,7 @@ class GUViewHist(GUViewAxes) :
         amin, amax, nbins, values = image_to_hist_arr(arr, self.amin, self.amax)
         self.set_limits_horizontal(amin, amax)
         vmin, vmax = values.min(), values.max()
-        print 'XXX: GUViewHist.add_array_as_hist: amin=%.1f  amax=%.1f  vmin=%.1f  vmax=%.1f' % (amin, amax, vmin, vmax)
+        #print 'XXX: GUViewHist.add_array_as_hist: amin=%.1f  amax=%.1f  vmin=%.1f  vmax=%.1f' % (amin, amax, vmin, vmax)
 
         #self._xmin = amin
         #self._xmax = amax

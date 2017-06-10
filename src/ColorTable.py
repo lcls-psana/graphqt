@@ -50,6 +50,7 @@ def apply_color_table(arr, ctable=None, amin=None, amax=None) :
     # color_table_monochr256() # color_table_def()
     min = np.amin(arr) if amin is None else amin
     max = np.amax(arr) if amax is None else amax
+    if min==max : max+=1
     f = float(ctab.size-1)/(max-min)
     ict = np.require(f*(arr-min), dtype=np.int) # array of indexes in color table
 

@@ -200,8 +200,8 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
 #------------------------------
  
     def draw_stat(self, mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w) :
-        #print 'mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w',\
-        #       mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w
+        #print 'XXX: mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w',\
+        #            mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w
         txt = u'  Entries: %d\n  Mean: %.2f \u00B1 %.2f\n  RMS: %.2f \u00B1 %.2f\n  \u03B31=%.2f   \u03B32=%.2f'%\
               (neff, mean, err_mean, rms, err_rms, skew, kurt)
         #print txt

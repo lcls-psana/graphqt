@@ -11,6 +11,10 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V01-00-07
+2017-06-09 Mikhail S. Dubrovin
+- tuning for expmon project
+
 Tag: V01-00-06
 2017-05-26 Mikhail S. Dubrovin
 - minor tuning for expmon project
