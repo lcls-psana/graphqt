@@ -15,8 +15,8 @@ Usage ::
 '''
 #------------------------------
 
-from PyQt4 import QtGui #, QtCore
-from PyQt4.QtCore import Qt
+from PyQt5 import QtCore, QtGui #
+from PyQt5.QtCore import Qt
 import numpy as np
 from math import floor
 

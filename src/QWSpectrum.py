@@ -57,9 +57,9 @@ Usage ::
 import os
 import sys
 #from graphqt.Frame import Frame
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 Qt = QtCore.Qt
-from graphqt.Styles import style    
+from graphqt.Styles import style
 
 from graphqt.GUViewFWImage import GUViewFWImage, image_with_random_peaks
 from graphqt.GUViewHist import GUViewHist, image_to_hist_arr
@@ -68,24 +68,26 @@ from graphqt.QWPopupSelectColorBar import popup_select_color_table
 
 #------------------------------
 
-class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
+class QWSpectrum(QtWidgets.QWidget) : # QtWidgets.QWidget, Frame
     """Widget for file name input
     """
+    color_table_is_changed = QtCore.pyqtSignal()
+
     def __init__(self, parent=None, arr=None,\
                  coltab = ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20),
                  show_frame=True, show_buts=True) :
 
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         #Frame.__init__(self, parent, mlw=1, vis=show_frame)
         self._name = self.__class__.__name__
         self.show_frame = show_frame
         self.show_buts  = show_buts
 
-        self.but_save = QtGui.QPushButton('&Save')
-        self.but_reset= QtGui.QPushButton('&Reset')
+        self.but_save = QtWidgets.QPushButton('&Save')
+        self.but_reset= QtWidgets.QPushButton('&Reset')
 
-        self.lab_stat = QtGui.QLabel('    Histogram\n    statistics')
-        self.lab_ibin = QtGui.QLabel('Bin info')
+        self.lab_stat = QtWidgets.QLabel('    Histogram\n    statistics')
+        self.lab_ibin = QtWidgets.QLabel('Bin info')
 
         #amin, amax, nbins, values = image_to_hist_arr(arr)
         #vmin, vmax = values.min(), values.max()
@@ -122,7 +124,7 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
         #self.vbox.addStretch(1)
         #self.setLayout(self.vbox)
 
-        grid = QtGui.QGridLayout()
+        grid = QtWidgets.QGridLayout()
         grid.addWidget(self.hist,      0,  0, 100, 100)
         grid.addWidget(self.cbar,     96, 12,   4,  88)
         grid.addWidget(self.lab_stat,  0, 80,  10,  20)
@@ -144,15 +146,15 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
         #self.connect_color_table_is_changed_to(self.test_color_table_is_changed_reception)
 
         if self.show_buts :
-          self.connect(self.but_save,  QtCore.SIGNAL('clicked()'), self.on_but_save)
-          self.connect(self.but_reset, QtCore.SIGNAL('clicked()'), self.on_but_reset)
+          self.but_save.clicked.connect(self.on_but_save)
+          self.but_reset.clicked.connect(self.on_but_reset)
 
 #------------------------------
  
     def on_but_save(self) :
         fltr='*.png *.gif *.jpg *.jpeg\n *'
         fname = 'fig-spectrum.png'
-        fname = str(QtGui.QFileDialog.getSaveFileName(self, 'Output file', fname, filter=fltr))
+        fname = str(QtWidgets.QFileDialog.getSaveFileName(self, 'Output file', fname, filter=fltr))[0]
         if fname == '' : return
         print 'QWSpectrum.on_but_save: save image in file: %s' % fname
         #p = QtGui.QPixmap.grabWindow(self.winId())
@@ -179,13 +181,13 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
         self.ctab = ct.next_color_table(ctab_ind)
         arr = ct.array_for_color_bar(self.ctab, orient='H')
         self.cbar.set_pixmap_from_arr(arr)
-        self.emit(QtCore.SIGNAL('color_table_is_changed()'))
+        self.color_table_is_changed.emit()
 
     def connect_color_table_is_changed_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('color_table_is_changed()'), recip)
+        self.color_table_is_changed.connect(recip)
 
     def disconnect_color_table_is_changed_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('color_table_is_changed()'), recip)
+        self.color_table_is_changed.disconnect(recip)
 
     def test_color_table_is_changed_reception(self) :
         print 'QWSpectrum.color_table_is_changed:', self.ctab.shape
@@ -270,7 +272,7 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
         try : self.cbar.close()
         except : pass
 
-        QtGui.QWidget.closeEvent(self, e)
+        QtWidgets.QWidget.closeEvent(self, e)
  
 #------------------------------
 
@@ -278,7 +280,7 @@ def test_guspectrum(tname) :
     print '%s:' % sys._getframe().f_code.co_name
 
     arr = image_with_random_peaks((50, 50))
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = QWSpectrum(None, arr, show_frame=False) #, show_buts=False)
 
     w.connect_color_table_is_changed_to(w.test_color_table_is_changed_reception)

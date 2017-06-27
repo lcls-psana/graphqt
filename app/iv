@@ -3,7 +3,7 @@
 import os
 import sys
 from optparse import OptionParser
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 from graphqt.Logger import log
 from graphqt.IVMain import IVMain
 from graphqt.IVConfigParameters import cp
@@ -27,7 +27,7 @@ class IMAGE_VIEWER :
         #if self.vrb : self.print_raw()
         if self.vrb : self.print_pars()
 
-        app = QtGui.QApplication(sys.argv)
+        app = QtWidgets.QApplication(sys.argv)
 
         t1 = PSQThreadWorker(cp, parent=None, dt_msec=5000, pbits=0) #0177777)
         t1.start()

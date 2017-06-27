@@ -19,10 +19,10 @@ Usage ::
 """
 
 from math import floor
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 
-class GUViewFW(QtGui.QGraphicsView) :
+class GUViewFW(QtWidgets.QGraphicsView) :
     
     def __init__(self, parent=None, rectax=QtCore.QRectF(0, 0, 10, 10), origin='UL', scale_ctl='HV', show_mode=0) :
 
@@ -32,11 +32,11 @@ class GUViewFW(QtGui.QGraphicsView) :
         self.set_origin(origin)
         self.set_scale_control(scale_ctl)
 
-        sc = QtGui.QGraphicsScene() # rectax
+        sc = QtWidgets.QGraphicsScene() # rectax
         #print 'scene rect=', sc.sceneRect()        
         #print 'rect img=', self.rectax
 
-        QtGui.QGraphicsView.__init__(self, sc, parent)
+        QtWidgets.QGraphicsView.__init__(self, sc, parent)
         
         self.set_style()
         self.set_view()
@@ -161,8 +161,8 @@ class GUViewFW(QtGui.QGraphicsView) :
 
 
     def mouseReleaseEvent(self, e):
-        QtGui.QApplication.restoreOverrideCursor()
-        QtGui.QGraphicsView.mouseReleaseEvent(self, e)
+        QtWidgets.QApplication.restoreOverrideCursor()
+        QtWidgets.QGraphicsView.mouseReleaseEvent(self, e)
         #print 'GUViewFW.mouseReleaseEvent, at point: ', e.pos(), ' diff:', e.pos() - self.pos_click
         #self.pos_click = e.pos()
         self.pos_click = None
@@ -176,7 +176,7 @@ class GUViewFW(QtGui.QGraphicsView) :
     def mousePressEvent(self, e):
         #print 'GUViewFW.mousePressEvent, at point: ', e.pos() #e.globalX(), e.globalY() 
         #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(Qt.SizeAllCursor))# ClosedHandCursor
-        QtGui.QGraphicsView.mousePressEvent(self, e)
+        QtWidgets.QGraphicsView.mousePressEvent(self, e)
 
         self.pos_click = e.pos()
         #self.pos_click_sc = self.mapToScene(self.pos_click)
@@ -208,7 +208,7 @@ class GUViewFW(QtGui.QGraphicsView) :
 
 
     def mouseMoveEvent(self, e):
-        QtGui.QGraphicsView.mouseMoveEvent(self, e)
+        QtWidgets.QGraphicsView.mouseMoveEvent(self, e)
         #print 'GUViewFW.mouseMoveEvent, at point: ', e.pos()
         self.display_pixel_pos(e)
 
@@ -232,7 +232,7 @@ class GUViewFW(QtGui.QGraphicsView) :
 
 
     def wheelEvent(self, e) :
-        QtGui.QGraphicsView.wheelEvent(self, e)
+        QtWidgets.QGraphicsView.wheelEvent(self, e)
 
         if self._scale_ctl==0 : return
 
@@ -276,19 +276,19 @@ class GUViewFW(QtGui.QGraphicsView) :
 
     def enterEvent(self, e) :
     #    print 'enterEvent'
-        QtGui.QGraphicsView.enterEvent(self, e)
+        QtWidgets.QGraphicsView.enterEvent(self, e)
         #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(Qt.CrossCursor))
         
 
     def leaveEvent(self, e) :
     #    print 'leaveEvent'
-        QtGui.QGraphicsView.leaveEvent(self, e)
+        QtWidgets.QGraphicsView.leaveEvent(self, e)
         #QtGui.QApplication.restoreOverrideCursor()
 
 
     def closeEvent(self, e) :
         #print 'GUViewFW.closeEvent' # % self._name
-        QtGui.QGraphicsView.closeEvent(self, e)
+        QtWidgets.QGraphicsView.closeEvent(self, e)
         
 
     #def moveEvent(self, e) :
@@ -297,7 +297,7 @@ class GUViewFW(QtGui.QGraphicsView) :
 
 
     def resizeEvent(self, e) :
-         QtGui.QGraphicsView.resizeEvent(self, e)
+         QtWidgets.QGraphicsView.resizeEvent(self, e)
          #print 'resizeEvent'
          #print 'Geometry rect:', self.geometry()
          rs = self.scene().sceneRect()    
@@ -330,7 +330,8 @@ class GUViewFW(QtGui.QGraphicsView) :
         """Adds rect to scene, returns GUQGraphicsRectItem - for interactive stuff"""
         from graphqt.GUQGraphicsRectItem import GUQGraphicsRectItem
         pen.setCosmetic(True)
-        item = GUQGraphicsRectItem(rect, parent=None, scene=self.scene())
+        item = GUQGraphicsRectItem(rect, parent=None)
+        self.scene().addItem(item)
         item.setPen(pen)
         item.setBrush(brush)
         return item
@@ -340,7 +341,7 @@ class GUViewFW(QtGui.QGraphicsView) :
 def test_guiviewfw(tname) :
     print '%s:' % sys._getframe().f_code.co_name
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = None
     if   tname == '0': w=GUViewFW(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin='DL', show_mode=3, scale_ctl='HV')
     elif tname == '1': w=GUViewFW(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin='DL', show_mode=3, scale_ctl='')

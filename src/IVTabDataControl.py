@@ -34,12 +34,12 @@ class IVTabDataControl(QWDataControl) :
 
 if __name__ == "__main__" :
     import sys
-    from PyQt4 import QtGui, QtCore
+    from PyQt5 import QtCore, QtGui, QtWidgets
 
     from graphqt.IVConfigParameters import cp
     from graphqt.Logger import log
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = IVTabDataControl(cp, log, show_mode=0377)
     w.move(QtCore.QPoint(50,50))
     w.setWindowTitle(w._name)
