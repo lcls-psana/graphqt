@@ -30,8 +30,8 @@ Usage ::
 #import os
 #import math
 #from graphqt.NDArrGenerators import random_array_xffffffff
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt, QPointF
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt, QPointF
 
 #from pyapps.graphqt.AxisLabeling import best_label_locs
 from AxisLabeling import best_label_locs
@@ -172,7 +172,7 @@ class GURuler() :
             txtitem = self.scene.addText(vstr, self.font)
             txtitem.setDefaultTextColor(self.color)
             txtitem.moveBy(pt.x(), pt.y())
-            txtitem.setFlag(QtGui.QGraphicsItem.ItemIgnoresTransformations, True)
+            txtitem.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)
             txtitem.setZValue(self.zvalue)
 
             self.lst_of_items.append(txtitem)       
@@ -203,18 +203,18 @@ if __name__ == "__main__" :
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     print 'screenGeometry():', app.desktop().screenGeometry()
 
     rv = QtCore.QRectF(-0.3, -0.3, 1.6, 1.6)
     rs = QtCore.QRectF(0, 0, 1, 1)
     ra = QtCore.QRectF(0.1, 0.1, 0.8, 0.8)
 
-    s = QtGui.QGraphicsScene(rs)
+    s = QtWidgets.QGraphicsScene(rs)
     #s.setSceneRect(r)
     print 'scene rect=', s.sceneRect()
 
-    v = QtGui.QGraphicsView(s)
+    v = QtWidgets.QGraphicsView(s)
     v.setGeometry(20, 20, 600, 400)
 
     v.fitInView(rv, 0) # Qt.IgnoreAspectRatio Qt.KeepAspectRatioByExpanding Qt.KeepAspectRatio

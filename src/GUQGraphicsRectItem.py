@@ -9,9 +9,9 @@ Class GUQGraphicsRectItem is derived from QGraphicsRectItem to intercept events.
 """
 #import os
 #import math
-from PyQt4 import QtGui#, QtCore
-from PyQt4.QtGui import QGraphicsRectItem
-from PyQt4.QtCore import Qt
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QGraphicsRectItem
+from PyQt5.QtCore import Qt
 #from PyQt4.QtCore import Qt, QPointF
 
 #from pyapps.graphqt.AxisLabeling import best_label_locs
@@ -20,8 +20,11 @@ from PyQt4.QtCore import Qt
 
 class GUQGraphicsRectItem(QGraphicsRectItem) :    
     #                  QRectF, QGraphicsItem, QGraphicsScene
+    event_on_rect = QtCore.pyqtSignal('QString')
+
     def __init__(self, rect, parent=None, scene=None) :
-        QGraphicsRectItem.__init__(self, rect, parent, scene)
+        QGraphicsRectItem.__init__(self, rect, parent)
+        if scene is not None: scene.addItem(self)
 
         self.setAcceptHoverEvents(True)
         self.setAcceptTouchEvents(True)
@@ -42,14 +45,14 @@ class GUQGraphicsRectItem(QGraphicsRectItem) :
     def hoverEnterEvent(self, e) :
         #print 'hoverEnterEvent'
         QGraphicsRectItem.hoverEnterEvent(self, e)
-        QtGui.QApplication.setOverrideCursor(QtGui.QCursor(self.hover_cursor))
+        QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(self.hover_cursor))
 
 
     def hoverLeaveEvent(self, e) :
         #print 'hoverLeaveEvent'
         QGraphicsRectItem.hoverLeaveEvent(self, e)
         #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(self.hover_cursor))
-        QtGui.QApplication.restoreOverrideCursor()
+        QtWidgets.QApplication.restoreOverrideCursor()
         
 
     def hoverMoveEvent(self, e) :
@@ -65,7 +68,7 @@ class GUQGraphicsRectItem(QGraphicsRectItem) :
     def mousePressEvent(self, e) :
         #print 'mousePressEvent, at point: ', e.pos() #e.globalX(), e.globalY() 
         QGraphicsRectItem.mousePressEvent(self, e)
-        QtGui.QApplication.setOverrideCursor(QtGui.QCursor(self.grub_cursor))
+        QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(self.grub_cursor))
 
 
     def mouseReleaseEvent(self, e) :
@@ -74,7 +77,7 @@ class GUQGraphicsRectItem(QGraphicsRectItem) :
         #print 'mouseReleaseEvent'
         QGraphicsRectItem.mouseReleaseEvent(self, e)
         #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(self.hover_cursor))
-        QtGui.QApplication.restoreOverrideCursor()
+        QtWidgets.QApplication.restoreOverrideCursor()
 
 
 #    def mouseDoubleClickEvent(self, e) :
@@ -88,7 +91,7 @@ class GUQGraphicsRectItem(QGraphicsRectItem) :
 
 
     def emit_signal(self, msg='click') :
-        self.emit(QtCore.SIGNAL('event_on_rect(QString)'), msg)
+        self.event_on_rect.emit(msg)
         #print msg
 
 #-----------------------------

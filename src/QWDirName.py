@@ -7,16 +7,21 @@
 #------------------------------
 
 from graphqt.QWFileName import *
+from PyQt5.QtWidgets import *
 
 #------------------------------
 
 class QWDirName(QWFileName) : # QtGui.QWidget
     """Widget for directory name input
     """
+    path_is_changed = QtCore.pyqtSignal('QString')
+
     def __init__(self, parent=None, butname='Select', label='Dir:',\
                  path='/reg/neh/home/dubrovin/LCLS/rel-expmon/',\
-                 fltr=QtGui.QFileDialog.ShowDirsOnly | QtGui.QFileDialog.DontResolveSymlinks,\
+                 fltr=QFileDialog.ShowDirsOnly | QFileDialog.DontResolveSymlinks,\
                  show_frame=False) :
+#                fltr=QtGui.QFileDialog.ShowDirsOnly | QtGui.QFileDialog.DontResolveSymlinks,\
+#                show_frame=False) :
 
         QWFileName.__init__(self, parent, butname, label, path, mode='r', fltr=fltr, show_frame=show_frame)
         self._name = self.__class__.__name__
@@ -34,7 +39,7 @@ class QWDirName(QWFileName) : # QtGui.QWidget
         else :
             self.path = path1
             self.edi.setText(self.path)
-            self.emit(QtCore.SIGNAL('path_is_changed(QString)'), self.path)
+            self.path_is_changed.emit(self.path)
             #logger.info('Selected file:\n' + self.path, __name__)
             #print 'Selected file: %s' % self.path
 

@@ -67,14 +67,18 @@ Usage ::
 """
 #------------------------------
 
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 #from graphqt.GUUtils import print_rect
 
 #------------------------------
 
-class GUView(QtGui.QGraphicsView) :
+class GUView(QtWidgets.QGraphicsView) :
     
+    axes_limits_changed = QtCore.pyqtSignal(float, float, float, float)
+    wheel_is_stopped = QtCore.pyqtSignal()
+    view_is_closed = QtCore.pyqtSignal()
+
     def __init__(self, parent=None, rectax=QtCore.QRectF(0, 0, 10, 10), origin='UL', scale_ctl='HV',\
                  margl=None, margr=None, margt=None, margb=None, show_mode=0) :
 
@@ -87,11 +91,11 @@ class GUView(QtGui.QGraphicsView) :
         self.set_margins(margl, margr, margt, margb)
 
         # begin graphics
-        sc = QtGui.QGraphicsScene() # rectax
+        sc = QtWidgets.QGraphicsScene() # rectax
         #print 'scene rect=', sc.sceneRect()        
         #print 'rect img=', self.rectax
 
-        QtGui.QGraphicsView.__init__(self, sc, parent)
+        QtWidgets.QGraphicsView.__init__(self, sc, parent)
         
         self.set_transform_orientation() 
         self.set_view()
@@ -115,7 +119,7 @@ class GUView(QtGui.QGraphicsView) :
         self.update_my_scene()
 
         self.timer = QtCore.QTimer()
-        self.connect(self.timer, QtCore.SIGNAL('timeout()'), self.on_timeout)
+        self.timer.timeout.connect(self.on_timeout)
 
         #self.connect_wheel_is_stopped_to(self.check_axes_limits_changed)
         #self.disconnect_wheel_is_stopped_from(self.check_axes_limits_changed)
@@ -246,7 +250,7 @@ class GUView(QtGui.QGraphicsView) :
             self._y1_old = y1
             self._y2_old = y2
             #self.evaluate_hist_statistics()
-            self.emit(QtCore.SIGNAL('axes_limits_changed(float,float,float,float)'), x1, x2, y1, y2)
+            self.axes_limits_changed.emit(x1, x2, y1, y2)
 
 
     def check_limits(self) :
@@ -399,7 +403,8 @@ class GUView(QtGui.QGraphicsView) :
         """Adds rect to scene, returns GUQGraphicsRectItem - for interactive stuff"""
         from graphqt.GUQGraphicsRectItem import GUQGraphicsRectItem
         pen.setCosmetic(True)
-        item = GUQGraphicsRectItem(rect, parent=None, scene=self.scene())
+        item = GUQGraphicsRectItem(rect, parent=None)
+        self.scene().addItem(item)
         item.setPen(pen)
         item.setBrush(brush)
         return item
@@ -433,10 +438,10 @@ class GUView(QtGui.QGraphicsView) :
 #------------------------------
 
     def connect_axes_limits_changed_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('axes_limits_changed(float,float,float,float)'), recip)
+        self.axes_limits_changed[float, float, float, float].connect(recip)
 
     def disconnect_axes_limits_changed_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('axes_limits_changed(float,float,float,float)'), recip)
+        self.axes_limits_changed[float, float, float, float].disconnect(recip)
 
     def test_axes_limits_changed_reception(self, x1, x2, y1, y2) :
         print 'GUView.test_axes_limits_changed_reception x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f' % (x1, x2, y1, y2)
@@ -463,8 +468,8 @@ class GUView(QtGui.QGraphicsView) :
 
 
     def mouseReleaseEvent(self, e):
-        QtGui.QApplication.restoreOverrideCursor()
-        QtGui.QGraphicsView.mouseReleaseEvent(self, e)
+        QtWidgets.QApplication.restoreOverrideCursor()
+        QtWidgets.QGraphicsView.mouseReleaseEvent(self, e)
         #print 'GUView.mouseReleaseEvent, at point: ', e.pos(), ' diff:', e.pos() - self.pos_click
         #self.pos_click = e.pos()
         self.pos_click = None
@@ -479,7 +484,7 @@ class GUView(QtGui.QGraphicsView) :
     def mousePressEvent(self, e):
         #print 'GUView.mousePressEvent, at point: ', e.pos() #e.globalX(), e.globalY() 
         #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(Qt.SizeAllCursor))# ClosedHandCursor
-        QtGui.QGraphicsView.mousePressEvent(self, e)
+        QtWidgets.QGraphicsView.mousePressEvent(self, e)
 
         self.pos_click = e.pos()
         #self.pos_click_sc = self.mapToScene(self.pos_click)
@@ -496,8 +501,8 @@ class GUView(QtGui.QGraphicsView) :
             return
 
         pos_on_sc = self.mapToScene(e.pos())
-        item = self.scene().itemAt(pos_on_sc)
-
+        print type(self.scene())
+        item = self.scene().itemAt(pos_on_sc, QtGui.QTransform())
         if   item == self.rsboti : self.scalebw = 1 # print 'bottom rect' # |= 1
         elif item == self.rstopi : self.scalebw = 1 # print 'left rect' # |= 2
         elif item == self.rslefi : self.scalebw = 2 # print 'left rect' # |= 2
@@ -508,7 +513,7 @@ class GUView(QtGui.QGraphicsView) :
 
 
     def mouseMoveEvent(self, e):
-        QtGui.QGraphicsView.mouseMoveEvent(self, e)
+        QtWidgets.QGraphicsView.mouseMoveEvent(self, e)
         #print 'GUView.mouseMoveEvent, at point: ', e.pos()
         self.display_pixel_pos(e) # re-defined in GUViewImage, GUViewHist, etc.
 
@@ -531,18 +536,18 @@ class GUView(QtGui.QGraphicsView) :
         self.update_my_scene()
 
 
-    def wheelEvent(self, e) :
-        QtGui.QGraphicsView.wheelEvent(self, e)
+    def wheelEvent(self, event) :
+        QtWidgets.QGraphicsView.wheelEvent(self, event)
 
         if self._scale_ctl==0 : return
 
-        self._select_further_action(e)
+        self._select_further_action(event)
 
-        #print 'wheelEvent: ', e.delta()
-        f = 1 + 0.4 * (1 if e.delta()>0 else -1)
-        #print 'Scale factor =', f
+        print event.angleDelta()
+        f = 1 + 0.4 * (1 if event.angleDelta().y()>0 else -1)
+        print 'Scale factor =', f
 
-        p = self.mapToScene(e.pos())
+        p = self.mapToScene(event.pos())
         px, py = p.x(), p.y() 
         #print 'wheel x,y = ', e.x(), e.y(), ' on scene x,y =', p.x(), p.y() 
         #rectax = self.rectax
@@ -589,15 +594,15 @@ class GUView(QtGui.QGraphicsView) :
         #print 'on_timeout'
         self.timer.stop()
         self.check_axes_limits_changed()
-        self.emit(QtCore.SIGNAL('wheel_is_stopped()'))
+        self.wheel_is_stopped.emit()
 
 #------------------------------
 
     def connect_wheel_is_stopped_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('wheel_is_stopped()'), recip)
+        self.wheel_is_stopped.connect(recip)
 
     def disconnect_wheel_is_stopped_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('wheel_is_stopped()'), recip)
+        self.wheel_is_stopped.disconnect(recip)
 
     def test_wheel_is_stopped_reception(self) :
         print 'GUView.test_wheel_is_stopped_reception'
@@ -606,29 +611,29 @@ class GUView(QtGui.QGraphicsView) :
 
     def enterEvent(self, e) :
     #    print 'enterEvent'
-        QtGui.QGraphicsView.enterEvent(self, e)
+        QtWidgets.QGraphicsView.enterEvent(self, e)
         #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(Qt.CrossCursor))
         
 
     def leaveEvent(self, e) :
     #    print 'leaveEvent'
-        QtGui.QGraphicsView.leaveEvent(self, e)
+        QtWidgets.QGraphicsView.leaveEvent(self, e)
         #QtGui.QApplication.restoreOverrideCursor()
 
 
     def closeEvent(self, e) :
         #print 'In %s.closeEvent' % (self._name) #, sys._getframe().f_code.co_name)
-        QtGui.QGraphicsView.closeEvent(self, e)
+        QtWidgets.QGraphicsView.closeEvent(self, e)
         #print 'GUView.closeEvent' #% self._name
-        self.emit(QtCore.SIGNAL('view_is_closed()'))
+        self.view_is_closed.emit()
 
 
     def connect_view_is_closed_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('view_is_closed()'), recip)
+        self.view_is_closed.connect(recip)
 
 
     def disconnect_view_is_closed_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('view_is_closed()'), recip)
+        self.view_is_closed.disconnect(recip)
 
 
     def test_view_is_closed_reception(self) :
@@ -641,7 +646,7 @@ class GUView(QtGui.QGraphicsView) :
 
 
     def resizeEvent(self, e) :
-        QtGui.QGraphicsView.resizeEvent(self, e)
+        QtWidgets.QGraphicsView.resizeEvent(self, e)
         #print 'resizeEvent'
         #print 'Geometry rect:', self.geometry()
         rs = self.scene().sceneRect()    
@@ -665,7 +670,7 @@ class GUView(QtGui.QGraphicsView) :
 
 def test_guiview(tname) :
     print '%s:' % sys._getframe().f_code.co_name
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = None
     rectax=QtCore.QRectF(0, 0, 100, 100)
     if   tname == '0': w=GUView(None, rectax, origin='DL', scale_ctl='HV', margl=0.12, margr=0.10, margt=0.06, margb=0.06, show_mode=3)

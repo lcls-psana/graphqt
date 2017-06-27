@@ -23,12 +23,15 @@ Usage ::
 #import math
 #import math
 import numpy as np
+from PyQt5.QtWidgets import *
 from math import floor
 import graphqt.ColorTable as ct
 from graphqt.GUViewFW import *
 
 class GUViewFWImage(GUViewFW) :
     
+    click_on_color_bar = QtCore.pyqtSignal()
+
     def __init__(self, parent=None, arr=None,\
                  coltab=ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20),\
                  origin='UL', scale_ctl='HV') :
@@ -71,15 +74,15 @@ class GUViewFWImage(GUViewFW) :
     def mousePressEvent(self, e):
         GUViewFW.mousePressEvent(self, e)
         #print 'GUViewFWImage.mousePressEvent'
-        self.emit(QtCore.SIGNAL('click_on_color_bar()'))
+        self.click_on_color_bar.emit()
 
 #------------------------------
 
     def connect_click_on_color_bar_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('click_on_color_bar()'), recip)
+        self.click_on_color_bar.connect(recip)
 
     def disconnect_click_on_color_bar_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('click_on_color_bar()'), recip)
+        self.click_on_color_bar.disconnect(recip)
 
 #------------------------------
 

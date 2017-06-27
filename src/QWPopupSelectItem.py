@@ -12,18 +12,18 @@
 
 import os
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 #------------------------------  
 
-class QWPopupSelectItem(QtGui.QDialog) :
+class QWPopupSelectItem(QtWidgets.QDialog) :
 
     def __init__(self, parent=None, lst=[]):
 
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
 
         self.name_sel = None
-        self.list = QtGui.QListWidget(parent)
+        self.list = QtWidgets.QListWidget(parent)
 
         self.fill_list(lst)
         #self.fill_list_icons(lst_icons)
@@ -42,7 +42,7 @@ class QWPopupSelectItem(QtGui.QDialog) :
         #self.hbox.addWidget(self.but_apply)
         ##self.hbox.addStretch(1)
 
-        vbox = QtGui.QVBoxLayout()
+        vbox = QtWidgets.QVBoxLayout()
         vbox.addWidget(self.list)
         #vbox.addLayout(self.hbox)
         self.setLayout(vbox)
@@ -55,7 +55,7 @@ class QWPopupSelectItem(QtGui.QDialog) :
 
     def fill_list(self, lst) :
         for exp in sorted(lst) :
-            item = QtGui.QListWidgetItem(exp, self.list)
+            item = QtWidgets.QListWidgetItem(exp, self.list)
         self.list.sortItems(QtCore.Qt.AscendingOrder)
 
 
@@ -105,7 +105,7 @@ class QWPopupSelectItem(QtGui.QDialog) :
         #print 'event.type', e.type()
         if e.type() == QtCore.QEvent.WindowDeactivate :
             self.reject()
-        return QtGui.QDialog.event(self, e)
+        return QtWidgets.QDialog.event(self, e)
     
 
     def closeEvent(self, e) :
@@ -132,8 +132,8 @@ def popup_select_item_from_list(parent, lst) :
     w = QWPopupSelectItem(parent, lst)
     ##w.show()
     resp=w.exec_()
-    if   resp == QtGui.QDialog.Accepted : return w.selectedName()
-    elif resp == QtGui.QDialog.Rejected : return None
+    if   resp == QtWidgets.QDialog.Accepted : return w.selectedName()
+    elif resp == QtWidgets.QDialog.Rejected : return None
     else : return None
 
 #------------------------------
@@ -145,7 +145,7 @@ def popup_select_item_from_list(parent, lst) :
 def test_select_exp(tname) :
     lst = sorted(os.listdir('/reg/d/psdm/CXI/'))
     print 'lst:', lst 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     exp_name = popup_select_item_from_list(None, lst)
     print 'exp_name = %s' % exp_name 
 

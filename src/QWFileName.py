@@ -9,13 +9,15 @@
 import os
 import sys
 from graphqt.Frame import Frame
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 #------------------------------
 
-class QWFileName(Frame) : # QtGui.QWidget
+class QWFileName(Frame) : # QtWidgets.QWidget
     """Widget for file name input
     """
+    path_is_changed = QtCore.pyqtSignal('QString')
+
     def __init__(self, parent=None, butname='Browse', label='File:',\
                  path='/reg/neh/home/dubrovin/LCLS/rel-expmon/log.txt',\
                  mode='r',\
@@ -31,12 +33,12 @@ class QWFileName(Frame) : # QtGui.QWidget
         self.fltr = fltr
         self.show_frame = show_frame
 
-        self.lab = QtGui.QLabel(label)
-        self.but = QtGui.QPushButton(butname)
-        self.edi = QtGui.QLineEdit(path)
+        self.lab = QtWidgets.QLabel(label)
+        self.but = QtWidgets.QPushButton(butname)
+        self.edi = QtWidgets.QLineEdit(path)
         self.edi.setReadOnly(True) 
 
-        self.hbox = QtGui.QHBoxLayout() 
+        self.hbox = QtWidgets.QHBoxLayout() 
         self.hbox.addWidget(self.lab)
         self.hbox.addWidget(self.edi)
         self.hbox.addWidget(self.but)
@@ -46,7 +48,7 @@ class QWFileName(Frame) : # QtGui.QWidget
         self.set_tool_tips()
         self.set_style()
 
-        self.connect(self.but, QtCore.SIGNAL('clicked()'), self.on_but)
+        self.but.clicked.connect(self.on_but)
 
 #------------------------------
 
@@ -81,9 +83,9 @@ class QWFileName(Frame) : # QtGui.QWidget
 #------------------------------
  
     def on_but(self):
-        self.path = str(QtGui.QFileDialog.getSaveFileName(self, 'Output file', self.path, filter=self.fltr)) \
+        self.path = str(QtWidgets.QFileDialog.getSaveFileName(self, 'Output file', self.path, filter=self.fltr)) \
                     if self.mode == 'w' else \
-                    str(QtGui.QFileDialog.getOpenFileName(self, 'Input file', self.path, filter=self.fltr))
+                    str(QtWidgets.QFileDialog.getOpenFileName(self, 'Input file', self.path, filter=self.fltr))[0]
 
         dname, fname = os.path.split(self.path)
 
@@ -98,14 +100,14 @@ class QWFileName(Frame) : # QtGui.QWidget
 
         else :
             self.edi.setText(self.path)
-            self.emit(QtCore.SIGNAL('path_is_changed(QString)'), self.path)
+            self.path_is_changed.emit(self.path)
             #logger.info('Selected file:\n' + self.path, __name__)
             #print 'Selected file: %s' % self.path
 
 #------------------------------
 
     def connect_path_is_changed_to_recipient(self, recip) :
-        self.connect(self, QtCore.SIGNAL('path_is_changed(QString)'), recip)
+        self.path_is_changed['QString'].connect(recip)
 
 #------------------------------
  
@@ -115,7 +117,7 @@ class QWFileName(Frame) : # QtGui.QWidget
 #------------------------------
 
 if __name__ == "__main__" :
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = QWFileName(None, butname='Select', label='Path:',\
                    path='/reg/neh/home/dubrovin/LCLS/rel-expmon/log.txt', show_frame=True)
     w.connect_path_is_changed_to_recipient(w.test_signal_reception)
