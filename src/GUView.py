@@ -429,6 +429,18 @@ class GUView(QtGui.QGraphicsView) :
         x1, x2 = r.left(), r.right()
         y1, y2 = r.bottom(), r.top()
         return min(x1, x2), max(x1, x2), min(y1, y2), max(y1, y2)
+
+ 
+#------------------------------
+
+    def move_scene(self, dp) :
+        """Move scene/axes rect by QtCore.QPointF dp
+        """
+        sc = self.scene()
+        rs = sc.sceneRect()
+        rs.moveCenter(rs.center() + dp)
+        sc.setSceneRect(rs)
+        self.update_my_scene()
  
 #------------------------------
 
