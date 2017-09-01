@@ -11,6 +11,10 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V01-00-10
+2017-09-01 Mikhail S. Dubrovin
+- IVTabDataControl - add parameter show_mode_evctl=017
+
 Tag: V01-00-09
 2017-07-28 Mikhail S. Dubrovin
 - add app/timeconvertor, QWDateTimeSec.py, QWCheckList.py
