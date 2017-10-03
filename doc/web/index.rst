@@ -10,187 +10,202 @@ graphqt documentation
    :maxdepth: 2
    :caption: Contents:
 
-.. automodule:: GeometryObject
+.. automodule:: GUView
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: GeometryAccess
+.. automodule:: GUViewAxes
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: SegGeometryStore
+.. automodule:: GUViewAxesDL
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: SegGeometry
+.. automodule:: GUViewImage
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: SegGeometryCspad2x1V1
+.. automodule:: GUViewGraph
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: SegGeometryEpix100V1
+.. automodule:: GUViewHist
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: SegGeometryMatrixV1
+.. automodule:: GUViewColorBar
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: DCMethods
+.. automodule:: GUViewFW
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: DCStore
+.. automodule:: GUViewFWImage
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: DCBase
+.. automodule:: GUQGraphicsRectItem
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: DCType
+.. automodule:: GURuler
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: DCRange
+.. automodule:: GUUtils
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: DCVersion
+.. automodule:: GUDragFactory
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: DCInterface
+.. automodule:: GUDragBase
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: DCFileName
+.. automodule:: GUDragCirc
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: DCDetectorId
+.. automodule:: GUDragPoint
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: DCConfigParameters
+.. automodule:: GUDragRect
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: DCEmail
+.. automodule:: GUViewImageWithShapes
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: DCLogger
+.. automodule:: QWCheckList
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: DCUtils
+.. automodule:: QWDateTimeSec
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibFileFinder
+.. automodule:: QWDirName
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: NDArrIO
+.. automodule:: QWFileName
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibPars
+.. automodule:: QWLogger
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibParsStore
+.. automodule:: QWPopupSelectColorBar
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: GenericCalibPars
+.. automodule:: QWPopupSelectItem
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibParsBaseAcqirisV1
+.. automodule:: QWSpectrum
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibParsBaseAndor3dV1
+.. automodule:: QWUtils
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibParsBaseAndorV1
+.. automodule:: IVMain
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibParsBaseCameraV1
+.. automodule:: IVMainTabs
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibParsBaseCSPad2x2V1
+.. automodule:: IVMainButtons
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibParsBaseCSPadV1
+.. automodule:: IVTabDataControl
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibParsBaseEpix100aV1
+.. automodule:: IVTabFileName
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibParsBaseImpV1
+.. automodule:: IVConfigParameters
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibParsBaseJungfrauV1
+.. automodule:: IVImageCursorInfo
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibParsBasePnccdV1
+.. automodule:: QIcons
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: CalibParsBasePrincetonV1
+.. automodule:: Logger
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: GlobalUtils
+.. automodule:: Styles
+   :members:
+   :show-inheritance:
+   :special-members:
+
+.. automodule:: AxisLabeling
+   :members:
+   :show-inheritance:
+   :special-members:
+
+.. automodule:: ColorTable
+   :members:
+   :show-inheritance:
+   :special-members:
+
+.. automodule:: Frame
    :members:
    :show-inheritance:
    :special-members:
