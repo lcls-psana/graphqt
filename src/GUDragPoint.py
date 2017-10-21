@@ -1,10 +1,9 @@
 #!@PYTHON@
 """
-Created on 2016-10-11
+Class :py:class:`GUDragPoint` - for draggable shape item
+========================================================
 
-@author: Mikhail Dubrovin
-
-Class GUDragPoint - for draggable shape item.
+Created on 2016-10-11 by Mikhail Dubrovin
 """
 #-----------------------------
 

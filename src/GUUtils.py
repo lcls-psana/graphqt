@@ -1,10 +1,7 @@
 #!@PYTHON@
 """
-Created on 2016-10-21
-
-@author: Mikhail Dubrovin
-
-Module GUUtils - re-usable utils
+:py:class:`GUUtils` - re-usable utils
+======================================
 
 Usage::
 
@@ -17,6 +14,7 @@ Usage::
     from graphqt.GUUtils import print_rect
     print_rect(r, cmt='')
 
+Created on 2016-10-21 by Mikhail Dubrovin
 """
 #------------------------------
 

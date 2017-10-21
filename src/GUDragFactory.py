@@ -1,10 +1,9 @@
 #!@PYTHON@
 """
-Created on 2016-10-09
+Module :py:class:`GUDragFactory` contains factory methods for draggable objects
+===============================================================================
 
-@author: Mikhail Dubrovin
-
-Module GUDragFactory contains factory methods for draggable objects.
+Created on 2016-10-09 by Mikhail Dubrovin
 """
 #-----------------------------
 

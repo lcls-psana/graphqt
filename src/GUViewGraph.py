@@ -1,9 +1,14 @@
 #!@PYTHON@
-"""Class GUViewGraph is a QWidget for interactive image.
-Created: 2016-09-09
-Author : Mikhail Dubrovin
+"""
+Class :py:class:`GUViewGraph` is a QWidget for interactive image
+================================================================
 
 Usage ::
+    from graphqt.GUViewGraph import GUViewGraph
+    #...
+    w = GUViewGraph(None, arr, origin='UL', scale_ctl='HV', coltab=ctab)
+
+Created on 2016-09-09 by Mikhail Dubrovin
 """
 
 #import os

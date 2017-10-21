@@ -1,10 +1,7 @@
 #!@PYTHON@
 """
-Created on September 9, 2016
-
-@author: Mikhail Dubrovin
-
-Class GUViewFWImage is a QWidget for interactive image.
+Class :py:class:`GUViewFWImage` is a QWidget for interactive image
+==================================================================
 
 Usage ::
 
@@ -17,6 +14,8 @@ Usage ::
     w = GUViewFWImage(None, arr, origin='UL', scale_ctl='HV', coltab=ctab)
     w.show()
     app.exec_()
+
+Created on September 9, 2016 by Mikhail Dubrovin
 """
 
 #import os

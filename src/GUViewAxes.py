@@ -1,10 +1,7 @@
 #!@PYTHON@
 """
-Created on December 14, 2016
-
-@author: Mikhail Dubrovin
-
-Class GUViewAxes is a QGraphicsView / QWidget with interactive scalable scene with axes.
+Class :py:class:`GUViewAxes` is a QGraphicsView / QWidget with interactive scalable scene with axes
+===================================================================================================
 
 Usage ::
 
@@ -35,6 +32,8 @@ Usage ::
     w.update_my_scene() # GUView.update_my_scene() + draw rulers
     w.set_style()       # sets GUView.set_style() + color, font, pen
     w.closeEvent()      # removes rulers, GUView.closeEvent()
+
+Created on December 14, 2016 by Mikhail Dubrovin
 """
 
 from graphqt.GUView  import GUView, QtGui, QtCore, Qt

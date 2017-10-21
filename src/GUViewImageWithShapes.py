@@ -1,12 +1,10 @@
 #!@PYTHON@
 """
-Created on 2016-10-10
-
-@author: Mikhail Dubrovin
-
-Class GUViewImageWithShapes is a QWidget for interactive image.
+Class :py:class:`GUViewImageWithShapes` is a QWidget for interactive image
+==========================================================================
 
 Usage ::
+
     import sys
     import numpy as np
     arr = np.random.random((1000, 1000))
@@ -14,6 +12,8 @@ Usage ::
     w = GUViewImageWithShapes(None, arr, origin='UL', scale_ctl='HV', rulers='UDLR')
     w.show()
     app.exec_()
+
+Created on 2016-10-10 by Mikhail Dubrovin
 """
 #------------------------------
 
@@ -113,6 +113,7 @@ class GUViewImageWithShapes(GUViewImage) :
         self.lst_drag_items.remove(item)
         self.setShapesEnabled()
 
+#------------------------------
 
     def keyPressEvent(self, e) :
         #print 'keyPressEvent, key=', e.key()         

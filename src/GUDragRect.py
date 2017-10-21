@@ -1,10 +1,9 @@
 #!@PYTHON@
 """
-Created on 2016-10-10
+Class :py:class:`GUDragRect` - for draggable shape item
+=======================================================
 
-@author: Mikhail Dubrovin
-
-Class GUDragRect - for draggable shape item.
+Created on 2016-10-10 by Mikhail Dubrovin
 """
 #-----------------------------
 

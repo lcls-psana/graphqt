@@ -1,10 +1,7 @@
 #!@PYTHON@
 """
-Created on September 9, 2016
-
-@author: Mikhail Dubrovin
-
-Class GUViewImage is a QWidget for interactive image.
+Class :py:class:`GUViewColorBar` is a QWidget for interactive color bar
+=======================================================================
 
 Usage ::
 
@@ -17,6 +14,8 @@ Usage ::
     w = GUViewColorBar(None, coltab=ctab)
     w.show()
     app.exec_()
+
+Created on September 9, 2016 by Mikhail Dubrovin
 """
 
 #-----------------------------

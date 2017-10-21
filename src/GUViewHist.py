@@ -1,8 +1,7 @@
 #!@PYTHON@
 """
-Created on September 9, 2016
-@author: Mikhail Dubrovin
-Class GUViewHist is a QWidget for interactive image.
+Class :py:class:`GUViewHist` is a QWidget for interactive image
+===============================================================
 
 Usage ::
 
@@ -74,6 +73,8 @@ Usage ::
     Global scope methods
     --------------------
     amin, amax, nhbins, values = image_to_hist_arr(arr, vmin=None, vmax=None, nbins=None)
+
+Created on September 9, 2016 by Mikhail Dubrovin
 """
 
 #import os

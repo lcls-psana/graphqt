@@ -1,9 +1,8 @@
 #!@PYTHON@
 """
-Created: 2017-01-03
-Author : Mikhail Dubrovin
+Class :py:class:`GUViewFW` is a QGraphicsView / QWidget with interactive scalable scene with axes
+=================================================================================================
 
-Class GUViewFW is a QGraphicsView / QWidget with interactive scalable scene with axes.
 FW stands for Full Window - no margins for axes
 
 Usage ::
@@ -16,6 +15,8 @@ Usage ::
     w = GUViewFW(None, raxes=QtCore.QRectF(0, 0, 100, 100), origin='UL', scale_ctl='HV')
     w.show()
     app.exec_()
+
+Created on 2017-01-03 by Mikhail Dubrovin
 """
 
 from math import floor

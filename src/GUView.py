@@ -1,10 +1,7 @@
 #!@PYTHON@
 """
-Created on September 9, 2016
-
-@author: Mikhail Dubrovin
-
-Class GUView is a QGraphicsView / QWidget with interactive scene having scalable axes box.
+Class :py:class:`GUView` is a QGraphicsView / QWidget with interactive scene having scalable axes box
+=====================================================================================================
 
 Usage ::
 
@@ -64,6 +61,8 @@ Usage ::
     __del__
     enterEvent, leaveEvent, closeEvent, resizeEvent, keyPressEvent, 
     mouseReleaseEvent, mousePressEvent, mouseMoveEvent, wheelEvent
+
+Created on September 9, 2016 by Mikhail Dubrovin
 """
 #------------------------------
 

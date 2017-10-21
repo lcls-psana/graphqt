@@ -1,10 +1,9 @@
 #!@PYTHON@
 """
-Created on 2016-09-14
+Class :py:class:`GUDragBase` is a base class for draggable objects
+==================================================================
 
-@author: Mikhail Dubrovin
-
-Class GUDragBase is a base class for draggable objects
+Created on 2016-09-14 by Mikhail Dubrovin
 """
 #-----------------------------
 

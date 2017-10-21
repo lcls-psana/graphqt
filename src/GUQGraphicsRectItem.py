@@ -1,11 +1,9 @@
 #!@PYTHON@
 """
-Created on June 12, 2016
+Class :py:class:`GUQGraphicsRectItem` is derived from QGraphicsRectItem to intercept events
+===========================================================================================
 
-@author: Mikhail Dubrovin
-
-Class GUQGraphicsRectItem is derived from QGraphicsRectItem to intercept events.
-
+Created on June 12, 2016 by Mikhail Dubrovin
 """
 #import os
 #import math

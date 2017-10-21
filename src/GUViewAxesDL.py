@@ -1,21 +1,20 @@
 #!@PYTHON@
 """
-Created on September 9, 2016
-
-@author: Mikhail Dubrovin
-
-Class GUView is a QGraphicsView / QWidget with interactive scalable scene with axes.
+Class :py:class:`GUViewAxesDL` is a QGraphicsView / QWidget with interactive scalable scene with axes
+=====================================================================================================
 
 Usage ::
 
     import sys
     from PyQt4 import QtGui, QtCore
-    from graphqt.GUView import GUView
+    from graphqt.GUViewAxesDL import GUViewAxesDL
 
     app = QtGui.QApplication(sys.argv)
-    w = GUView(None, raxes=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=3)
+    w = GUViewAxesDL(None, raxes=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=3)
     w.show()
     app.exec_()
+
+Created on September 9, 2016 by Mikhail Dubrovin
 """
 
 #import os
@@ -24,7 +23,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt
 from graphqt.GURuler import GURuler
 
-class GUView(QtGui.QGraphicsView) :
+class GUViewAxesDL(QtGui.QGraphicsView) :
     
     def __init__(self, parent=None, rectax=QtCore.QRectF(0, 0, 10, 10), origin_up=True, scale_ctl=3, rulers='LB') :
 
@@ -91,7 +90,7 @@ class GUView(QtGui.QGraphicsView) :
 
     def set_style(self) :
         self.setGeometry(20, 20, 600, 600)
-        self.setWindowTitle("GUView window")
+        self.setWindowTitle("GUViewAxesDL window")
         #w.setContentsMargins(-9,-9,-9,-9)
         self.setStyleSheet("background-color:black; border: 0px solid green")
         #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
@@ -212,7 +211,7 @@ class GUView(QtGui.QGraphicsView) :
     def mouseReleaseEvent(self, e):
         QtGui.QApplication.restoreOverrideCursor()
         QtGui.QGraphicsView.mouseReleaseEvent(self, e)
-        #print 'GUView.mouseReleaseEvent, at point: ', e.pos(), ' diff:', e.pos() - self.pos_click
+        #print 'GUViewAxesDL.mouseReleaseEvent, at point: ', e.pos(), ' diff:', e.pos() - self.pos_click
         #self.pos_click = e.pos()
         self.pos_click = None
 
@@ -223,7 +222,7 @@ class GUView(QtGui.QGraphicsView) :
 
 
     def mousePressEvent(self, e):
-        #print 'GUView.mousePressEvent, at point: ', e.pos() #e.globalX(), e.globalY() 
+        #print 'GUViewAxesDL.mousePressEvent, at point: ', e.pos() #e.globalX(), e.globalY() 
         #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(Qt.SizeAllCursor))# ClosedHandCursor
         QtGui.QGraphicsView.mousePressEvent(self, e)
 
@@ -254,12 +253,12 @@ class GUView(QtGui.QGraphicsView) :
     def display_pixel_pos(self, e):
         p = self.mapToScene(e.pos())
         #print 'mouseMoveEvent, current point: ', e.x(), e.y(), ' on scene: %.1f  %.1f' % (p.x(), p.y()) 
-        self.setWindowTitle('GUView: x=%.1f y=%.1f' % (p.x(), p.y()))
+        self.setWindowTitle('GUViewAxesDL: x=%.1f y=%.1f' % (p.x(), p.y()))
 
 
     def mouseMoveEvent(self, e):
         QtGui.QGraphicsView.mouseMoveEvent(self, e)
-        #print 'GUView.mouseMoveEvent, at point: ', e.pos()
+        #print 'GUViewAxesDL.mouseMoveEvent, at point: ', e.pos()
         self.display_pixel_pos(e)
 
         if self._scale_ctl==0 : return
@@ -395,13 +394,13 @@ def test_guiview(tname) :
     print '%s:' % sys._getframe().f_code.co_name
     app = QtGui.QApplication(sys.argv)
     w = None
-    if tname == '0': w=GUView(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=3)
-    if tname == '1': w=GUView(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=0)
-    if tname == '2': w=GUView(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=1)
-    if tname == '3': w=GUView(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=2)
-    if tname == '4': w=GUView(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=True,  scale_ctl=3)
-    if tname == '5': w=GUView(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=3, rulers='L')
-    if tname == '6': w=GUView(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=3, rulers='B')
+    if tname == '0': w=GUViewAxesDL(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=3)
+    if tname == '1': w=GUViewAxesDL(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=0)
+    if tname == '2': w=GUViewAxesDL(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=1)
+    if tname == '3': w=GUViewAxesDL(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=2)
+    if tname == '4': w=GUViewAxesDL(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=True,  scale_ctl=3)
+    if tname == '5': w=GUViewAxesDL(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=3, rulers='L')
+    if tname == '6': w=GUViewAxesDL(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=3, rulers='B')
     else : print 'test %s is not implemented' % tname
     w.show()
     app.exec_()

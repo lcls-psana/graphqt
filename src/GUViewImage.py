@@ -1,10 +1,7 @@
 #!@PYTHON@
 """
-Created on September 9, 2016
-
-@author: Mikhail Dubrovin
-
-Class GUViewImage is a GUViewAxes/QWidget for interactive image.
+Class :py:class:`GUViewImage` is a GUViewAxes/QWidget for interactive image
+===========================================================================
 
 Usage ::
 
@@ -62,6 +59,8 @@ Usage ::
     --------------------
     img = image_with_random_peaks(shape=(500, 500)) : 
     test_guiviewimage(tname)
+
+Created on September 9, 2016 by Mikhail Dubrovin
 """
 
 #import os

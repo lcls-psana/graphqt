@@ -1,10 +1,9 @@
 #!@PYTHON@
 """
-Created on 2016-10-09
+Class :py:class:`GUDragCirc` - for draggable circle
+===================================================
 
-@author: Mikhail Dubrovin
-
-Class GUDragCirc - for draggable circle.
+Created on 2016-10-09 by Mikhail Dubrovin
 """
 
 #import os

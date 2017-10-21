@@ -11,6 +11,10 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V01-00-11
+2017-10-20 Mikhail S. Dubrovin
+- add sphinx doc titles to all GU* modules
+
 Tag: V01-00-10
 2017-09-01 Mikhail S. Dubrovin
 - IVTabDataControl - add parameter show_mode_evctl=017

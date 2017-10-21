@@ -1,10 +1,7 @@
 #!@PYTHON@
 """
-Created on June 12, 2016
-
-@author: Mikhail Dubrovin
-
-Class adds a ruller to one of the sides of the scene rectangle.
+Class :py:class:`GURuler` adds a ruller to one of the sides of the scene rectangle
+==================================================================================
 
 Usage ::
 
@@ -25,6 +22,8 @@ Usage ::
 
     ruler3.remove()
     ruler4.remove()
+
+Created on June 12, 2016 by Mikhail Dubrovin
 """
 
 #import os
