@@ -142,6 +142,28 @@ class GUViewFW(QtGui.QGraphicsView) :
         self.raxesi.setZValue(20)
 
 
+    def set_rect_axes_default(self, rectax) :
+        #print 'XXX: In GUIView.set_rect_axes_default rectax', rectax
+        #self.rectax = rectax # self.rectax is a current window which is set later
+        self.raxes = rectax
+
+
+    def reset_original_size(self) :
+        """call sequence of methods to reset original size.
+        """
+        self.set_view()
+        self.update_my_scene()
+        #self.check_axes_limits_changed()
+
+
+    def set_rect_axes(self, rectax) :
+        """Sets new axes rect.
+        """
+        self.set_rect_axes_default(rectax)
+        self.reset_original_size()
+        self.update_my_scene()
+
+
     def remove(self) :
         #remove ruler lines
         #self.scene.removeItem(self.path_item)
@@ -317,8 +339,19 @@ class GUViewFW(QtGui.QGraphicsView) :
 
         elif e.key() == Qt.Key_R : 
             print 'Reset original size'
-            self.set_view()
-            self.update_my_scene()
+            self.reset_original_size()
+
+        elif e.key() == Qt.Key_B : 
+            print '%s: Set big rect' % self._name
+            self.set_rect_axes(QtCore.QRectF(0, 0, 200, 200))
+
+        elif e.key() == Qt.Key_S : 
+            print '%s: Set small rect' % self._name
+            self.set_rect_axes(QtCore.QRectF(0, 0, 10, 10))
+
+        elif e.key() == Qt.Key_W : 
+            print '%s: Set small rect' % self._name
+            self.set_rect_axes(QtCore.QRectF(0, 0, 100, 50))
 
 
     def add_rect_to_scene_v1(self, rect, brush=QtGui.QBrush(), pen=QtGui.QPen(Qt.yellow, 4, Qt.DashLine)) :

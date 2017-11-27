@@ -11,6 +11,16 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V01-00-12
+2017-10-26 Mikhail S. Dubrovin
+- update keyboard examples for major methods in GUView and GUViewImage
+- modified:
+  GUView.py
+  GUViewAxes.py
+  GUViewFW.py
+  GUViewImage.py
+
+
 Tag: V01-00-11
 2017-10-20 Mikhail S. Dubrovin
 - add sphinx doc titles to all GU* modules

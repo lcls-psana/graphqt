@@ -23,6 +23,7 @@ Usage ::
     Methods
     -------
     w.set_show_rulers(rulers='TBLR')
+    w.reset_original_image_size()
 
     Internal methods
     -----------------
@@ -107,6 +108,17 @@ class GUViewAxes(GUView) :
             if self._do_bottom : self.rulerb = GURuler(sc, GURuler.HD, rect=ra, color=self.colax, pen=self.penax, font=self.fonax, txtoff_hfr=0.05)
             if self._do_right  : self.rulerr = GURuler(sc, GURuler.VL, rect=ra, color=self.colax, pen=self.penax, font=self.fonax, txtoff_hfr=0.06)
             if self._do_top    : self.rulert = GURuler(sc, GURuler.HU, rect=ra, color=self.colax, pen=self.penax, font=self.fonax, txtoff_hfr=0.05, txtoff_vfr=0.04)
+
+#------------------------------
+
+    def reset_original_image_size(self) :
+         # def in GUView.py with overloaded update_my_scene()
+         self.reset_original_size()
+
+#    def reset_original_image_size(self) :
+#        self.set_view()
+#        self.update_my_scene()
+#        self.check_axes_limits_changed()
 
 #------------------------------
  

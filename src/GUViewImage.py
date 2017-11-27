@@ -31,15 +31,28 @@ Usage ::
     w.connect_axes_limits_changed_to(w.test_axes_limits_changed_reception)
     w.connect_pixmap_is_updated_to(w.test_pixmap_is_updated_reception)
 
+    Major methors
+    -----------------
+    w.reset_original_image_size()   # def in GUViewAxes and GUView
+    w.set_pixmap_from_arr(arr=None)
+
+    #------ combined:
+    w.set_color_table(coltab=None) # sets color table, nothing else
+    w.set_pixmap_from_arr(arr=None) # to redraw
+    #------ combined:
+    w.set_intensity_limits(amin, amax) # sets attributes, nothing else
+    w.set_pixmap_from_arr()
+    #------
+
+    w.set_rect_scene(rs) # works as zoom-in/out, do not change default
+    w.set_rect_axes(rs) # def in GUView, reset default axes rect
+
     Methods
     -------
-    w.set_color_table(coltab=None)
     w.set_style(self) # sets GUViewAxes.set_style(self) + transparent background
     arr = w.image_data()
-    w.reset_original_image_size() # calls set_view(), update_my_scene(), check_axes_limits_changed()
-    w.set_intensity_limits(amin=None, amax=None) # sets attributes, nothing else
     w.add_pixmap_to_scene(self, pixmap, flag=Qt.IgnoreAspectRatio, mode=Qt.FastTransformation)
-    w.set_pixmap_from_arr(arr=None) # adds pixmap to scene, sends signal 
+
     w.set_pixmap_random(shape=(512,512))
     w.save_pixmap_in_file(fname='fig-image.xpm')
     w.save_qimage_in_file(fname='fig-image.gif') 
@@ -70,6 +83,9 @@ from math import floor
 import graphqt.ColorTable as ct
 from graphqt.GUViewAxes import *
 from graphqt.Logger import log
+
+import pyimgalgos.NDArrGenerators as ag
+
 
 class GUViewImage(GUViewAxes) :
     
@@ -148,17 +164,11 @@ class GUViewImage(GUViewAxes) :
 
 #------------------------------
 
-    def reset_original_image_size(self) :
-        self.set_view()
-        self.update_my_scene()
-        self.check_axes_limits_changed()
-        #self.set_intensity_limits()
-
-
     def set_intensity_limits(self, amin=None, amax=None) :
         self.amin = amin
         self.amax = amax
 
+#------------------------------
 
     def add_pixmap_to_scene(self, pixmap, flag=Qt.IgnoreAspectRatio,\
                             mode=Qt.FastTransformation) : # Qt.KeepAspectRatio, IgnoreAspectRatio
@@ -271,26 +281,81 @@ class GUViewImage(GUViewAxes) :
         #print '%s.closeEvent' % self._name
 
 
+    def key_usage(self) :
+        return 'Keys:'\
+               '\n  ESC - exit'\
+               '\n  R - reset original image size'\
+               '\n  N - set new image of the same shape'\
+               '\n  S - set new image of random shape'\
+               '\n  C - change color map'\
+               '\n  L - change intensity limits for color map'\
+               '\n  W - change axes rect, do not change default'\
+               '\n  D - change axes rect and its default'\
+               '\n'
+
     def keyPressEvent(self, e) :
+
         #print 'keyPressEvent, key=', e.key()         
         if   e.key() == Qt.Key_Escape :
             self.close()
 
         elif e.key() == Qt.Key_R : 
             print '%s: Reset original size' % self._name
-            self.reset_original_image_size()
+            self.reset_original_image_size() # see GUViewAxes
 
         elif e.key() == Qt.Key_N : 
-            print '%s: Test set new pixel map' % self._name
+            print '%s: Set new pixel map of the same shape' % self._name
             s = self.pmi.pixmap().size()
             #self.set_pixmap_random((s.width(), s.height()))
             img = image_with_random_peaks((s.height(), s.width()))
             self.set_pixmap_from_arr(img)
 
+        elif e.key() == Qt.Key_S : 
+            print '%s: Set new pixel map of different shape' % self._name
+            #s = self.pmi.pixmap().size()
+            #self.set_pixmap_random((s.width(), s.height()))
+            sh_new = ag.random_standard((2,), mu=1000, sigma=200, dtype=np.int)
+            #sh_new = [(int(v) if v>100 else 100) for v in s_newh] 
+            print '%s: Set image with new shape %s' % (self._name, str(sh_new))
+            img = image_with_random_peaks(sh_new)
+            self.set_pixmap_from_arr(img)
+
+        elif e.key() == Qt.Key_C : 
+            print 'Reset color table'
+            ctab = ct.next_color_table()
+            self.set_color_table(coltab=ctab)
+            self.set_pixmap_from_arr()
+
+        elif e.key() == Qt.Key_L : 
+            nsigma = ag.random_standard((2,), mu=3, sigma=1, dtype=np.float)
+            arr = self.arr
+            mean, std = arr.mean(), arr.std()
+            amin, amax = mean-nsigma[0]*std, mean+nsigma[1]*std # None, None
+            print '%s: Set intensity min=%.1f max=%.1f' % (self._name, amin, amax)
+            #------------------------------------
+            self.set_intensity_limits(amin, amax)
+            self.set_pixmap_from_arr()
+ 
+        elif e.key() == Qt.Key_W : 
+            print '%s: change axes rect, do not change default)' % self._name
+            v = ag.random_standard((4,), mu=0, sigma=200, dtype=np.int)
+            rax = QtCore.QRectF(v[0], v[1], v[2]+1000, v[3]+1000)
+            print 'Set new axes rect: %s' % str(rax)
+            self.set_rect_axes(rax, set_def=False) # def in GUView
+
+        elif e.key() == Qt.Key_D : 
+            print '%s: change default axes rect, set new default' % self._name
+            v = ag.random_standard((4,), mu=0, sigma=200, dtype=np.int)
+            rax = QtCore.QRectF(v[0], v[1], v[2]+1000, v[3]+1000)
+            print 'Set new default axes rect: %s' % str(rax)
+            self.set_rect_axes(rax) # def in GUView
+
+        else :
+            print self.key_usage()
+
 #------------------------------
 
 def image_with_random_peaks(shape=(500, 500)) : 
-    import pyimgalgos.NDArrGenerators as ag
     img = ag.random_standard(shape, mu=0, sigma=10)
     peaks = ag.add_random_peaks(img, npeaks=50, amean=100, arms=50, wmean=1.5, wrms=0.3)
     ag.add_ring(img, amp=20, row=500, col=500, rad=300, sigma=50)

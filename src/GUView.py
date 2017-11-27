@@ -30,8 +30,16 @@ Usage ::
     w.disconnect_view_is_closed_from(recipient)
     w.test_view_is_closed_reception(self)
 
+    Major methors
+    -----------------
+    w.reset_original_size()
+    w.set_rect_axes(rectax, set_def=True)
+
     Methods
     -------
+    rs = w.rect_scene_from_rect_axes(raxes=None)
+    w.set_rect_scene(rs) # the same as zoom-in/out, do not change default
+
     w.set_rect_axes_default(rectax)
     w.set_origin(origin='UL')
     w.set_transform_orientation() # if origin is changed
@@ -69,6 +77,8 @@ Created on September 9, 2016 by Mikhail Dubrovin
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt
 #from graphqt.GUUtils import print_rect
+
+import pyimgalgos.NDArrGenerators as ag
 
 #------------------------------
 
@@ -111,6 +121,9 @@ class GUView(QtGui.QGraphicsView) :
         self.pos_click = None
         self.scalebw = 3
 
+        self.raxi = None
+        self.rori = None
+
         self.update_my_scene()
 
         self.timer = QtCore.QTimer()
@@ -140,7 +153,35 @@ class GUView(QtGui.QGraphicsView) :
         self._y2_old = None
 
 
+    def set_rect_axes(self, rectax, set_def=True) :
+        """ Sets new axes rect.
+        """
+        if set_def :
+            self.set_rect_axes_default(rectax)
+            self.reset_original_size()
+        else :
+            rs = self.rect_scene_from_rect_axes(rectax)
+            self.set_rect_scene(rs)
+
+
+    def set_rect_scene(self, rs) :
+        self.scene().setSceneRect(rs)
+        self.fitInView(rs, Qt.IgnoreAspectRatio)
+        self.update_my_scene()
+
+
+    def reset_original_size(self) :
+        """call sequence of methods to reset original size.
+        """
+        self.set_view()
+        self.update_my_scene()
+        self.check_axes_limits_changed()
+
+
     def set_origin(self, origin='UL') :
+        """Defines internal (bool) parameters for origin position. 
+           Sensitive to U(T)L characters in (str) origin, standing for upper(top) lower.  
+        """
         self._origin = origin
         key = origin.upper()
 
@@ -210,11 +251,11 @@ class GUView(QtGui.QGraphicsView) :
         self.margb = margb if margb is not None else 0.06
 
 
-    def set_view(self) :
+    def rect_scene_from_rect_axes(self, raxes=None) :
         # Sets scene rect larger than axes rect by margins
         ml, mr, mt, mb = self.margl, self.margr, self.margt, self.margb
 
-        r = self.raxes
+        r = self.raxes if raxes is None else raxes
         #print_rect(r, cmt='XXX rect axes')
         
         x, y, w, h = r.x(), r.y(), r.width(), r.height()
@@ -223,10 +264,12 @@ class GUView(QtGui.QGraphicsView) :
 
         my = mt if self._origin_u else mb
         mx = ml if self._origin_l else mr
-        rs = QtCore.QRectF(x-mx*sx, y-my*sy, sx, sy)
+        return QtCore.QRectF(x-mx*sx, y-my*sy, sx, sy)
 
+
+    def set_view(self) :
+        rs = self.rect_scene_from_rect_axes()
         #print_rect(rs, cmt='XXX rect scene')
-
         self.scene().setSceneRect(rs)
         self.fitInView(rs, Qt.IgnoreAspectRatio) # Qt.IgnoreAspectRatio Qt.KeepAspectRatioByExpanding Qt.KeepAspectRatio
 
@@ -380,12 +423,17 @@ class GUView(QtGui.QGraphicsView) :
 
         if self.show_mode & 1 :
             colfld = Qt.magenta
+            if self.raxi is not None : self.scene().removeItem(self.raxi)
             self.raxi = self.add_rect_to_scene_v1(self.raxes, pen=QtGui.QPen(Qt.NoPen), brush=QtGui.QBrush(colfld))
+            self.raxi.setZValue(0.1)
 
         if self.show_mode & 2 :
-            ror=QtCore.QRectF(-2, -2, 4, 4)
+            pc = self.raxes.topLeft()
+            ror=QtCore.QRectF(pc.x()-2, pc.y()-2, 4, 4)
             colori = Qt.red
+            if self.rori is not None : self.scene().removeItem(self.rori)
             self.rori = self.add_rect_to_scene(ror, pen=QtGui.QPen(colori, 0, Qt.SolidLine), brush=QtGui.QBrush(colori))
+            self.rori.setZValue(0.2)
 
 
     def add_rect_to_scene_v1(self, rect, brush=QtGui.QBrush(), pen=QtGui.QPen(Qt.yellow, 4, Qt.DashLine)) :
@@ -402,14 +450,6 @@ class GUView(QtGui.QGraphicsView) :
         item.setPen(pen)
         item.setBrush(brush)
         return item
-
-
-    def reset_original_size(self) :
-        """call sequence of methods
-        """
-        self.set_view()
-        self.update_my_scene()
-        self.check_axes_limits_changed()
 
 
     def display_pixel_pos(self, e):
@@ -574,15 +614,11 @@ class GUView(QtGui.QGraphicsView) :
         dy, sy = (dyc, f*h) if self.scalebw & 2 else (0, h)
 
         rs.setRect(x-dx, y-dy, sx, sy)      
-        sc.setSceneRect(rs)
 
-        #self.update_transform()
-        #sc.update()
-        #rs = self.scene().sceneRect()    
-        self.fitInView(rs, Qt.IgnoreAspectRatio)
-        self.update_my_scene()
-
-        #self.scalebw = 3
+        self.set_rect_scene(rs)
+        #sc.setSceneRect(rs)
+        #self.fitInView(rs, Qt.IgnoreAspectRatio)
+        #self.update_my_scene()
 
         self._continue_wheel_event()
 
@@ -662,6 +698,13 @@ class GUView(QtGui.QGraphicsView) :
 
     #def paintEvent(e):
     #    pass
+    def key_usage(self) :
+        return 'Keys:'\
+               '\n  ESC - exit'\
+               '\n  R - reset original size'\
+               '\n  W - change axes rect, do not change default'\
+               '\n  D - change axes rect and its default'\
+               '\n'
 
     def keyPressEvent(self, e) :
         #print 'keyPressEvent, key=', e.key()         
@@ -671,6 +714,23 @@ class GUView(QtGui.QGraphicsView) :
         elif e.key() == Qt.Key_R : 
             print '%s: Reset original size' % self._name
             self.reset_original_size()
+
+        elif e.key() == Qt.Key_W : 
+            print '%s: set rect of axes, do not change default' % self._name
+            v = ag.random_standard((4,), mu=0, sigma=20, dtype=np.int)
+            rax = QtCore.QRectF(v[0], v[1], v[2]+100, v[3]+100)
+            print 'Set axes rect: %s' % str(rax)
+            self.set_rect_axes(rax, set_def=False)
+
+        elif e.key() == Qt.Key_D : 
+            print '%s: change default axes rect, set new default' % self._name
+            v = ag.random_standard((4,), mu=0, sigma=20, dtype=np.int)
+            rax = QtCore.QRectF(v[0], v[1], v[2]+100, v[3]+100)
+            print 'Set new default axes rect: %s' % str(rax)
+            self.set_rect_axes(rax) # def in GUView
+
+        else :
+            print self.key_usage()
 
 #-----------------------------
 
