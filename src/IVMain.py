@@ -235,7 +235,7 @@ class IVMain(QtGui.QWidget) :
         #self.wspe = None
 
 
-    def set_image_data(self, arr):
+    def set_image_data(self, arr, set_hlims=False):
         '''Sets new image data array:
         '''
         log.info('%s.set_image_data' % self._name)
@@ -244,7 +244,7 @@ class IVMain(QtGui.QWidget) :
         #self.wimg.set_intensity_limits(amin, amax)
 
         self.wimg.set_pixmap_from_arr(arr)
-        self.set_spectral_data(arr)
+        self.set_spectral_data(arr, set_hlims=set_hlims)
 
 
     def set_spectral_data(self, arr, hcolor = Qt.green, set_hlims=True):
@@ -347,7 +347,7 @@ class IVMain(QtGui.QWidget) :
         #h,w = self.arr.shape
         #print 'ZZZ:shape', self.arr.shape
         #self.on_image_axes_limits_changed(0, w, 0, h)
-        self.set_image_data(self.arr)
+        self.set_image_data(self.arr, set_hlims=True)
         #self.on_but_reset()
         #self.wimg.update_my_scene()
 
@@ -357,12 +357,14 @@ class IVMain(QtGui.QWidget) :
         '''
         log.debug('%s.on_new_event_number %d' % (self._name, num))
 
+        set_hlims=False
         if self.improd is None : 
             from expmon.PSImageProducer import PSImageProducer
             self.improd = PSImageProducer(cp, log)
+            set_hlims=True
 
         self.arr = self.improd.image(num)
-        self.set_image_data(self.arr)
+        self.set_image_data(self.arr, set_hlims)
 
 
     def set_tool_tips(self):
