@@ -3,6 +3,8 @@
 Class :py:class:`GUViewAxesDL` is a QGraphicsView / QWidget with interactive scalable scene with axes
 =====================================================================================================
 
+DL stands for Down and Lext axes only.
+
 Usage ::
 
     import sys

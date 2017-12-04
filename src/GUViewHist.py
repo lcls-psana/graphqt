@@ -92,16 +92,23 @@ def image_to_hist_arr(arr, vmin=None, vmax=None, nbins=None) :
     
     amin = math.floor(arr.min() if vmin is None else vmin)
     amax = math.ceil (arr.max() if vmax is None else vmax)
+
+    awid = math.fabs(amax - amin)
+    if math.fabs(amin) < 0.01*awid :
+        amin = -0.01*awid
+
     #mean, std = arr.mean(), arr.std()
     #amin, amax = mean-2*std, mean+10*std
     if amin == amax : amax += 1
     nhbins = int(amax-amin) if nbins is None else nbins
 
+    NBINS_MIN = 2 if arr.dtype == np.int else 100
     NBINS_MAX = (1<<15) - 1
 
     #print 'XXX:NBINS_MAX', NBINS_MAX
     
     if nhbins>NBINS_MAX : nhbins=NBINS_MAX
+    if nhbins<NBINS_MIN : nhbins=NBINS_MIN
 
     #print 'XXX arr.shape:\n', arr.shape
     #print 'XXX amin, amax, nhbins:\n', amin, amax, nhbins
@@ -175,6 +182,9 @@ class GUViewHist(GUViewAxes) :
 
     def set_limits_horizontal(self, amin=None, amax=None) :
         self.amin, self.amax = amin, amax
+        rax = self.rectax
+        if self.amin is not None : rax.setLeft(self.amin)
+        if self.amax is not None : rax.setRight(self.amax)
 
 
     def set_limits(self):
@@ -278,7 +288,8 @@ class GUViewHist(GUViewAxes) :
 #------------------------------
 
     def on_axes_limits_changed(self, x1, x2, y1, y2):
-        #print 'GUViewHist.on_axes_limits_changed  x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f' % (x1, x2, y1, y2)      
+        #print 'XXX:GUViewHist.on_axes_limits_changed  x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f' % (x1, x2, y1, y2)      
+        self.set_limits_horizontal(amin=x1, amax=x2)
         self.evaluate_hist_statistics()
 
 #------------------------------
@@ -394,6 +405,12 @@ class GUViewHist(GUViewAxes) :
             self.cline1i.setPen(QtGui.QPen())
             self.cline2i.setPen(QtGui.QPen())
 
+    def key_usage(self) :
+        return 'Keys:'\
+               '\n  ESC - exit'\
+               '\n  R - reset original histogram'\
+               '\n  N - set new histogram'\
+               '\n'
 
     def keyPressEvent(self, e) :
         #print 'keyPressEvent, key=', e.key()         
@@ -410,13 +427,24 @@ class GUViewHist(GUViewAxes) :
             self.remove_all_graphs()
             hcolor = Qt.green # Qt.yellow Qt.blue Qt.yellow 
             self.add_array_as_hist(arr, pen=QtGui.QPen(hcolor, 0), brush=QtGui.QBrush(hcolor))
+        else :
+            print self.key_usage()
 
     
     def reset_original_hist(self) :
+
+        #print 'GUViewHist.reset_original_hist'        
+
         #print 'Reset original size'
-        self.set_view()
-        self.update_my_scene()
+        #ihis=0
+        #hb = self.lst_hbins[ihis]
+        #amin, amax = hb.limits()
+        #self.set_limits_horizontal(amin, amax)
+
+        self.reset_original_size()
         self.set_limits()
+        self.reset_original_size()
+        #self.set_view()
         #self.update_my_scene()
         #self.check_axes_limits_changed()
 
@@ -469,11 +497,16 @@ class GUViewHist(GUViewAxes) :
 
 #------------------------------
 
-    def add_array_as_hist(self, arr, pen=QtGui.QPen(Qt.black), brush=QtGui.QBrush(), vtype=np.float) :
+    def add_array_as_hist(self, arr, pen=QtGui.QPen(Qt.black), brush=QtGui.QBrush(),\
+                          vtype=np.float, set_hlims=True) :
         """Adds array (i.e. like image) as a histogram of intensities
         """
-        amin, amax, nbins, values = image_to_hist_arr(arr, self.amin, self.amax)
-        self.set_limits_horizontal(amin, amax)
+        amin, amax, nbins, values = image_to_hist_arr(arr) #, self.amin, self.amax)
+        if set_hlims : 
+            self.set_limits_horizontal(amin, amax)
+
+        #print 'XXX:GUViewHist.add_array_as_hist amin=%.2f amax=%.2f' % (amin, amax)
+
         vmin, vmax = values.min(), values.max()
         #print 'XXX: GUViewHist.add_array_as_hist: amin=%.1f  amax=%.1f  vmin=%.1f  vmax=%.1f' % (amin, amax, vmin, vmax)
 
@@ -481,7 +514,7 @@ class GUViewHist(GUViewAxes) :
         #self._xmax = amax
         self._ymin = None
         self._ymax = vmax
-        self.raxes = QtCore.QRectF(amin, vmin, amax-amin, vmax-vmin) 
+        self.raxes = QtCore.QRectF(self.amin, vmin, self.amax-self.amin, vmax-vmin) 
         #self.check_limits()
         self.add_hist(values, (amin,amax), pen, brush, vtype)
         self.reset_original_hist()

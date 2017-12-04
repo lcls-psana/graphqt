@@ -109,6 +109,8 @@ class IVMain(QtGui.QWidget) :
         self.move(self.pos()) # + QtCore.QPoint(self.width()+5, 0))
         #self.wimg.show()
 
+        self.is_reset=False
+
 
     def connect_signals_to_slots(self):
 
@@ -242,14 +244,27 @@ class IVMain(QtGui.QWidget) :
         #self.wimg.set_intensity_limits(amin, amax)
 
         self.wimg.set_pixmap_from_arr(arr)
+        self.set_spectral_data(arr)
+
+
+    def set_spectral_data(self, arr, hcolor = Qt.green, set_hlims=True):
+        log.debug('%s.set_spectral_data, set_hlims=%s' % (self._name,set_hlims))
         self.wspe.hist.remove_all_graphs()
-        hcolor = Qt.green # Qt.yellow Qt.blue Qt.yellow 
-        self.wspe.hist.add_array_as_hist(arr, pen=QtGui.QPen(hcolor, 0), brush=QtGui.QBrush(hcolor))
+        self.wspe.hist.add_array_as_hist(arr, pen=QtGui.QPen(hcolor, 0),\
+                                         brush=QtGui.QBrush(hcolor), set_hlims=set_hlims)
 
 
     def on_but_reset(self):
         log.info('%s.on_but_reset' % self._name)
+        self.is_reset=True
+
         self.wimg.on_but_reset()
+
+        rax = self.wimg.rect_axes()
+        #rax.moveCenter(rax.center() + QtCore.QPointF(1, 0))
+        self.wimg.set_rect_axes(rax) # need to call it to update image window->reset spectrum
+
+        self.is_reset=False
 
 
     def on_but_save(self):
@@ -313,9 +328,7 @@ class IVMain(QtGui.QWidget) :
 
         self.disconnect_signals_from_img()
 
-        self.wspe.hist.remove_all_graphs()
-        hcolor = Qt.green # Qt.yellow Qt.blue Qt.yellow 
-        self.wspe.hist.add_array_as_hist(arr_win, pen=QtGui.QPen(hcolor, 0), brush=QtGui.QBrush(hcolor))
+        self.set_spectral_data(arr_win, hcolor = Qt.yellow, set_hlims=self.is_reset)
 
         self.connect_signals_from_img()
 

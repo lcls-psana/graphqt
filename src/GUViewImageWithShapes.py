@@ -112,6 +112,20 @@ class GUViewImageWithShapes(GUViewImage) :
         self.scene().removeItem(item)
         self.lst_drag_items.remove(item)
         self.setShapesEnabled()
+#------------------------------
+
+    def key_usage(self) :
+        return 'Keys:'\
+               '\n  ESC - exit'\
+               '\n  M - add point'\
+               '\n  A - add rect'\
+               '\n  L - add line TBD'\
+               '\n  P - add polyline TBD'\
+               '\n  C - add circle TBD'\
+               '\n  W - add wedge TBD'\
+               '\n  S - switch interactive session between scene and shapes'\
+               '\n  D - delete selected item'\
+               '\n'
 
 #------------------------------
 
@@ -123,7 +137,10 @@ class GUViewImageWithShapes(GUViewImage) :
         d = {Qt.Key_M : POINT, Qt.Key_A : RECT, Qt.Key_L : LINE,\
              Qt.Key_C : CIRC,  Qt.Key_P : POLY, Qt.Key_W : WEDG}
 
-        if e.key() in d.keys() :
+        if   e.key() == Qt.Key_Escape :
+            self.close()
+
+        elif e.key() in d.keys() :
             type = d[e.key()]
             self.add_request = type # e.g. RECT
             print 'click-drag-release mouse button on image to add %s' % dic_drag_type_to_name[type]
@@ -142,13 +159,15 @@ class GUViewImageWithShapes(GUViewImage) :
             else :
                 self.set_scale_control(scale_ctl='HV')
                 self.setShapesEnabled(False)
+        else :
+            print self.key_usage()
 
 #------------------------------
 
 if __name__ == "__main__" :
 
     import sys
-    import numpy as np
+    import numpy as np; global np
     arr = np.random.random((1000, 1000))
     app = QtGui.QApplication(sys.argv)
     w = GUViewImageWithShapes(None, arr, origin='UL', scale_ctl='HV', rulers='DL',\

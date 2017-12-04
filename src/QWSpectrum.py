@@ -62,7 +62,7 @@ Qt = QtCore.Qt
 from graphqt.Styles import style    
 
 from graphqt.GUViewFWImage import GUViewFWImage, image_with_random_peaks
-from graphqt.GUViewHist import GUViewHist, image_to_hist_arr
+from graphqt.GUViewHist import GUViewHist
 import graphqt.ColorTable as ct
 from graphqt.QWPopupSelectColorBar import popup_select_color_table
 

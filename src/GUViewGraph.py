@@ -98,6 +98,13 @@ class GUViewGraph(GUViewAxes) :
         self.cline1i.setPen(QtGui.QPen())
         self.cline2i.setPen(QtGui.QPen())
 
+    def key_usage(self) :
+        return 'Keys: TBD ???'\
+               '\n  ESC - exit'\
+               '\n  R - reset original graphic ????'\
+               '\n  N - set new graphic ?????'\
+               '\n'
+
 
     def keyPressEvent(self, e) :
         #print 'keyPressEvent, key=', e.key()         
@@ -114,6 +121,8 @@ class GUViewGraph(GUViewAxes) :
             s = self.pmi.pixmap().size()
             self.set_pixmap_random((s.width(), s.height()))
 
+        else :
+            print self.key_usage()
 
     def _add_path_to_scene(self, path, pen=QtGui.QPen(Qt.yellow), brush=QtGui.QBrush()) :
         item = self.scene().addPath(path, pen, brush)
