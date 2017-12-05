@@ -1,12 +1,29 @@
 #!@PYTHON@
 """
-Created on February 1, 2017
-
-@author: Mikhail Dubrovin
-
-Class IVMainButtons is a QWidget for interactive image.
+Class :py:class:`IVMainButtons` window with buttons for IVMain
+==============================================================
 
 Usage ::
+
+    import sys
+    from PyQt4 import QtGui
+    from graphqt.IVMainButtons import IVMainButtons
+    app = QtGui.QApplication(sys.argv)
+    w  = IVMainButtons(parent=None)
+    w.show()
+    app.exec_()
+
+See:
+    - :class:`IVMain`
+    - :class:`IVMainTabs`
+    - :class:`IVMainButtons`
+    - :class:`IVImageCursorInfo`
+    - :class:`IVConfigParameters`
+    - :class:`IVTabDataControl`
+    - :class:`IVTabFileName`
+    - `graphqt documentation <https://lcls-psana.github.io/graphqt/py-modindex.html>`_.
+
+Created on February 1, 2017 by Mikhail Dubrovin
 """
 #import os
 #import math

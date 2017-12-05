@@ -1,31 +1,42 @@
 #!@PYTHON@
 """
-Created on February 1, 2017
+Class :py:class:`IVImageCursorInfo` is a QWidget for interactive image
+======================================================================
 
-@author: Mikhail Dubrovin
-
-Class IVImageCursorInfo is a QWidget for interactive image.
+QWidget shows cursor coordinates and hovered pixel intensity.
 
 Usage ::
+    from PyQt4 import QtGui, QtCore
+    from graphqt.IVImageCursorInfo import IVImageCursorInfo
+
+    app = QtGui.QApplication(sys.argv)
+    w = IVImageCursorInfo(parent=None)
+    w.setWindowTitle('Cursor info')
+    w.show()
+    app.exec_()
+
+See:
+    - :class:`IVMain`
+    - :class:`IVMainTabs`
+    - :class:`IVMainButtons`
+    - :class:`IVImageCursorInfo`
+    - :class:`IVConfigParameters`
+    - :class:`IVTabDataControl`
+    - :class:`IVTabFileName`
+    - `graphqt documentation <https://lcls-psana.github.io/graphqt/py-modindex.html>`_.
+
+Created on February 1, 2017 by Mikhail Dubrovin
 """
-#import os
-#import math
+#------------------------------
 
 from PyQt4 import QtGui, QtCore
-#from PyQt4.QtCore import Qt
 
 from graphqt.Logger import log
 from graphqt.Styles import style
-#from graphqt.Frame  import Frame
-#from graphqt.QIcons import icon
 
-#from graphqt.IVConfigParameters import cp
-
-#class IVImageCursorInfo(Frame) :
 class IVImageCursorInfo(QtGui.QWidget) :
 
     def __init__(self, parent=None) :
-        #Frame.__init__(self, parent=None, mlw=1)
         QtGui.QWidget.__init__(self, parent=None)
         self._name = self.__class__.__name__
 

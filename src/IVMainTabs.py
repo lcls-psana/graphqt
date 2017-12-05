@@ -1,9 +1,30 @@
 
 #------------------------------
 """
-@version $Id: IVMainTabs.py 13157 2017-02-18 00:05:34Z dubrovin@SLAC.STANFORD.EDU $
+Class :py:class:`IVMainTabs` - tabs in IVMain window
+====================================================
 
-@author Mikhail S. Dubrovin
+Usage ::
+
+    import sys
+    from PyQt4 import QtGui
+    from graphqt.IVMainTabs import IVMainTabs
+    app = QtGui.QApplication(sys.argv)
+    w = IVMainTabs()
+    w.show()
+    app.exec_()
+
+See:
+    - :class:`IVMain`
+    - :class:`IVMainTabs`
+    - :class:`IVMainButtons`
+    - :class:`IVImageCursorInfo`
+    - :class:`IVConfigParameters`
+    - :class:`IVTabDataControl`
+    - :class:`IVTabFileName`
+    - `graphqt documentation <https://lcls-psana.github.io/graphqt/py-modindex.html>`_.
+
+Created on 2017-02-18 by Mikhail Dubrovin
 """
 #------------------------------
 import sys
@@ -37,7 +58,7 @@ class IVMainTabs(QtGui.QWidget) :
         self._name = self.__class__.__name__
 
         self.current_tab = cp.current_tab
-        cp.guitabs       = self
+        cp.guitabs = self
 
         self.gui_win = None
 

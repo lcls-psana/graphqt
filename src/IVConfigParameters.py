@@ -1,20 +1,33 @@
+#!@PYTHON@
 #------------------------------
-"""IVConfigParameters - class supporting configuration parameters for application.
-
-@see class :py:class:`graphqt.IVConfigParameters`
-
-@see project modules
-    * :py:class:`graphqt.IVConfigParameters`
-    * :py:class:`CalibManager.ConfigParameters`
-    * :py:class:`graphqt.Logger`
-    * :py:class:`CalibManager.Logger`
+"""
+Class :py:class:`IVConfigParameters` supports configuration parameters for application
+======================================================================================
 
 This software was developed for the SIT project.
 If you use all or part of it, please give an appropriate acknowledgment.
 
-@version $Id:IVConfigParameters.py 11923 2016-11-22 14:28:00Z dubrovin@SLAC.STANFORD.EDU $
+Usage ::
 
-@author Mikhail S. Dubrovin
+    from expmon.Logger import log
+
+    log.setPrintBits(0377)
+    cp.readParametersFromFile()
+    cp.printParameters()
+    cp.log_level.setValue('debug')
+    cp.saveParametersInFile()
+
+See:
+    - :class:`IVMain`
+    - :class:`IVMainTabs`
+    - :class:`IVMainButtons`
+    - :class:`IVImageCursorInfo`
+    - :class:`IVConfigParameters`
+    - :class:`IVTabDataControl`
+    - :class:`IVTabFileName`
+    - `graphqt documentation <https://lcls-psana.github.io/graphqt/py-modindex.html>`_.
+
+Created on 2016-11-22 by Mikhail Dubrovin
 """
 #------------------------------
 
@@ -68,6 +81,7 @@ class IVConfigParameters(PSConfigParameters) :
         self.main_win_width  = self.declareParameter(name='MAIN_WIN_WIDTH',  val_def=1200, type='int')
         self.main_win_height = self.declareParameter(name='MAIN_WIN_HEIGHT', val_def=700,  type='int')
 
+        self.color_table_ind = self.declareParameter(name='COLOR_TABLE_IND', val_def=1, type='int')
         self.current_tab     = self.declareParameter(name='MAIN_CURRENT_TAB', val_def='Status', type='str')
         self.fname_img       = self.declareParameter(name='FNAME_IMAGE', val_def='',     type='str') # '/reg/d/
 

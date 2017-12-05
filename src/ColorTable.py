@@ -1,7 +1,7 @@
-'''
-Created on Dec 6, 2015
-
-@author: Mikhail
+#!@PYTHON@
+"""
+:py:class:`ColorTable` collection of methods to generate color bars
+===================================================================
 
 Usage ::
 
@@ -12,7 +12,18 @@ Usage ::
     ctab = ct.color_table_interpolated()
     ctab = ct.color_table_interpolated(points=[0, 100, 200, 400, 500, 650, 700],\
          colors=[0xffffff, 0xffff00, 0x00ff00, 0xff0000, 0xff00ff, 0x0000ff, 0])
-'''
+See:
+    - :class:`IVMain`
+    - :class:`IVMainTabs`
+    - :class:`IVMainButtons`
+    - :class:`IVImageCursorInfo`
+    - :class:`IVConfigParameters`
+    - :class:`IVTabDataControl`
+    - :class:`IVTabFileName`
+    - `graphqt documentation <https://lcls-psana.github.io/graphqt/py-modindex.html>`_.
+
+Created on Dec 6, 2015 by Mikhail Dubrovin
+"""
 #------------------------------
 
 from PyQt4 import QtGui #, QtCore

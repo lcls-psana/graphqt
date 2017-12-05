@@ -1,8 +1,32 @@
 #------------------------------
 """
-@version $Id: IVTabFileName.py 13157 2017-02-18 00:05:34Z dubrovin@SLAC.STANFORD.EDU $
+Class :py:class:`IVTabFileName` file name control window
+========================================================
 
-@author Mikhail S. Dubrovin
+Usage ::
+
+    import sys
+    from PyQt4 import QtGui
+    from graphqt.IVTabFileName import IVTabFileName
+ 
+    app = QtGui.QApplication(sys.argv)
+    w = IVTabFileName(show_mode=03)
+    w.w_fname.connect_path_is_changed_to_recipient(w.test_signal_reception)
+    w.w_calib.connect_path_is_changed_to_recipient(w.test_signal_reception)
+    w.show()
+    app.exec_()
+
+See:
+    - :class:`IVMain`
+    - :class:`IVMainTabs`
+    - :class:`IVMainButtons`
+    - :class:`IVImageCursorInfo`
+    - :class:`IVConfigParameters`
+    - :class:`IVTabDataControl`
+    - :class:`IVTabFileName`
+    - `graphqt documentation <https://lcls-psana.github.io/graphqt/py-modindex.html>`_.
+
+Created on 2017-02-18 by Mikhail Dubrovin
 """
 #------------------------------
 import sys

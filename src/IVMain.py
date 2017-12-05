@@ -1,19 +1,29 @@
 #!@PYTHON@
 """
-Created on February 1, 2017
-
-@author: Mikhail Dubrovin
-
-Class IVMain is a QWidget for interactive image.
+Class :py:class:`IVMain` is a QWidget for interactive image
+===========================================================
 
 Usage ::
 
     import sys
+    from PyQt4 import QtGui
     from graphqt.IVMain import IVMain
     app = QtGui.QApplication(sys.argv)
     w = IVMain(None, app)
     w.show()
     app.exec_()
+
+See:
+    - :class:`IVMain`
+    - :class:`IVMainTabs`
+    - :class:`IVMainButtons`
+    - :class:`IVImageCursorInfo`
+    - :class:`IVConfigParameters`
+    - :class:`IVTabDataControl`
+    - :class:`IVTabFileName`
+    - `graphqt documentation <https://lcls-psana.github.io/graphqt/py-modindex.html>`_.
+
+Created on February 1, 2017 by Mikhail Dubrovin
 """
 #import os
 #import math
@@ -61,14 +71,16 @@ class IVMain(QtGui.QWidget) :
         self.main_win_height = cp.main_win_height
         self.main_win_pos_x  = cp.main_win_pos_x 
         self.main_win_pos_y  = cp.main_win_pos_y  
+        self.color_table_ind = cp.color_table_ind 
 
         self.arr = self.get_image_array()
 
-        ctab = ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20)
+        #ctab = ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20)
+        ctab = ct.next_color_table(self.color_table_ind.value())
         self.wimg = GUViewImage(None, self.arr, coltab=ctab, origin='UL', scale_ctl='HV', rulers='DL',\
                                 margl=0.09, margr=0.0, margt=0.0, margb=0.04)
 
-        self.wspe = QWSpectrum(None, self.arr, show_buts=False)
+        self.wspe = QWSpectrum(None, self.arr, coltab=ctab, show_buts=False)
 
         #icon.set_icons()
 
@@ -109,7 +121,7 @@ class IVMain(QtGui.QWidget) :
         self.move(self.pos()) # + QtCore.QPoint(self.width()+5, 0))
         #self.wimg.show()
 
-        self.is_reset=False
+        self.on_but_reset()
 
 
     def connect_signals_to_slots(self):
@@ -190,8 +202,8 @@ class IVMain(QtGui.QWidget) :
             log.info('Input image file name: %s' % ifname)
             cp.fname_img.setValue(ifname)
             cp.current_tab.setValue('File')
-        else :
-            cp.current_tab.setValue('Data')
+        #else :
+        #    cp.current_tab.setValue('Data')
 
 #------------------------------
 
@@ -239,9 +251,9 @@ class IVMain(QtGui.QWidget) :
         '''Sets new image data array:
         '''
         log.info('%s.set_image_data' % self._name)
-        #mean, std = arr.mean(), arr.std()
-        #amin, amax = mean-3*std, mean+9*std
-        #self.wimg.set_intensity_limits(amin, amax)
+        if arr is None :
+            log.warning('%s.set_image_data: data array is None' % (self._name))
+            return
 
         self.wimg.set_pixmap_from_arr(arr)
         self.set_spectral_data(arr, set_hlims=set_hlims)
@@ -468,6 +480,8 @@ class IVMain(QtGui.QWidget) :
         self.main_win_pos_y .setValue(y)
         self.main_win_width .setValue(w)
         self.main_win_height.setValue(h)
+
+        self.color_table_ind.setValue(ct.STOR.ictab)
 
         cp.printParameters()
         cp.saveParametersInFile()

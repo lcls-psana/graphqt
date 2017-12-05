@@ -10,11 +10,32 @@ Usage ::
     import sys
     from PyQt4 import QtGui, QtCore
     from graphqt.GUViewFW import GUViewFW
-
     app = QtGui.QApplication(sys.argv)
     w = GUViewFW(None, raxes=QtCore.QRectF(0, 0, 100, 100), origin='UL', scale_ctl='HV')
     w.show()
     app.exec_()
+
+See:
+    - :class:`GUDragBase`
+    - :class:`GUDragCirc`
+    - :class:`GUDragFactory`
+    - :class:`GUDragPoint`
+    - :class:`GUDragRect`
+    - :class:`GUQGraphicsRectItem`
+    - :class:`GURuler`
+    - :class:`GUUtils`
+    - :class:`GUViewAxesDL`
+    - :class:`GUViewAxes`
+    - :class:`GUViewColorBar`
+    - :class:`GUViewFWImage`
+    - :class:`GUViewFW`
+    - :class:`GUViewGraph`
+    - :class:`GUViewHist`
+    - :class:`GUViewImage`
+    - :class:`GUViewImageWithShapes`
+    - :class:`GUView`
+    - :class:`IVMain`
+    - `graphqt documentation <https://lcls-psana.github.io/graphqt/py-modindex.html>`_.
 
 Created on 2017-01-03 by Mikhail Dubrovin
 """
@@ -148,6 +169,18 @@ class GUViewFW(QtGui.QGraphicsView) :
         self.raxes = rectax
 
 
+    def set_rect_axes(self, rectax, set_def=True) :
+        """Sets new axes rect.
+        """
+        if set_def :
+            self.set_rect_axes_default(rectax)
+            self.reset_original_size()
+        else :
+            self.set_rect_axes_default(rectax)
+            self.reset_original_size()
+            self.update_my_scene()
+
+
     def reset_original_size(self) :
         """call sequence of methods to reset original size.
         """
@@ -156,11 +189,9 @@ class GUViewFW(QtGui.QGraphicsView) :
         #self.check_axes_limits_changed()
 
 
-    def set_rect_axes(self, rectax) :
-        """Sets new axes rect.
-        """
-        self.set_rect_axes_default(rectax)
-        self.reset_original_size()
+    def set_rect_scene(self, rs) :
+        self.scene().setSceneRect(rs)
+        self.fitInView(rs, Qt.IgnoreAspectRatio)
         self.update_my_scene()
 
 
@@ -332,7 +363,16 @@ class GUViewFW(QtGui.QGraphicsView) :
     #    pass
 
 
+    def key_usage(self) :
+        return 'Keys:'\
+               '\n  ESC - exit'\
+               '\n  R - reset original size'\
+               '\n  W - change axes rect, do not change default'\
+               '\n  D - change axes rect and its default'\
+               '\n'
+
     def keyPressEvent(self, e) :
+
         #print 'keyPressEvent, key=', e.key()         
         if   e.key() == Qt.Key_Escape :
             self.close()
@@ -341,17 +381,24 @@ class GUViewFW(QtGui.QGraphicsView) :
             print 'Reset original size'
             self.reset_original_size()
 
-        elif e.key() == Qt.Key_B : 
-            print '%s: Set big rect' % self._name
-            self.set_rect_axes(QtCore.QRectF(0, 0, 200, 200))
-
-        elif e.key() == Qt.Key_S : 
-            print '%s: Set small rect' % self._name
-            self.set_rect_axes(QtCore.QRectF(0, 0, 10, 10))
-
         elif e.key() == Qt.Key_W : 
-            print '%s: Set small rect' % self._name
-            self.set_rect_axes(QtCore.QRectF(0, 0, 100, 50))
+            print '%s: set rect of axes, do not change default' % self._name
+            import pyimgalgos.NDArrGenerators as ag
+            v = ag.random_standard((4,), mu=0, sigma=20, dtype=np.int)
+            rax = QtCore.QRectF(v[0], v[1], v[2]+100, v[3]+100)
+            print 'Set axes rect: %s' % str(rax)
+            self.set_rect_axes(rax, set_def=False)
+
+        elif e.key() == Qt.Key_D : 
+            print '%s: change default axes rect, set new default' % self._name
+            import pyimgalgos.NDArrGenerators as ag
+            v = ag.random_standard((4,), mu=0, sigma=20, dtype=np.int)
+            rax = QtCore.QRectF(v[0], v[1], v[2]+100, v[3]+100)
+            print 'Set new default axes rect: %s' % str(rax)
+            self.set_rect_axes(rax) # def in GUView
+
+        else :
+            print self.key_usage()
 
 
     def add_rect_to_scene_v1(self, rect, brush=QtGui.QBrush(), pen=QtGui.QPen(Qt.yellow, 4, Qt.DashLine)) :

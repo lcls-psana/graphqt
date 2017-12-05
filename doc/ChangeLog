@@ -11,11 +11,29 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V01-00-16
+2017-12-05 Mikhail S. Dubrovin
+- update doc, tune behavior
+- modified:
+	ColorTable - doc
+	GUViewFW - doc, add/modify set_rect_scene, key_usage, set_rect_axes
+	IVConfigParameters - doc, add color_table_ind
+	IVImageCursorInfo - doc
+	IVMain - doc, pass ctab, save ctab index on exit, use cp.current_tab as is
+	IVMainButtons - doc
+	IVMainTabs - doc
+	IVTabDataControl - doc
+	IVTabFileName - doc
+
+Tag: V01-00-15
+2017-12-04 Mikhail S. Dubrovin
+- adjust interaction
+
 Tag: V01-00-14
 2017-12-04 Mikhail S. Dubrovin
 - adjust interaction between image and spectrum
 	modified:   app/iv
-	modified:   src/IVMain.py
+	modified:   src/IVMain
 
 Tag: V01-00-13
 2017-12-04 Mikhail S. Dubrovin

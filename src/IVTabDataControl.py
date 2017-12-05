@@ -1,8 +1,30 @@
 #------------------------------
 """
-@version $Id: IVTabDataControl.py 2017-04-12 dubrovin@SLAC.STANFORD.EDU$
+Class :py:class:`IVTabDataControl` is a QWidget for interactive image
+===========================================================
 
-@author Mikhail S. Dubrovin
+Usage ::
+
+    import sys
+    from PyQt4 import QtGui
+    from graphqt.IVTabDataControl import IVTabDataControl
+    app = QtGui.QApplication(sys.argv)
+    w = IVTabDataControl(cp, log, show_mode=0377, show_mode_evctl=017)
+    w.w_evt.connect_new_event_number_to(w.test_on_new_event_number_reception)
+    w.show()
+    app.exec_()
+
+See:
+    - :class:`IVMain`
+    - :class:`IVMainTabs`
+    - :class:`IVMainButtons`
+    - :class:`IVImageCursorInfo`
+    - :class:`IVConfigParameters`
+    - :class:`IVTabDataControl`
+    - :class:`IVTabFileName`
+    - `graphqt documentation <https://lcls-psana.github.io/graphqt/py-modindex.html>`_.
+
+Created on 2017-04-12 by Mikhail Dubrovin
 """
 #------------------------------
 
