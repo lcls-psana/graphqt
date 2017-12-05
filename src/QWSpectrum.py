@@ -1,7 +1,7 @@
 #------------------------------
 """
-@version $Id: QWSpectrum.py 13121 2017-02-06 19:09:32Z dubrovin@SLAC.STANFORD.EDU $
-@author Mikhail S. Dubrovin
+Class :py:class:`QWSpectrum` - supports widget for spectrum
+===========================================================
 
 Usage ::
 
@@ -51,6 +51,16 @@ Usage ::
     --------------------
     test_guspectrum(tname)
 
+See:
+    * :py:class:`IVMain`
+    * :py:class:`IVMainTabs`
+    * :py:class:`IVConfigParameters`
+    * :py:class:`IVImageCursorInfo`
+    * :py:class:`IVMainTabs`
+    * :py:class:`IVTabDataControl`
+    * :py:class:`IVTabFileName`
+ 
+Created on 2017-02-06 by Mikhail Dubrovin
 """
 #------------------------------
 
@@ -146,6 +156,8 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
         if self.show_buts :
           self.connect(self.but_save,  QtCore.SIGNAL('clicked()'), self.on_but_save)
           self.connect(self.but_reset, QtCore.SIGNAL('clicked()'), self.on_but_reset)
+
+        #self.on_but_reset()
 
 #------------------------------
  

@@ -47,6 +47,7 @@ Usage ::
     sc = w.scale_control()
     w.set_margins(margl=None, margr=None, margt=None, margb=None)
 
+    w.set_limits_vertical(yaxmin, yaxmax)
     w.check_limits()
     w.check_axes_limits_changed() # compare axes box with old and sends signal if changed
     w.update_my_scene()
@@ -265,6 +266,23 @@ class GUView(QtGui.QGraphicsView) :
         my = mt if self._origin_u else mb
         mx = ml if self._origin_l else mr
         return QtCore.QRectF(x-mx*sx, y-my*sy, sx, sy)
+
+
+    def set_limits_vertical(self, ymin, ymax) :
+        """ymin, ymax - axes coordinates
+           self._ymin, self._ymax -scene coordinates
+        """
+        if None in (ymin, ymax) :
+            self._ymin = ymin
+            self._ymax = ymax
+            return
+
+        if ymax == ymin : ymax = ymin+1
+        #print 'XXX:  ymin, ymax', ymin, ymax
+        ml, mr, mt, mb = self.margl, self.margr, self.margt, self.margb
+        hsc = (ymax-ymin)/(1 - mt - mb)
+        self._ymin = ymin-hsc*mb if ymin<0 else -hsc*mb
+        self._ymax = ymax+hsc*mt if ymax>0 else  hsc*mt
 
 
     def set_view(self) :

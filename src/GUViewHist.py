@@ -203,23 +203,16 @@ class GUViewHist(GUViewAxes) :
             i1,i2 = hb.bin_indexes((x1,x2))
             hmin = hb.values[i1] if i1==i2 else hb.values[i1:i2].min()            
             hmax = hb.values[i1] if i1==i2 else hb.values[i1:i2].max()
+            hmean= hb.values[i1] if i1==i2 else hb.values[i1:i2].mean()
+            if hmax>20*hmean : hmax = 20*hmean
+
             ymin = hmin #if ymin is None else min(hmin,ymin) 
             ymax = hmax + 0.12*(hmax-hmin) #if ymax is None else max(hmax,ymax) 
             #print hb.values
 
         #print 'i1, i2, hmin, hmax:', i1, i2, hmin, hmax
-        #self._ymin = ymin*1.4 if ymin<0 else 0
-        ##self._ymin = 0
-        #self._ymax = ymax*1.1 if ymax>0 else 0 
 
-        if ymax == ymin : ymax = ymin+1
-        #print 'XXX:  ymin, ymax', ymin, ymax
-
-        ml, mr, mt, mb = self.margl, self.margr, self.margt, self.margb
-        hsc = (ymax-ymin)/(1 - mt - mb)
-        #self._ymin = -hsc*mb # ymin-hsc*mb if ymin<0 else -hsc*mb
-        self._ymin = ymin-hsc*mb if ymin<0 else -hsc*mb
-        self._ymax = ymax+hsc*mt if ymax>0 else  hsc*mt
+        self.set_limits_vertical(ymin, ymax)
 
         self.evaluate_hist_mean_std()
 
@@ -444,6 +437,7 @@ class GUViewHist(GUViewAxes) :
         self.reset_original_size()
         self.set_limits()
         self.reset_original_size()
+
         #self.set_view()
         #self.update_my_scene()
         #self.check_axes_limits_changed()
@@ -505,16 +499,18 @@ class GUViewHist(GUViewAxes) :
         if set_hlims : 
             self.set_limits_horizontal(amin, amax)
 
-        #print 'XXX:GUViewHist.add_array_as_hist amin=%.2f amax=%.2f' % (amin, amax)
-
         vmin, vmax = values.min(), values.max()
+        vmean = values.mean()
+        if vmax > 20*vmean : vmax = 20*vmean
+
         #print 'XXX: GUViewHist.add_array_as_hist: amin=%.1f  amax=%.1f  vmin=%.1f  vmax=%.1f' % (amin, amax, vmin, vmax)
 
-        #self._xmin = amin
-        #self._xmax = amax
-        self._ymin = None
-        self._ymax = vmax
+        self.set_limits_vertical(None, vmax)
         self.raxes = QtCore.QRectF(self.amin, vmin, self.amax-self.amin, vmax-vmin) 
+
+        #rax = QtCore.QRectF(self.amin, vmin, self.amax-self.amin, vmax-vmin) 
+        #self.set_rect_axes(rax, set_def=True) # GUView
+
         #self.check_limits()
         self.add_hist(values, (amin,amax), pen, brush, vtype)
         self.reset_original_hist()
@@ -550,12 +546,8 @@ if __name__ == "__main__" :
     app = QtGui.QApplication(sys.argv)
     w = GUViewHist(None, rectax, origin='DL', scale_ctl='H', rulers='DL',\
                     margl=0.12, margr=0.02, margt=0.02, margb=0.06)
-    #w._xmin =-100
-    #w._xmax = 200
-    w._ymin =-1.2
-    w._ymax = 1.2
-    #w._ymin =-5
-    #w._ymax = 5
+
+    w.set_limits_vertical(-1.2, 1.2) 
     w.setWindowTitle("GUViewHist")
     
     w.connect_axes_limits_changed_to(w.test_axes_limits_changed_reception)
