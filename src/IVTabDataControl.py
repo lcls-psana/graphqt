@@ -1,7 +1,7 @@
 #------------------------------
 """
-Class :py:class:`IVTabDataControl` is a QWidget for interactive image
-===========================================================
+Class :py:class:`IVTabDataControl` - window for data control
+============================================================
 
 Usage ::
 
