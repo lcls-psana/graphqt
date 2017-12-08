@@ -61,7 +61,7 @@ Created on September 9, 2016 by Mikhail Dubrovin
 
 from math import floor
 import graphqt.ColorTable as ct
-from graphqt.FWView import FWView, QtGui, QtCore, Qt
+from graphqt.FWView import *
 
 #------------------------------
 

@@ -11,6 +11,9 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+2017-12-08 Mikhail S. Dubrovin
+- update index.rst
+
 Tag: V01-00-17
 2017-12-08 Mikhail S. Dubrovin
 - tuning and re-factoring

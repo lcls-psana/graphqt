@@ -45,12 +45,12 @@ graphqt documentation
    :show-inheritance:
    :special-members:
 
-.. automodule:: GUViewFW
+.. automodule:: FWView
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: GUViewFWImage
+.. automodule:: FWViewImage
    :members:
    :show-inheritance:
    :special-members:
