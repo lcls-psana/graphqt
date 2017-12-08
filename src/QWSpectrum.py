@@ -1,3 +1,4 @@
+#!@PYTHON@
 #------------------------------
 """
 Class :py:class:`QWSpectrum` - supports widget for spectrum
@@ -71,7 +72,7 @@ from PyQt4 import QtGui, QtCore
 Qt = QtCore.Qt
 from graphqt.Styles import style    
 
-from graphqt.GUViewFWImage import GUViewFWImage, image_with_random_peaks
+from graphqt.FWViewImage import FWViewImage, image_with_random_peaks
 from graphqt.GUViewHist import GUViewHist
 import graphqt.ColorTable as ct
 from graphqt.QWPopupSelectColorBar import popup_select_color_table
@@ -119,7 +120,7 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
         #self.ctab = ct.color_table_interpolated()
         self.ctab = coltab
         arrct = ct.array_for_color_bar(self.ctab, orient='H')
-        self.cbar = GUViewFWImage(None, arrct, coltab=None, origin='UL', scale_ctl='') # 'H'
+        self.cbar = FWViewImage(None, arrct, coltab=None, origin='UL', scale_ctl='') # 'H'
 
         #self.hist.move(10,10)
         #self.cbar.move(50,200)
@@ -146,7 +147,7 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
         self.set_tool_tips()
         self.set_style()
 
-        self.cbar.connect_click_on_color_bar_to(self.on_colorbar)
+        self.cbar.connect_click_on_fwview_to(self.on_colorbar)
 
         #self.hist.disconnect_mean_std_updated_from(self.draw_stat)
         #self.hist.disconnect_statistics_updated_from(self.draw_stat)
@@ -184,7 +185,7 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
 
 #------------------------------
  
-    def on_colorbar(self) :
+    def on_colorbar(self, e) :
         #print 'QWSpectrum.on_colorbar'
         ctab_ind = popup_select_color_table(None)
         if ctab_ind is None : return

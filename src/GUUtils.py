@@ -37,7 +37,9 @@ import math
 
 def print_rect(r, cmt='') :
     x, y, w, h = r.x(), r.y(), r.width(), r.height()
+    L, R, T, B = r.left(), r.right(), r.top(), r.bottom()
     print '%s x=%8.2f  y=%8.2f  w=%8.2f  h=%8.2f' % (cmt, x, y, w, h)
+    print '%s L=%8.2f  B=%8.2f  R=%8.2f  T=%8.2f' % (len(cmt)*' ', L, B, R, T)
 
 #------------------------------
 
@@ -132,6 +134,15 @@ def proc_stat_v2(weights, centers) :
 
     rms  = math.sqrt(m2) if m2>=0 else 0
     return mean, rms
+
+#------------------------------
+
+def equal_rects(r1, r2):
+    if r1.left()   != r1.left() :   return False
+    if r1.right()  != r1.right()  : return False
+    if r1.bottom() != r1.bottom() : return False
+    if r1.top()    != r1.top()    : return False
+    return True
 
 #------------------------------
 #------------------------------

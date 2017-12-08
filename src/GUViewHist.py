@@ -414,7 +414,7 @@ class GUViewHist(GUViewAxes) :
             self.reset_original_hist()
 
         elif e.key() == Qt.Key_N :
-            from graphqt.GUViewFWImage import image_with_random_peaks
+            from graphqt.FWViewImage import image_with_random_peaks
             print '%s: Test set new histogram' % self._name
             arr = image_with_random_peaks((50, 50))
             self.remove_all_graphs()

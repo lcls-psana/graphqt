@@ -11,6 +11,17 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V01-00-17
+2017-12-08 Mikhail S. Dubrovin
+- tuning and re-factoring
+	new file:   FWView.py
+	new file:   FWViewImage.py
+	modified:   GUUtils.py
+	deleted:    GUViewFW.py
+	deleted:    GUViewFWImage.py
+	modified:   GUViewHist.py
+	modified:   QWSpectrum.py
+
 Tag: V01-00-16
 2017-12-05 Mikhail S. Dubrovin
 - update doc, tune behavior
