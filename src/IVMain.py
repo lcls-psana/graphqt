@@ -129,7 +129,8 @@ class IVMain(QtGui.QWidget) :
         self.connect(self.wbut.but_reset, QtCore.SIGNAL('clicked()'), self.on_but_reset)
         self.connect(self.wbut.but_save,  QtCore.SIGNAL('clicked()'), self.on_but_save)
 
-        self.wspe.connect_color_table_is_changed_to(self.on_spectrum_color_table_is_changed)
+        #self.wspe.connect_color_table_is_changed_to(self.on_spectrum_color_table_is_changed)
+        self.wspe.cbar.connect_new_color_table_to(self.on_spectrum_color_table_is_changed)
 
         self.connect_signals_from_img()
         self.connect_signals_from_hist()
@@ -292,7 +293,9 @@ class IVMain(QtGui.QWidget) :
         '''Responce on signal color_table_is_changed():
         '''
         log.info('%s.on_color_table_is_changed' % self._name)
-        self.wimg.set_color_table(self.wspe.color_table())
+        #self.wimg.set_color_table(self.wspe.color_table())
+        self.wimg.set_color_table(self.wspe.cbar.color_table())
+
         self.wimg.set_pixmap_from_arr()
 
 

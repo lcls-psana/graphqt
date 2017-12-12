@@ -29,7 +29,7 @@ Usage ::
     w.reset_original_size()
     w.connect_cursor_on_scene_pos_to(recip)
     w.connect_scene_rect_changed_to(recip)
-    w.connect_click_on_fwview_to(recip) 
+    w.connect_mouse_press_event_to(recip) 
 
     # Methods
     #---------
@@ -68,10 +68,9 @@ Usage ::
     w.key_usage(self)
     w.keyPressEvent(e)
 
-    w.emit_signal_cursor_on_scene_pos(e)         # emits signal cursor_on_scene_pos()
-    w.connect_cursor_on_scene_pos_to(recip)
-    w.disconnect_cursor_on_scene_pos_from(recip)
-    w.test_cursor_on_scene_pos_reception(p)
+    w.connect_mouse_move_event_to(recip)
+    w.disconnect_mouse_move_event_from(recip)
+    w.test_mouse_move_event_reception(e)     # resieves signal mouse_move_event(QMouseEvent)
 
     w.on_timeout()
     w.emit_signal_if_scene_rect_changed()        # emits signal scene_rect_changed(QRectF)
@@ -79,9 +78,9 @@ Usage ::
     w.disconnect_scene_rect_changed_from(recip)
     w.test_scene_rect_changed_reception(rs)
 
-    w.connect_click_on_fwview_to(recip)
-    w.disconnect_click_on_fwview_from(recip)
-    w.test_click_on_fwview_reception(e)
+    w.connect_mouse_press_event_to(recip)
+    w.disconnect_mouse_press_event_from(recip)
+    w.test_mouse_press_event_reception(e)
 
 
     # w.connect_wheel_is_stopped_to(recip)
@@ -283,7 +282,7 @@ class FWView(QtGui.QGraphicsView) :
     def mousePressEvent(self, e):
         #print 'FWView.mousePressEvent, at point: ', e.pos() #e.globalX(), e.globalY() 
         #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(Qt.ClosedHandCursor)) #Qt.SizeAllCursor))# ClosedHandCursor
-        self.emit(QtCore.SIGNAL('click_on_fwview(QMouseEvent)'), e)
+        self.emit(QtCore.SIGNAL('mouse_press_event(QMouseEvent)'), e)
 
         QtGui.QGraphicsView.mousePressEvent(self, e)
         self.pos_click = e.pos()
@@ -296,7 +295,7 @@ class FWView(QtGui.QGraphicsView) :
     def mouseMoveEvent(self, e):
         QtGui.QGraphicsView.mouseMoveEvent(self, e)
         #print 'FWView.mouseMoveEvent, at point: ', e.pos()
-        self.emit_signal_cursor_on_scene_pos(e)
+        self.emit(QtCore.SIGNAL('mouse_move_event(QMouseEvent)'), e)
 
         if self._scale_ctl==0 : return
         if self.pos_click is None : return        
@@ -437,7 +436,6 @@ class FWView(QtGui.QGraphicsView) :
 
 
     def keyPressEvent(self, e) :
-
         #print 'keyPressEvent, key=', e.key()         
         if   e.key() == Qt.Key_Escape :
             self.close()
@@ -487,32 +485,27 @@ class FWView(QtGui.QGraphicsView) :
 
 #------------------------------
 
-    def connect_click_on_fwview_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('click_on_fwview(QMouseEvent)'), recip)
+    def connect_mouse_press_event_to(self, recip) :
+        self.connect(self, QtCore.SIGNAL('mouse_press_event(QMouseEvent)'), recip)
 
-    def disconnect_click_on_fwview_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('click_on_fwview(QMouseEvent)'), recip)
+    def disconnect_mouse_press_event_from(self, recip) :
+        self.disconnect(self, QtCore.SIGNAL('mouse_press_event(QMouseEvent)'), recip)
 
-    def test_click_on_fwview_reception(self, e) :
-        print 'FWViewImage.click_on_fwview, QMouseEvent point: x=%d y=%d' % (e.x(), e.y())
+    def test_mouse_press_event_reception(self, e) :
+        print 'FWViewImage.mouse_press_event, QMouseEvent point: x=%d y=%d' % (e.x(), e.y())
 
 #-----------------------------
 
-    def emit_signal_cursor_on_scene_pos(self, e):
-        p = self.mapToScene(e.pos())
-        ##print 'mouseMoveEvent, current point: ', e.x(), e.y(), ' on scene: %.1f  %.1f' % (p.x(), p.y()) 
-        #self.setWindowTitle('FWView: x=%.1f y=%.1f' % (p.x(), p.y()))
-        self.emit(QtCore.SIGNAL('cursor_on_scene_pos(QPointF)'), p)
-
-    def test_cursor_on_scene_pos_reception(self, p) :
+    def test_mouse_move_event_reception(self, e) :
         #print 'mouseMoveEvent, current point: ', e.x(), e.y(), ' on scene: %.1f  %.1f' % (p.x(), p.y()) 
+        p = self.mapToScene(e.pos())
         self.setWindowTitle('FWView: x=%.1f y=%.1f %s' % (p.x(), p.y(), 25*' '))
 
-    def connect_cursor_on_scene_pos_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('cursor_on_scene_pos(QPointF)'), recip)
+    def connect_mouse_move_event_to(self, recip) :
+        self.connect(self, QtCore.SIGNAL('mouse_move_event(QMouseEvent)'), recip)
 
-    def disconnect_cursor_on_scene_pos_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('cursor_on_scene_pos(QPointF)'), recip)
+    def disconnect_mouse_move_event_from(self, recip) :
+        self.disconnect(self, QtCore.SIGNAL('mouse_move_event(QMouseEvent)'), recip)
 
 #-----------------------------
 #-----------------------------
@@ -537,9 +530,9 @@ def test_fwview(tname) :
         print 'test %s is not implemented' % tname
         return
 
-    w.connect_cursor_on_scene_pos_to(w.test_cursor_on_scene_pos_reception)
+    w.connect_mouse_move_event_to(w.test_mouse_move_event_reception)
     w.connect_scene_rect_changed_to(w.test_scene_rect_changed_reception)
-    w.connect_click_on_fwview_to(w.test_click_on_fwview_reception)
+    w.connect_mouse_press_event_to(w.test_mouse_press_event_reception)
 
     w.show()
     app.exec_()

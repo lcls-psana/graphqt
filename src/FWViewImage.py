@@ -22,8 +22,11 @@ Usage ::
     # Main methods in addition to FWView
     #------------------------------------
     w.set_pixmap_from_arr(arr, set_def=True)
-    w.connect_click_on_fwview_to(recip) 
-    w.connect_cursor_on_scene_pos_to(self, recip) # Overrides method from FWView
+    w.set_coltab(self, coltab=ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20))
+
+    w.connect_mouse_press_event_to(w.test_mouse_press_event_reception)
+    w.connect_mouse_move_event_to(w.test_mouse_move_event_reception)
+    w.connect_scene_rect_changed_to(w.test_scene_rect_changed_reception)
 
     # Methods
     #--------
@@ -40,10 +43,7 @@ Usage ::
 
     # Overrides method from FWView
     #-----------------------------
-    w.emit_signal_cursor_on_scene_pos(self, p)
-    w.connect_cursor_on_scene_pos_to(self, recip)
-    w.disconnect_cursor_on_scene_pos_from(self, recip)
-    w.test_cursor_on_scene_pos_reception(self, ix, iy, v) # signature differs from FWView
+    w.test_mouse_move_event_reception(e) # signature differs from FWView
 
     # Global methods for test
     #------------------------
@@ -75,9 +75,13 @@ class FWViewImage(FWView) :
         rscene = QtCore.QRectF(0, 0, w, h)
         FWView.__init__(self, parent, rscene, origin, scale_ctl)
         self._name = self.__class__.__name__
-        self.coltab = coltab
+        self.set_coltab(coltab)
         self.pmi = None
         self.set_pixmap_from_arr(arr)
+
+
+    def set_coltab(self, coltab=ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20)) :
+        self.coltab = coltab
 
 
     def set_style(self) :
@@ -187,25 +191,12 @@ class FWViewImage(FWView) :
 
 #------------------------------
 
-    def emit_signal_cursor_on_scene_pos(self, p):
+    def test_mouse_move_event_reception(self, e) :
         """Overrides method from FWView"""
-        #p = self.mapToScene(e.pos())
+        p = self.mapToScene(e.pos())
         ix, iy, v = self.cursor_on_image_pixcoords_and_value(p)
         fv = 0 if v is None else v 
-        self.emit(QtCore.SIGNAL('cursor_on_scene_pos(int,int,float)'), ix, iy, fv)
-
-    def connect_cursor_on_scene_pos_to(self, recip) :
-        """Overrides method from FWView"""
-        self.connect(self, QtCore.SIGNAL('cursor_on_scene_pos(int,int,float)'), recip)
-
-    def disconnect_cursor_on_scene_pos_from(self, recip) :
-        """Overrides method from FWView"""
-        self.disconnect(self, QtCore.SIGNAL('cursor_on_scene_pos(int,int,float)'), recip)
-
-    def test_cursor_on_scene_pos_reception(self, ix, iy, v) :
-        """Overrides method from FWView"""
-        #print 'FWViewImage.test_cursor_on_scene_pos_reception, x=%d y=%d v=%.2f' % (ix, iy, v)
-        self.setWindowTitle('FWViewImage x=%d y=%d v=%s%s' % (ix, iy, '%.1f'%v, 25*' '))
+        self.setWindowTitle('FWViewImage x=%d y=%d v=%s%s' % (ix, iy, '%.1f'%fv, 25*' '))
 
 #------------------------------
 #------------------------------
@@ -259,9 +250,9 @@ def test_wfviewimage(tname) :
         print 'test %s is not implemented' % tname
         return
 
-    w.connect_cursor_on_scene_pos_to(w.test_cursor_on_scene_pos_reception)
+    w.connect_mouse_press_event_to(w.test_mouse_press_event_reception)
+    w.connect_mouse_move_event_to(w.test_mouse_move_event_reception)
     w.connect_scene_rect_changed_to(w.test_scene_rect_changed_reception)
-    w.connect_click_on_fwview_to(w.test_click_on_fwview_reception)
 
     w.show()
     app.exec_()

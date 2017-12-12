@@ -38,6 +38,9 @@ class Storage :
     def __init__(self) :
         self.ictab = 0
 
+    def color_table_index(self) :
+        return self.ictab
+
 #------------------------------
 STOR = Storage()
 #------------------------------
@@ -190,7 +193,7 @@ def get_pixmap(ind, orient='H', size=(200,30)) :
 
 #------------------------------
 
-def array_for_color_bar(ctab=color_table_monochr256(), orient='V', width = 2) : 
+def array_for_color_bar(ctab=color_table_monochr256(), orient='V', width=2) : 
     """Returns 2-d array made of repeated 1-d array ctab to display as a color bar
     """
     arr = [(c,c) for c in ctab[::-1]] if orient=='V' else\

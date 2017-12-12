@@ -19,9 +19,9 @@ Usage ::
     Connect/disconnecr recipient to signals
     ---------------------------------------
 
-    w.connect_color_table_is_changed_to(recipient)
-    w.disconnect_color_table_is_changed_from(recipient) :
-    w.test_color_table_is_changed_reception(self)
+    ### w.connect_color_table_is_changed_to(recipient)
+    ### w.disconnect_color_table_is_changed_from(recipient) :
+    ### w.test_color_table_is_changed_reception(self)
 
     For self.hist:
     self.hist.connect_axes_limits_changed_to(recipient)
@@ -72,7 +72,8 @@ from PyQt4 import QtGui, QtCore
 Qt = QtCore.Qt
 from graphqt.Styles import style    
 
-from graphqt.FWViewImage import FWViewImage, image_with_random_peaks
+from graphqt.FWViewImage import image_with_random_peaks
+from graphqt.FWViewColorBar import FWViewColorBar
 from graphqt.GUViewHist import GUViewHist
 import graphqt.ColorTable as ct
 from graphqt.QWPopupSelectColorBar import popup_select_color_table
@@ -118,10 +119,10 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
         #self.ctab = ct.color_table_monochr256()
         #self.ctab = ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20)
         #self.ctab = ct.color_table_interpolated()
-        self.ctab = coltab
-        arrct = ct.array_for_color_bar(self.ctab, orient='H')
-        self.cbar = FWViewImage(None, arrct, coltab=None, origin='UL', scale_ctl='') # 'H'
-
+        #self.ctab = coltab
+        #arrct = ct.array_for_color_bar(self.ctab, orient='H')
+        #self.cbar = FWViewImage(None, arrct, coltab=None, origin='UL', scale_ctl='') # 'H'
+        self.cbar = FWViewColorBar(None, coltab=coltab, orient='H')
         #self.hist.move(10,10)
         #self.cbar.move(50,200)
         #self.label = QtGui.QLineEdit(self)
@@ -147,7 +148,7 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
         self.set_tool_tips()
         self.set_style()
 
-        self.cbar.connect_click_on_fwview_to(self.on_colorbar)
+        #self.cbar.connect_mouse_press_event_to(self.on_colorbar)
 
         #self.hist.disconnect_mean_std_updated_from(self.draw_stat)
         #self.hist.disconnect_statistics_updated_from(self.draw_stat)
@@ -185,23 +186,23 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
 
 #------------------------------
  
-    def on_colorbar(self, e) :
-        #print 'QWSpectrum.on_colorbar'
-        ctab_ind = popup_select_color_table(None)
-        if ctab_ind is None : return
-        self.ctab = ct.next_color_table(ctab_ind)
-        arr = ct.array_for_color_bar(self.ctab, orient='H')
-        self.cbar.set_pixmap_from_arr(arr)
-        self.emit(QtCore.SIGNAL('color_table_is_changed()'))
+#    def on_colorbar(self, e) :
+#        #print 'QWSpectrum.on_colorbar'
+#        ctab_ind = popup_select_color_table(None)
+#        if ctab_ind is None : return
+#        self.ctab = ct.next_color_table(ctab_ind)
+#        arr = ct.array_for_color_bar(self.ctab, orient='H')
+#        self.cbar.set_pixmap_from_arr(arr)
+#        self.emit(QtCore.SIGNAL('color_table_is_changed()'))
 
-    def connect_color_table_is_changed_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('color_table_is_changed()'), recip)
+#    def connect_color_table_is_changed_to(self, recip) :
+#        self.connect(self, QtCore.SIGNAL('color_table_is_changed()'), recip)
 
-    def disconnect_color_table_is_changed_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('color_table_is_changed()'), recip)
+#    def disconnect_color_table_is_changed_from(self, recip) :
+#        self.disconnect(self, QtCore.SIGNAL('color_table_is_changed()'), recip)
 
-    def test_color_table_is_changed_reception(self) :
-        print 'QWSpectrum.color_table_is_changed:', self.ctab.shape
+#    def test_color_table_is_changed_reception(self) :
+#        print 'QWSpectrum.color_table_is_changed:', self.ctab.shape
 
 #------------------------------
  
@@ -294,7 +295,9 @@ def test_guspectrum(tname) :
     app = QtGui.QApplication(sys.argv)
     w = QWSpectrum(None, arr, show_frame=False) #, show_buts=False)
 
-    w.connect_color_table_is_changed_to(w.test_color_table_is_changed_reception)
+    #w.connect_color_table_is_changed_to(w.test_color_table_is_changed_reception)
+    w.cbar.connect_new_color_table_to(w.cbar.test_new_color_table_reception)
+
     w.hist.connect_axes_limits_changed_to(w.hist.test_axes_limits_changed_reception)
     #w.hist.disconnect_axes_limits_changed_from(self.hist.test_axes_limits_changed_reception)
 

@@ -11,6 +11,16 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V01-00-18
+2017-12-11 Mikhail S. Dubrovin
+- add FWViewColorBar, refactoring other modules
+	modified:   src/ColorTable.py
+	modified:   src/FWView.py
+	new file:   src/FWViewColorBar.py
+	modified:   src/FWViewImage.py
+	modified:   src/IVMain.py
+	modified:   src/QWSpectrum.py
+
 2017-12-08 Mikhail S. Dubrovin
 - update index.rst
 
