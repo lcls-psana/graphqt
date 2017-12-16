@@ -1,0 +1,1374 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>graphqt documentation &#8212; graphqt-doc 1 documentation</title>
+    <link rel="stylesheet" href="_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="#">graphqt-doc 1 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="graphqt-documentation">
+<h1>graphqt documentation<a class="headerlink" href="#graphqt-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-GUView"></span><div class="section" id="class-guview-is-a-qgraphicsview-qwidget-with-interactive-scene-having-scalable-axes-box">
+<h2>Class <a class="reference internal" href="#module-GUView" title="GUView"><code class="xref py py-class docutils literal"><span class="pre">GUView</span></code></a> is a QGraphicsView / QWidget with interactive scene having scalable axes box<a class="headerlink" href="#class-guview-is-a-qgraphicsview-qwidget-with-interactive-scene-having-scalable-axes-box" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Create</span> <span class="n">GUView</span> <span class="nb">object</span> <span class="n">within</span> <span class="n">pyqt</span> <span class="n">QApplication</span>
+<span class="o">---------------------------------------------</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">graphqt.GUView</span> <span class="k">import</span> <span class="n">GUView</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">GUView</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">raxes</span><span class="o">=</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;UL&#39;</span><span class="p">,</span>               <span class="n">scale_ctl</span><span class="o">=</span><span class="s1">&#39;HV&#39;</span><span class="p">,</span> <span class="n">margl</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">margr</span><span class="o">=</span><span class="mf">0.10</span><span class="p">,</span> <span class="n">margt</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span> <span class="n">margb</span><span class="o">=</span><span class="mf">0.06</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+<span class="n">Connect</span><span class="o">/</span><span class="n">disconnecr</span> <span class="n">recipient</span> <span class="n">to</span> <span class="n">signals</span>
+<span class="o">----------------------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect_axes_limits_changed_to</span><span class="p">(</span><span class="n">recipient</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_axes_limits_changed_from</span><span class="p">(</span><span class="n">recipient</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">test_axes_limits_changed_reception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">connect_wheel_is_stopped_to</span><span class="p">(</span><span class="n">recipient</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_wheel_is_stopped_from</span><span class="p">(</span><span class="n">recipient</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">test_wheel_is_stopped_reception</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">connect_view_is_closed_to</span><span class="p">(</span><span class="n">recipient</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_view_is_closed_from</span><span class="p">(</span><span class="n">recipient</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">test_view_is_closed_reception</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<span class="n">Major</span> <span class="n">methors</span>
+<span class="o">-----------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">reset_original_size</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_rect_axes</span><span class="p">(</span><span class="n">rectax</span><span class="p">,</span> <span class="n">set_def</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">Methods</span>
+<span class="o">-------</span>
+<span class="n">rs</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">rect_scene_from_rect_axes</span><span class="p">(</span><span class="n">raxes</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_rect_scene</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span> <span class="c1"># the same as zoom-in/out, do not change default</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">set_rect_axes_default</span><span class="p">(</span><span class="n">rectax</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_origin</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;UL&#39;</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_transform_orientation</span><span class="p">()</span> <span class="c1"># if origin is changed</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_scale_control</span><span class="p">(</span><span class="n">scale_ctl</span><span class="o">=</span><span class="s1">&#39;HV&#39;</span><span class="p">)</span> <span class="c1"># sets dynamically controlled axes</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">scale_control</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_margins</span><span class="p">(</span><span class="n">margl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">margr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">margt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">margb</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">set_limits_vertical</span><span class="p">(</span><span class="n">yaxmin</span><span class="p">,</span> <span class="n">yaxmax</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">check_limits</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">check_axes_limits_changed</span><span class="p">()</span> <span class="c1"># compare axes box with old and sends signal if changed</span>
+<span class="n">w</span><span class="o">.</span><span class="n">update_my_scene</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_view</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">reset_original_size</span><span class="p">()</span> <span class="c1"># calls sequence of methods: set_view, update_my_scene, check_axes_limits_changed</span>
+<span class="n">w</span><span class="o">.</span><span class="n">add_rect_to_scene_v1</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">brush</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QBrush</span><span class="p">(),</span> <span class="n">pen</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPen</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">yellow</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">DashLine</span><span class="p">))</span> <span class="c1"># returns QGraphicsRectItem</span>
+<span class="n">w</span><span class="o">.</span><span class="n">add_rect_to_scene</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">brush</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QBrush</span><span class="p">(),</span> <span class="n">pen</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPen</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">yellow</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">DashLine</span><span class="p">))</span>  <span class="c1"># returns GUQGraphicsRectItem</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">rect_axes</span><span class="p">()</span>
+<span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">axes_limits</span><span class="p">()</span>
+
+<span class="n">Internal</span> <span class="n">methods</span>
+<span class="o">-----------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">_select_further_action</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="c1"># checks cursor position relative to margin box items and sets w.scalebw</span>
+<span class="n">w</span><span class="o">.</span><span class="n">_continue_wheel_event</span><span class="p">(</span><span class="n">t_msec</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">on_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+
+<span class="n">Re</span><span class="o">-</span><span class="n">defines</span> <span class="n">methods</span>
+<span class="o">------------------</span>
+<span class="fm">__del__</span>
+<span class="n">enterEvent</span><span class="p">,</span> <span class="n">leaveEvent</span><span class="p">,</span> <span class="n">closeEvent</span><span class="p">,</span> <span class="n">resizeEvent</span><span class="p">,</span> <span class="n">keyPressEvent</span><span class="p">,</span> 
+<span class="n">mouseReleaseEvent</span><span class="p">,</span> <span class="n">mousePressEvent</span><span class="p">,</span> <span class="n">mouseMoveEvent</span><span class="p">,</span> <span class="n">wheelEvent</span>
+</pre></div>
+</div>
+<p>Created on September 9, 2016 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GUViewAxes"></span><div class="section" id="class-guviewaxes-is-a-qgraphicsview-qwidget-with-interactive-scalable-scene-with-axes">
+<h2>Class <a class="reference internal" href="#module-GUViewAxes" title="GUViewAxes"><code class="xref py py-class docutils literal"><span class="pre">GUViewAxes</span></code></a> is a QGraphicsView / QWidget with interactive scalable scene with axes<a class="headerlink" href="#class-guviewaxes-is-a-qgraphicsview-qwidget-with-interactive-scalable-scene-with-axes" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Create</span> <span class="n">GUViewAxes</span> <span class="nb">object</span> <span class="n">within</span> <span class="n">pyqt</span> <span class="n">QApplication</span>
+<span class="o">--------------------------------------------------</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">graphqt.GUViewAxes</span> <span class="k">import</span> <span class="n">GUViewAxes</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">GUViewAxes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">raxes</span><span class="o">=</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;UL&#39;</span><span class="p">,</span>                   <span class="n">scale_ctl</span><span class="o">=</span><span class="s1">&#39;HV&#39;</span><span class="p">,</span> <span class="n">rulers</span><span class="o">=</span><span class="s1">&#39;TR&#39;</span><span class="p">,</span> <span class="n">margl</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">margr</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">margt</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span> <span class="n">margb</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+<span class="n">Connect</span><span class="o">/</span><span class="n">disconnecr</span> <span class="n">recipient</span> <span class="n">to</span> <span class="n">signals</span>
+<span class="o">---------------------------------------</span>
+
+<span class="n">Methods</span>
+<span class="o">-------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_show_rulers</span><span class="p">(</span><span class="n">rulers</span><span class="o">=</span><span class="s1">&#39;TBLR&#39;</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">reset_original_image_size</span><span class="p">()</span>
+
+<span class="n">Internal</span> <span class="n">methods</span>
+<span class="o">-----------------</span>
+
+<span class="n">Re</span><span class="o">-</span><span class="n">defines</span> <span class="n">methods</span>
+<span class="o">------------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">update_my_scene</span><span class="p">()</span> <span class="c1"># GUView.update_my_scene() + draw rulers</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_style</span><span class="p">()</span>       <span class="c1"># sets GUView.set_style() + color, font, pen</span>
+<span class="n">w</span><span class="o">.</span><span class="n">closeEvent</span><span class="p">()</span>      <span class="c1"># removes rulers, GUView.closeEvent()</span>
+</pre></div>
+</div>
+<p>Created on December 14, 2016 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GUViewAxesDL"></span><div class="section" id="class-guviewaxesdl-is-a-qgraphicsview-qwidget-with-interactive-scalable-scene-with-axes">
+<h2>Class <a class="reference internal" href="#module-GUViewAxesDL" title="GUViewAxesDL"><code class="xref py py-class docutils literal"><span class="pre">GUViewAxesDL</span></code></a> is a QGraphicsView / QWidget with interactive scalable scene with axes<a class="headerlink" href="#class-guviewaxesdl-is-a-qgraphicsview-qwidget-with-interactive-scalable-scene-with-axes" title="Permalink to this headline">¶</a></h2>
+<p>DL stands for Down and Lext axes only.</p>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">graphqt.GUViewAxesDL</span> <span class="k">import</span> <span class="n">GUViewAxesDL</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">GUViewAxesDL</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">raxes</span><span class="o">=</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">origin_up</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scale_ctl</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Created on September 9, 2016 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GUViewImage"></span><div class="section" id="class-guviewimage-is-a-guviewaxes-qwidget-for-interactive-image">
+<h2>Class <a class="reference internal" href="#module-GUViewImage" title="GUViewImage"><code class="xref py py-class docutils literal"><span class="pre">GUViewImage</span></code></a> is a GUViewAxes/QWidget for interactive image<a class="headerlink" href="#class-guviewimage-is-a-guviewaxes-qwidget-for-interactive-image" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Create</span> <span class="n">GUViewImage</span> <span class="nb">object</span> <span class="n">within</span> <span class="n">pyqt</span> <span class="n">QApplication</span>
+<span class="o">--------------------------------------------------</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">graphqt.GUViewImage</span> <span class="k">import</span> <span class="n">GUViewImage</span>
+<span class="kn">import</span> <span class="nn">graphqt.ColorTable</span> <span class="k">as</span> <span class="nn">ct</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">ctab</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">color_table_monochr256</span><span class="p">()</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">GUViewImage</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;UL&#39;</span><span class="p">,</span> <span class="n">scale_ctl</span><span class="o">=</span><span class="s1">&#39;HV&#39;</span><span class="p">,</span> <span class="n">coltab</span><span class="o">=</span><span class="n">ctab</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+<span class="n">Connect</span><span class="o">/</span><span class="n">disconnecr</span> <span class="n">recipient</span> <span class="n">to</span> <span class="n">signals</span>
+<span class="o">---------------------------------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect_cursor_pos_value_to</span><span class="p">(</span><span class="n">recipient</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_cursor_pos_value_from</span><span class="p">(</span><span class="n">recipient</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">test_cursor_pos_value_reception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">connect_pixmap_is_updated_to</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_pixmap_is_updated_from</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">test_pixmap_is_updated_reception</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<span class="n">Enherited</span><span class="p">:</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect_axes_limits_changed_to</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_axes_limits_changed_reception</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect_pixmap_is_updated_to</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_pixmap_is_updated_reception</span><span class="p">)</span>
+
+<span class="n">Major</span> <span class="n">methors</span>
+<span class="o">-----------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">reset_original_image_size</span><span class="p">()</span>   <span class="c1"># def in GUViewAxes and GUView</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_pixmap_from_arr</span><span class="p">(</span><span class="n">arr</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="c1">#------ combined:</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_color_table</span><span class="p">(</span><span class="n">coltab</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="c1"># sets color table, nothing else</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_pixmap_from_arr</span><span class="p">(</span><span class="n">arr</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="c1"># to redraw</span>
+<span class="c1">#------ combined:</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_intensity_limits</span><span class="p">(</span><span class="n">amin</span><span class="p">,</span> <span class="n">amax</span><span class="p">)</span> <span class="c1"># sets attributes, nothing else</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_pixmap_from_arr</span><span class="p">()</span>
+<span class="c1">#------</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">set_rect_scene</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span> <span class="c1"># works as zoom-in/out, do not change default</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_rect_axes</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span> <span class="c1"># def in GUView, reset default axes rect</span>
+
+<span class="n">Methods</span>
+<span class="o">-------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="c1"># sets GUViewAxes.set_style(self) + transparent background</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">image_data</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">add_pixmap_to_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pixmap</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">IgnoreAspectRatio</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">FastTransformation</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">set_pixmap_random</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span><span class="mi">512</span><span class="p">))</span>
+<span class="n">w</span><span class="o">.</span><span class="n">save_pixmap_in_file</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;fig-image.xpm&#39;</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">save_qimage_in_file</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;fig-image.gif&#39;</span><span class="p">)</span> 
+<span class="n">w</span><span class="o">.</span><span class="n">save_window_in_file</span><span class="p">(</span><span class="n">fname</span><span class="o">=</span><span class="s1">&#39;fig-image.png&#39;</span><span class="p">)</span> 
+<span class="n">w</span><span class="o">.</span><span class="n">on_but_reset</span><span class="p">()</span> <span class="c1"># calls w.reset_original_image_size()</span>
+
+<span class="n">Internal</span> <span class="n">methods</span>
+<span class="o">-----------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">display_pixel_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="c1"># submits signal when coursor hovering pixel</span>
+<span class="n">w</span><span class="o">.</span><span class="n">on_but_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">at_obj</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">Re</span><span class="o">-</span><span class="n">defines</span> <span class="n">methods</span>
+<span class="o">------------------</span>
+<span class="n">mouseMoveEvent</span><span class="p">,</span> <span class="n">closeEvent</span><span class="p">,</span> <span class="n">keyPressEvent</span>
+
+<span class="n">Global</span> <span class="n">scope</span> <span class="n">methods</span>
+<span class="o">--------------------</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">image_with_random_peaks</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span> <span class="p">:</span> 
+<span class="n">test_guiviewimage</span><span class="p">(</span><span class="n">tname</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Created on September 9, 2016 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GUViewGraph"></span><div class="section" id="class-guviewgraph-is-a-qwidget-for-interactive-image">
+<h2>Class <a class="reference internal" href="#module-GUViewGraph" title="GUViewGraph"><code class="xref py py-class docutils literal"><span class="pre">GUViewGraph</span></code></a> is a QWidget for interactive image<a class="headerlink" href="#class-guviewgraph-is-a-qwidget-for-interactive-image" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Usage ::</dt>
+<dd>from graphqt.GUViewGraph import GUViewGraph
+#…
+w = GUViewGraph(None, arr, origin=’UL’, scale_ctl=’HV’, coltab=ctab)</dd>
+</dl>
+<p>Created on 2016-09-09 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GUViewHist"></span><div class="section" id="class-guviewhist-is-a-qwidget-for-interactive-image">
+<h2>Class <a class="reference internal" href="#module-GUViewHist" title="GUViewHist"><code class="xref py py-class docutils literal"><span class="pre">GUViewHist</span></code></a> is a QWidget for interactive image<a class="headerlink" href="#class-guviewhist-is-a-qwidget-for-interactive-image" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Create</span> <span class="n">GUViewHist</span> <span class="nb">object</span> <span class="n">within</span> <span class="n">pyqt</span> <span class="n">QApplication</span>
+<span class="o">--------------------------------------------------</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">graphqt.GUViewHist</span> <span class="k">import</span> <span class="n">GUViewHist</span>
+<span class="n">rectax</span><span class="o">=</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.2</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mf">2.4</span><span class="p">)</span>    
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">GUViewHist</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">rectax</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;DL&#39;</span><span class="p">,</span> <span class="n">scale_ctl</span><span class="o">=</span><span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="n">rulers</span><span class="o">=</span><span class="s1">&#39;DL&#39;</span><span class="p">,</span>                    <span class="n">margl</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">margr</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">margt</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">margb</span><span class="o">=</span><span class="mf">0.06</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">_ymin</span> <span class="o">=-</span><span class="mf">1.2</span>
+<span class="n">w</span><span class="o">.</span><span class="n">_ymax</span> <span class="o">=</span> <span class="mf">1.2</span>
+<span class="n">w</span><span class="o">.</span><span class="n">add_hist</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">100</span><span class="p">),</span> <span class="n">pen</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPen</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">blue</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">brush</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QBrush</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">green</span><span class="p">))</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+<span class="n">Connect</span><span class="o">/</span><span class="n">disconnecr</span> <span class="n">recipient</span> <span class="n">to</span> <span class="n">signals</span>
+<span class="o">---------------------------------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect_statistics_updated_to</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_statistics_updated_from</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">test_statistics_std_reception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">rms</span><span class="p">,</span> <span class="n">err_mean</span><span class="p">,</span> <span class="n">err_rms</span><span class="p">,</span> <span class="n">neff</span><span class="p">,</span> <span class="n">skew</span><span class="p">,</span> <span class="n">kurt</span><span class="p">,</span> <span class="n">err_err</span><span class="p">,</span> <span class="n">sum_w</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">connect_mean_std_updated_to</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_mean_std_updated_from</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">test_hist_mean_std_updated_reception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">rms</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">connect_cursor_bin_changed_to</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_cursor_bin_changed_from</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">connect_histogram_updated_to</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span> <span class="p">:</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_histogram_updated_from</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span> <span class="p">:</span>
+<span class="n">w</span><span class="o">.</span><span class="n">test_histogram_updated_reception</span><span class="p">()</span>
+
+
+<span class="n">Methods</span>
+<span class="o">-------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_limits_horizontal</span><span class="p">(</span><span class="n">amin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">amax</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="c1"># sets self.amin, self.amax</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_limits</span><span class="p">()</span>
+<span class="n">values</span><span class="p">,</span> <span class="n">centers</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">visible_hist_vce</span><span class="p">(</span><span class="n">ihis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">mean</span><span class="p">,</span> <span class="n">rms</span><span class="p">,</span> <span class="n">err_mean</span><span class="p">,</span> <span class="n">err_rms</span><span class="p">,</span> <span class="n">neff</span><span class="p">,</span> <span class="n">skew</span><span class="p">,</span> <span class="n">kurt</span><span class="p">,</span> <span class="n">err_err</span><span class="p">,</span> <span class="n">sum_w</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">visible_hist_stat</span><span class="p">(</span><span class="n">ihis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">mean</span><span class="p">,</span> <span class="n">std</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">visible_hist_mean_std</span><span class="p">(</span><span class="n">ihis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">on_axes_limits_changed</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">evaluate_hist_statistics</span><span class="p">()</span> <span class="c1"># emits signal statistics_updated</span>
+<span class="n">w</span><span class="o">.</span><span class="n">evaluate_hist_mean_std</span><span class="p">()</span> <span class="c1"># emits signal mean_std_updated</span>
+
+<span class="n">ind</span><span class="p">,</span> <span class="n">hb</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">hist_bin_value</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ihis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">reset_original_hist</span><span class="p">()</span> 
+<span class="n">w</span><span class="o">.</span><span class="n">add_hist</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPen</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">black</span><span class="p">),</span> <span class="n">brush</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QBrush</span><span class="p">(),</span> <span class="n">vtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">add_array_as_hist</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPen</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">black</span><span class="p">),</span> <span class="n">brush</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QBrush</span><span class="p">(),</span> <span class="n">vtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">remove_all_graphs</span><span class="p">()</span>
+
+
+<span class="n">Internal</span> <span class="n">methods</span>
+<span class="o">-----------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">_init_cursor_scope</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_style</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">_add_path_to_scene</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">pen</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPen</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">yellow</span><span class="p">),</span> <span class="n">brush</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QBrush</span><span class="p">())</span>
+
+
+<span class="n">Re</span><span class="o">-</span><span class="n">defines</span> <span class="n">methods</span>
+<span class="o">------------------</span>
+<span class="n">mouseReleaseEvent</span><span class="p">,</span> <span class="n">closeEvent</span><span class="p">,</span> <span class="n">mouseMoveEvent</span><span class="p">,</span> <span class="n">wheelEvent</span><span class="p">,</span> 
+<span class="n">enterEvent</span><span class="p">,</span> <span class="n">leaveEvent</span><span class="p">,</span> <span class="n">keyPressEvent</span><span class="p">,</span> <span class="fm">__del__</span>
+
+<span class="n">Global</span> <span class="n">scope</span> <span class="n">methods</span>
+<span class="o">--------------------</span>
+<span class="n">amin</span><span class="p">,</span> <span class="n">amax</span><span class="p">,</span> <span class="n">nhbins</span><span class="p">,</span> <span class="n">values</span> <span class="o">=</span> <span class="n">image_to_hist_arr</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Created on September 9, 2016 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GUViewColorBar"></span><div class="section" id="class-guviewcolorbar-is-a-qwidget-for-interactive-color-bar">
+<h2>Class <a class="reference internal" href="#module-GUViewColorBar" title="GUViewColorBar"><code class="xref py py-class docutils literal"><span class="pre">GUViewColorBar</span></code></a> is a QWidget for interactive color bar<a class="headerlink" href="#class-guviewcolorbar-is-a-qwidget-for-interactive-color-bar" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">graphqt.GUViewColorBar</span> <span class="k">import</span> <span class="n">GUViewColorBar</span>
+<span class="kn">import</span> <span class="nn">graphqt.ColorTable</span> <span class="k">as</span> <span class="nn">ct</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">ctab</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">color_table_monochr256</span><span class="p">()</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">GUViewColorBar</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">coltab</span><span class="o">=</span><span class="n">ctab</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Created on September 9, 2016 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-FWView"></span><div class="section" id="class-fwview-is-a-qgraphicsview-qwidget-with-interactive-scalable-scene">
+<h2>Class <a class="reference internal" href="#module-FWView" title="FWView"><code class="xref py py-class docutils literal"><span class="pre">FWView</span></code></a> is a QGraphicsView QWidget with interactive scalable scene<a class="headerlink" href="#class-fwview-is-a-qgraphicsview-qwidget-with-interactive-scalable-scene" title="Permalink to this headline">¶</a></h2>
+<p>FW stands for Full Window - no margins for rullers etc.</p>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Test</span>
+<span class="c1">#-----</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">graphqt.FWView</span> <span class="k">import</span> <span class="n">FWView</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">FWView</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">rscene</span><span class="o">=</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;UL&#39;</span><span class="p">,</span> <span class="n">scale_ctl</span><span class="o">=</span><span class="s1">&#39;HV&#39;</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+<span class="c1"># Constructor and destructor</span>
+<span class="c1">#---------------------------</span>
+<span class="kn">from</span> <span class="nn">graphqt.FWView</span> <span class="k">import</span> <span class="n">FWView</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">FWView</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rscene</span><span class="o">=</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;UL&#39;</span><span class="p">,</span> <span class="n">scale_ctl</span><span class="o">=</span><span class="s1">&#39;HV&#39;</span><span class="p">,</span> <span class="n">show_mode</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="fm">__del__</span><span class="p">()</span> <span class="c1"># on w.close()</span>
+
+<span class="c1"># Main methods</span>
+<span class="c1">#-------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_rect_scene</span><span class="p">(</span><span class="n">rs</span><span class="p">,</span> <span class="n">set_def</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">reset_original_size</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect_cursor_on_scene_pos_to</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect_scene_rect_changed_to</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect_mouse_press_event_to</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span> 
+
+<span class="c1"># Methods</span>
+<span class="c1">#---------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_origin</span><span class="p">(</span><span class="n">origin</span><span class="o">=</span><span class="s1">&#39;UL&#39;</span><span class="p">)</span>           <span class="c1"># sets attributes for origin</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_scale_control</span><span class="p">(</span><span class="n">scale_ctl</span><span class="o">=</span><span class="s1">&#39;HV&#39;</span><span class="p">)</span> <span class="c1"># sets attribute _scale_ctl = 0/+1/+2</span>
+<span class="n">sctrl</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">scale_control</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_style</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_signs_of_transform</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_background_style</span><span class="p">(</span><span class="n">bkgd</span><span class="o">=</span><span class="s2">&quot;background-color:black; border: 0px solid green&quot;</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_scene_item_rect_zvalue</span><span class="p">(</span><span class="n">sc_zvalue</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># Re-calls</span>
+<span class="c1">#---------    </span>
+<span class="n">w</span><span class="o">.</span><span class="n">update_my_scene</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_cursor_type_on_scene_rect</span><span class="p">(</span><span class="n">curs_hover</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">CrossCursor</span><span class="p">,</span> <span class="n">curs_grab</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">SizeAllCursor</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_view</span><span class="p">(</span><span class="n">rs</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># Methods for tests</span>
+<span class="c1">#------------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">add_rect_to_scene_v1</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">brush</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QBrush</span><span class="p">(),</span> <span class="n">pen</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPen</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">yellow</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">DashLine</span><span class="p">))</span>
+<span class="n">w</span><span class="o">.</span><span class="n">add_rect_to_scene</span><span class="p">(</span><span class="n">rect</span><span class="p">,</span> <span class="n">brush</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QBrush</span><span class="p">(),</span> <span class="n">pen</span><span class="o">=</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QPen</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">yellow</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">DashLine</span><span class="p">))</span>
+<span class="n">w</span><span class="o">.</span><span class="n">add_test_items_to_scene</span><span class="p">(</span><span class="n">show_mode</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Call-back slots</span>
+<span class="c1">#----------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">mouseReleaseEvent</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="c1"># w.mouseDoubleCkickEvent(e)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">mouseMoveEvent</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">wheelEvent</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">enterEvent</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">leaveEvent</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">closeEvent</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">resizeEvent</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="c1"># w.paintEvent(e)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">key_usage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">keyPressEvent</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">connect_mouse_move_event_to</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_mouse_move_event_from</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">test_mouse_move_event_reception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>     <span class="c1"># resieves signal mouse_move_event(QMouseEvent)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">on_timeout</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">emit_signal_if_scene_rect_changed</span><span class="p">()</span>        <span class="c1"># emits signal scene_rect_changed(QRectF)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect_scene_rect_changed_to</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_scene_rect_changed_from</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">test_scene_rect_changed_reception</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">connect_mouse_press_event_to</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_mouse_press_event_from</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">test_mouse_press_event_reception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+
+<span class="c1"># w.connect_wheel_is_stopped_to(recip)</span>
+<span class="c1"># w.disconnect_wheel_is_stopped_from(recip)</span>
+<span class="c1"># w.test_wheel_is_stopped_reception()</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>See:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#module-FWView" title="FWView"><code class="xref py py-class docutils literal"><span class="pre">FWView</span></code></a></li>
+<li><a class="reference internal" href="#module-FWViewImage" title="FWViewImage"><code class="xref py py-class docutils literal"><span class="pre">FWViewImage</span></code></a></li>
+<li><a class="reference internal" href="#module-QWSpectrum" title="QWSpectrum"><code class="xref py py-class docutils literal"><span class="pre">QWSpectrum</span></code></a></li>
+<li><a class="reference external" href="https://lcls-psana.github.io/graphqt/py-modindex.html">graphqt documentation</a>.</li>
+</ul>
+</dd>
+</dl>
+<p>Created on 2017-01-03 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-FWViewImage"></span><div class="section" id="class-fwviewimage-is-a-fwview-for-interactive-image">
+<h2>Class <a class="reference internal" href="#module-FWViewImage" title="FWViewImage"><code class="xref py py-class docutils literal"><span class="pre">FWViewImage</span></code></a> is a FWView for interactive image<a class="headerlink" href="#class-fwviewimage-is-a-fwview-for-interactive-image" title="Permalink to this headline">¶</a></h2>
+<p>FWView &lt;- QGraphicsView &lt;- … &lt;- QWidget</p>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Test</span>
+<span class="c1">#-----</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">graphqt.FWViewImage</span> <span class="k">import</span> <span class="n">FWViewImage</span>
+<span class="kn">import</span> <span class="nn">graphqt.ColorTable</span> <span class="k">as</span> <span class="nn">ct</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">ctab</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">color_table_monochr256</span><span class="p">()</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">FWViewImage</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;UL&#39;</span><span class="p">,</span> <span class="n">scale_ctl</span><span class="o">=</span><span class="s1">&#39;HV&#39;</span><span class="p">,</span> <span class="n">coltab</span><span class="o">=</span><span class="n">ctab</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+<span class="c1"># Main methods in addition to FWView</span>
+<span class="c1">#------------------------------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_pixmap_from_arr</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">set_def</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_coltab</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coltab</span><span class="o">=</span><span class="n">ct</span><span class="o">.</span><span class="n">color_table_rainbow</span><span class="p">(</span><span class="n">ncolors</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hang1</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">hang2</span><span class="o">=-</span><span class="mi">20</span><span class="p">))</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">connect_mouse_press_event_to</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_mouse_press_event_reception</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect_mouse_move_event_to</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_mouse_move_event_reception</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect_scene_rect_changed_to</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_scene_rect_changed_reception</span><span class="p">)</span>
+
+<span class="c1"># Methods</span>
+<span class="c1">#--------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_style</span><span class="p">()</span>
+<span class="n">ix</span><span class="p">,</span> <span class="n">iy</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">cursor_on_image_pixcoords_and_value</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+<span class="c1"># Call-back slots</span>
+<span class="c1">#----------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">mousePressEvent</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="c1"># w.mouseMoveEvent(e)</span>
+<span class="c1"># w.closeEvent(e)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">key_usage</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">keyPressEvent</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+<span class="c1"># Overrides method from FWView</span>
+<span class="c1">#-----------------------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">test_mouse_move_event_reception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="c1"># signature differs from FWView</span>
+
+<span class="c1"># Global methods for test</span>
+<span class="c1">#------------------------</span>
+<span class="n">img</span> <span class="o">=</span> <span class="n">image_with_random_peaks</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>See:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#module-FWView" title="FWView"><code class="xref py py-class docutils literal"><span class="pre">FWView</span></code></a></li>
+<li><a class="reference internal" href="#module-FWViewImage" title="FWViewImage"><code class="xref py py-class docutils literal"><span class="pre">FWViewImage</span></code></a></li>
+<li><a class="reference internal" href="#module-QWSpectrum" title="QWSpectrum"><code class="xref py py-class docutils literal"><span class="pre">QWSpectrum</span></code></a></li>
+<li><a class="reference external" href="https://lcls-psana.github.io/graphqt/py-modindex.html">graphqt documentation</a>.</li>
+</ul>
+</dd>
+</dl>
+<p>Created on September 9, 2016 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-FWViewColorBar"></span><div class="section" id="class-fwviewcolorbar-is-a-fwview-for-interactive-color-bar">
+<h2>Class <a class="reference internal" href="#module-FWViewColorBar" title="FWViewColorBar"><code class="xref py py-class docutils literal"><span class="pre">FWViewColorBar</span></code></a> is a FWView for interactive color bar<a class="headerlink" href="#class-fwviewcolorbar-is-a-fwview-for-interactive-color-bar" title="Permalink to this headline">¶</a></h2>
+<p>FWView &lt;- QGraphicsView &lt;- … &lt;- QWidget</p>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Create object</span>
+<span class="c1">#--------------</span>
+<span class="kn">from</span> <span class="nn">graphqt.FWViewColorBar</span> <span class="k">import</span> <span class="n">FWViewColorBar</span>
+<span class="kn">import</span> <span class="nn">graphqt.ColorTable</span> <span class="k">as</span> <span class="nn">ct</span>
+
+<span class="n">ctab</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">color_table_rainbow</span><span class="p">(</span><span class="n">ncolors</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hang1</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">hang2</span><span class="o">=-</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">FWViewColorBar</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">coltab</span><span class="o">=</span><span class="n">ctab</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="n">wlength</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">wwidth</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">keys_on</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Main methods</span>
+<span class="c1">#-------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_colorbar_table_ind</span><span class="p">(</span><span class="n">ctab_ind</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="c1"># None for next in the loop</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_colorbar_table</span><span class="p">(</span><span class="n">ctab</span><span class="p">)</span>
+
+<span class="n">ctab</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">color_table</span><span class="p">()</span>          <span class="c1"># current color table used in colorbar</span>
+<span class="n">ctab_ind</span> <span class="o">=</span> <span class="n">color_table_index</span><span class="p">()</span>  <span class="c1"># current color table index</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">connect_new_color_table_index_is_selected_to</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_new_color_table_index_is_selected_from</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect_new_color_table_index_is_selected_to</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_new_color_table_index_is_selected_reception</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">connect_new_color_table_to</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_new_color_table_reception</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">disconnect_new_color_table_from</span><span class="p">(</span><span class="n">recip</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">connect_new_color_table_to</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_new_color_table_reception</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">connect_mouse_move_event_to</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_mouse_move_event_reception</span><span class="p">)</span> <span class="c1"># from FWViewImage</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>See:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#module-FWView" title="FWView"><code class="xref py py-class docutils literal"><span class="pre">FWView</span></code></a></li>
+<li><a class="reference internal" href="#module-FWViewImage" title="FWViewImage"><code class="xref py py-class docutils literal"><span class="pre">FWViewImage</span></code></a></li>
+<li><a class="reference internal" href="#module-FWViewColorBar" title="FWViewColorBar"><code class="xref py py-class docutils literal"><span class="pre">FWViewColorBar</span></code></a></li>
+<li><a class="reference internal" href="#module-QWSpectrum" title="QWSpectrum"><code class="xref py py-class docutils literal"><span class="pre">QWSpectrum</span></code></a></li>
+<li><a class="reference external" href="https://lcls-psana.github.io/graphqt/py-modindex.html">graphqt documentation</a>.</li>
+</ul>
+</dd>
+</dl>
+<p>Created on November 9, 2017 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-FWViewAxis"></span><div class="section" id="class-fwviewaxis-is-a-widget-with-interactive-axes">
+<h2>Class <a class="reference internal" href="#module-FWViewAxis" title="FWViewAxis"><code class="xref py py-class docutils literal"><span class="pre">FWViewAxis</span></code></a> is a widget with interactive axes<a class="headerlink" href="#class-fwviewaxis-is-a-widget-with-interactive-axes" title="Permalink to this headline">¶</a></h2>
+<p>FWViewAxis &lt;- FWView &lt;- QGraphicsView &lt;- QWidget</p>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Create</span> <span class="n">FWViewAxis</span> <span class="nb">object</span> <span class="n">within</span> <span class="n">pyqt</span> <span class="n">QApplication</span>
+<span class="o">--------------------------------------------------</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">graphqt.FWViewAxis</span> <span class="k">import</span> <span class="n">FWViewAxis</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">FWViewAxis</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">raxes</span><span class="o">=</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;UL&#39;</span><span class="p">,</span>                   <span class="n">scale_ctl</span><span class="o">=</span><span class="s1">&#39;HV&#39;</span><span class="p">,</span> <span class="n">rulers</span><span class="o">=</span><span class="s1">&#39;TR&#39;</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+<span class="n">Connect</span><span class="o">/</span><span class="n">disconnecr</span> <span class="n">recipient</span> <span class="n">to</span> <span class="n">signals</span>
+<span class="o">---------------------------------------</span>
+
+<span class="n">Methods</span>
+<span class="o">-------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_show_rulers</span><span class="p">(</span><span class="n">rulers</span><span class="o">=</span><span class="s1">&#39;TBLR&#39;</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">reset_original_image_size</span><span class="p">()</span>
+
+<span class="n">Internal</span> <span class="n">methods</span>
+<span class="o">-----------------</span>
+
+<span class="n">Re</span><span class="o">-</span><span class="n">defines</span> <span class="n">methods</span>
+<span class="o">------------------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">update_my_scene</span><span class="p">()</span> <span class="c1"># FWView.update_my_scene() + draw rulers</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_style</span><span class="p">()</span>       <span class="c1"># sets FWView.set_style() + color, font, pen</span>
+<span class="n">w</span><span class="o">.</span><span class="n">closeEvent</span><span class="p">()</span>      <span class="c1"># removes rulers, FWView.closeEvent()</span>
+</pre></div>
+</div>
+<p>Created on December 12, 2017 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-FWRuler"></span><div class="section" id="class-fwruler-adds-a-ruller-to-one-of-the-sides-of-the-scene-rectangle">
+<h2>Class <a class="reference internal" href="#module-FWRuler" title="FWRuler"><code class="xref py py-class docutils literal"><span class="pre">FWRuler</span></code></a> adds a ruller to one of the sides of the scene rectangle<a class="headerlink" href="#class-fwruler-adds-a-ruller-to-one-of-the-sides-of-the-scene-rectangle" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rs</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QGraphicsScene</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QGraphicsView</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="n">v</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+
+<span class="n">v</span><span class="o">.</span><span class="n">fitInView</span><span class="p">(</span><span class="n">rs</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">IgnoreAspectRatio</span><span class="p">)</span> <span class="c1"># Qt.IgnoreAspectRatio Qt.KeepAspectRatioByExpanding Qt.KeepAspectRatio</span>
+
+<span class="n">ruler1</span> <span class="o">=</span> <span class="n">FWRuler</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">)</span>
+<span class="n">ruler2</span> <span class="o">=</span> <span class="n">FWRuler</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">)</span>
+<span class="n">ruler3</span> <span class="o">=</span> <span class="n">FWRuler</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s1">&#39;U&#39;</span><span class="p">)</span>
+<span class="n">ruler4</span> <span class="o">=</span> <span class="n">FWRuler</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">)</span>
+
+<span class="n">ruler1</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+
+<span class="n">ruler4</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Created on December 12, 2017 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GUQGraphicsRectItem"></span><div class="section" id="class-guqgraphicsrectitem-is-derived-from-qgraphicsrectitem-to-intercept-events">
+<h2>Class <a class="reference internal" href="#module-GUQGraphicsRectItem" title="GUQGraphicsRectItem"><code class="xref py py-class docutils literal"><span class="pre">GUQGraphicsRectItem</span></code></a> is derived from QGraphicsRectItem to intercept events<a class="headerlink" href="#class-guqgraphicsrectitem-is-derived-from-qgraphicsrectitem-to-intercept-events" title="Permalink to this headline">¶</a></h2>
+<p>Created on June 12, 2016 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GURuler"></span><div class="section" id="class-guruler-adds-a-ruller-to-one-of-the-sides-of-the-scene-rectangle">
+<h2>Class <a class="reference internal" href="#module-GURuler" title="GURuler"><code class="xref py py-class docutils literal"><span class="pre">GURuler</span></code></a> adds a ruller to one of the sides of the scene rectangle<a class="headerlink" href="#class-guruler-adds-a-ruller-to-one-of-the-sides-of-the-scene-rectangle" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rv</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QRectF</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">,</span> <span class="mf">1.4</span><span class="p">)</span>
+<span class="n">rs</span> <span class="o">=</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">QRectF</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">s</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QGraphicsScene</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QGraphicsView</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+<span class="n">v</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+
+<span class="n">v</span><span class="o">.</span><span class="n">fitInView</span><span class="p">(</span><span class="n">rv</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="c1"># Qt.IgnoreAspectRatio Qt.KeepAspectRatioByExpanding Qt.KeepAspectRatio</span>
+
+<span class="n">ruler1</span> <span class="o">=</span> <span class="n">GURuler</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">GURuler</span><span class="o">.</span><span class="n">VL</span><span class="p">)</span>
+<span class="n">ruler2</span> <span class="o">=</span> <span class="n">GURuler</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">GURuler</span><span class="o">.</span><span class="n">HD</span><span class="p">)</span>
+<span class="n">ruler3</span> <span class="o">=</span> <span class="n">GURuler</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">GURuler</span><span class="o">.</span><span class="n">HU</span><span class="p">)</span>
+<span class="n">ruler4</span> <span class="o">=</span> <span class="n">GURuler</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">GURuler</span><span class="o">.</span><span class="n">VR</span><span class="p">)</span>
+
+<span class="n">ruler3</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+<span class="n">ruler4</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Created on June 12, 2016 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GUUtils"></span><div class="section" id="guutils-re-usable-utils">
+<h2><a class="reference internal" href="#module-GUUtils" title="GUUtils"><code class="xref py py-class docutils literal"><span class="pre">GUUtils</span></code></a> - re-usable utils<a class="headerlink" href="#guutils-re-usable-utils" title="Permalink to this headline">¶</a></h2>
+<p>Usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">graphqt.GUUtils</span> <span class="k">import</span> <span class="n">select_item_from__popup_menu</span><span class="p">,</span> <span class="n">QtGui</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>    
+<span class="n">lst</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;apple&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;pear&#39;</span><span class="p">,</span> <span class="s1">&#39;peache&#39;</span><span class="p">,</span> <span class="s1">&#39;plum&#39;</span><span class="p">)</span> 
+<span class="n">item</span> <span class="o">=</span> <span class="n">select_item_in_popup_menu</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+<span class="nb">print</span> <span class="s1">&#39;selected: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">item</span>
+
+<span class="kn">from</span> <span class="nn">graphqt.GUUtils</span> <span class="k">import</span> <span class="n">print_rect</span>
+<span class="n">print_rect</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">cmt</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Created on 2016-10-21 by Mikhail Dubrovin</p>
+<dl class="function">
+<dt id="GUUtils.proc_stat">
+<code class="descclassname">GUUtils.</code><code class="descname">proc_stat</code><span class="sig-paren">(</span><em>weights</em>, <em>bins</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GUUtils.html#proc_stat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GUUtils.proc_stat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copied from CalibManager/src/PlotImgSpeWidget.py</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GUUtils.proc_stat_v2">
+<code class="descclassname">GUUtils.</code><code class="descname">proc_stat_v2</code><span class="sig-paren">(</span><em>weights</em>, <em>centers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GUUtils.html#proc_stat_v2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GUUtils.proc_stat_v2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns mean and rms for input histogram arrays.</p>
+<p>Simplified version of proc_stat from CalibManager.PlotImgSpeWidget
+mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w = proc_stat(weights,bins)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GUUtils.select_color">
+<code class="descclassname">GUUtils.</code><code class="descname">select_color</code><span class="sig-paren">(</span><em>colini=9</em>, <em>parent=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GUUtils.html#select_color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GUUtils.select_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select color using QColorDialog</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="GUUtils.select_item_from_popup_menu">
+<code class="descclassname">GUUtils.</code><code class="descname">select_item_from_popup_menu</code><span class="sig-paren">(</span><em>list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/GUUtils.html#select_item_from_popup_menu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#GUUtils.select_item_from_popup_menu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows the list as a pop-up menu and returns the selected item as a string or None</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-GUDragFactory"></span><div class="section" id="module-gudragfactory-contains-factory-methods-for-draggable-objects">
+<h2>Module <a class="reference internal" href="#module-GUDragFactory" title="GUDragFactory"><code class="xref py py-class docutils literal"><span class="pre">GUDragFactory</span></code></a> contains factory methods for draggable objects<a class="headerlink" href="#module-gudragfactory-contains-factory-methods-for-draggable-objects" title="Permalink to this headline">¶</a></h2>
+<p>Created on 2016-10-09 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GUDragBase"></span><div class="section" id="class-gudragbase-is-a-base-class-for-draggable-objects">
+<h2>Class <a class="reference internal" href="#module-GUDragBase" title="GUDragBase"><code class="xref py py-class docutils literal"><span class="pre">GUDragBase</span></code></a> is a base class for draggable objects<a class="headerlink" href="#class-gudragbase-is-a-base-class-for-draggable-objects" title="Permalink to this headline">¶</a></h2>
+<p>Created on 2016-09-14 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GUDragCirc"></span><div class="section" id="class-gudragcirc-for-draggable-circle">
+<h2>Class <a class="reference internal" href="#module-GUDragCirc" title="GUDragCirc"><code class="xref py py-class docutils literal"><span class="pre">GUDragCirc</span></code></a> - for draggable circle<a class="headerlink" href="#class-gudragcirc-for-draggable-circle" title="Permalink to this headline">¶</a></h2>
+<p>Created on 2016-10-09 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GUDragPoint"></span><div class="section" id="class-gudragpoint-for-draggable-shape-item">
+<h2>Class <a class="reference internal" href="#module-GUDragPoint" title="GUDragPoint"><code class="xref py py-class docutils literal"><span class="pre">GUDragPoint</span></code></a> - for draggable shape item<a class="headerlink" href="#class-gudragpoint-for-draggable-shape-item" title="Permalink to this headline">¶</a></h2>
+<p>Created on 2016-10-11 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GUDragRect"></span><div class="section" id="class-gudragrect-for-draggable-shape-item">
+<h2>Class <a class="reference internal" href="#module-GUDragRect" title="GUDragRect"><code class="xref py py-class docutils literal"><span class="pre">GUDragRect</span></code></a> - for draggable shape item<a class="headerlink" href="#class-gudragrect-for-draggable-shape-item" title="Permalink to this headline">¶</a></h2>
+<p>Created on 2016-10-10 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-GUViewImageWithShapes"></span><div class="section" id="class-guviewimagewithshapes-is-a-qwidget-for-interactive-image">
+<h2>Class <a class="reference internal" href="#module-GUViewImageWithShapes" title="GUViewImageWithShapes"><code class="xref py py-class docutils literal"><span class="pre">GUViewImageWithShapes</span></code></a> is a QWidget for interactive image<a class="headerlink" href="#class-guviewimagewithshapes-is-a-qwidget-for-interactive-image" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">GUViewImageWithShapes</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;UL&#39;</span><span class="p">,</span> <span class="n">scale_ctl</span><span class="o">=</span><span class="s1">&#39;HV&#39;</span><span class="p">,</span> <span class="n">rulers</span><span class="o">=</span><span class="s1">&#39;UDLR&#39;</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Created on 2016-10-10 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-QWCheckList"></span><p>Created on 2017-07-27</p>
+<p>&#64;author: Mikhail Dubrovin</p>
+<p>QListView/QWidget QWCheckList - works on the dictionary of checked items</p>
+<dl class="docutils">
+<dt>Usage::</dt>
+<dd><p class="first">from graphqt.QWCheckList import QWCheckList, print_dic
+import sys</p>
+<p>d = {‘CSPAD1’:True, ‘CSPAD2x21’:False, ‘pNCCD1’:True, ‘Opal1’:False}</p>
+<p>app = QtGui.QApplication(sys.argv)
+w = QWCheckList(parent=None, dic_item_state=d)
+w.setGeometry(100, 100, 200, 300)
+w.setWindowTitle(‘Test Check List’)
+w.show()
+app.exec_()</p>
+<p class="last">print_dic(d)</p>
+</dd>
+</dl>
+<dl class="class">
+<dt id="QWCheckList.QWCheckList">
+<em class="property">class </em><code class="descclassname">QWCheckList.</code><code class="descname">QWCheckList</code><span class="sig-paren">(</span><em>parent=None</em>, <em>dic_item_state={}</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QWCheckList.html#QWCheckList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QWCheckList.QWCheckList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt4.QtGui.QListView</span></code></p>
+<p>Gets dict of item for checkbox GUI in format {‘CSPAD1’:True, ‘CSPAD2x21’:False, ‘pNCCD1’:True, ‘Opal1’:False}
+and modify this list in gui.</p>
+</dd></dl>
+
+<span class="target" id="module-QWDateTimeSec"></span><p>Created on June 14, 2017</p>
+<p>&#64;author: Mikhail Dubrovin</p>
+<dl class="class">
+<dt id="QWDateTimeSec.QWDateTimeSec">
+<em class="property">class </em><code class="descclassname">QWDateTimeSec.</code><code class="descname">QWDateTimeSec</code><span class="sig-paren">(</span><em>parent=None</em>, <em>show_frame=False</em>, <em>verb=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QWDateTimeSec.html#QWDateTimeSec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QWDateTimeSec.QWDateTimeSec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">CalibManager.Frame.Frame</span></code></p>
+<p>Widget for date and time selection</p>
+<dl class="method">
+<dt id="QWDateTimeSec.QWDateTimeSec.set_date_time_fields">
+<code class="descname">set_date_time_fields</code><span class="sig-paren">(</span><em>tsec=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QWDateTimeSec.html#QWDateTimeSec.set_date_time_fields"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QWDateTimeSec.QWDateTimeSec.set_date_time_fields" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets date and time fields for tsec - time in seconds or current time by default.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="QWDateTimeSec.QWDateTimeSec.set_tsec">
+<code class="descname">set_tsec</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QWDateTimeSec.html#QWDateTimeSec.set_tsec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QWDateTimeSec.QWDateTimeSec.set_tsec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets self.edi (tsec) field from date and time fields.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="QWDateTimeSec.str_tstamp">
+<code class="descclassname">QWDateTimeSec.</code><code class="descname">str_tstamp</code><span class="sig-paren">(</span><em>fmt='%Y-%m-%dT%H:%M:%S'</em>, <em>time_sec=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QWDateTimeSec.html#str_tstamp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QWDateTimeSec.str_tstamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string timestamp for specified format and time in sec or current time by default</p>
+</dd></dl>
+
+<span class="target" id="module-QWDirName"></span><p>&#64;version $Id: QWDirName.py 12962 2016-12-09 20:06:16Z <a class="reference external" href="mailto:dubrovin&#37;&#52;&#48;SLAC&#46;STANFORD&#46;EDU">dubrovin<span>&#64;</span>SLAC<span>&#46;</span>STANFORD<span>&#46;</span>EDU</a> $</p>
+<p>&#64;author Mikhail S. Dubrovin</p>
+<dl class="class">
+<dt id="QWDirName.QWDirName">
+<em class="property">class </em><code class="descclassname">QWDirName.</code><code class="descname">QWDirName</code><span class="sig-paren">(</span><em>parent=None</em>, <em>butname='Select'</em>, <em>label='Dir:'</em>, <em>path='/reg/neh/home/dubrovin/LCLS/rel-expmon/'</em>, <em>fltr=&lt;PyQt4.QtGui.Options object&gt;</em>, <em>show_frame=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QWDirName.html#QWDirName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QWDirName.QWDirName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">graphqt.QWFileName.QWFileName</span></code></p>
+<p>Widget for directory name input</p>
+</dd></dl>
+
+<span class="target" id="module-QWFileName"></span><p>&#64;version $Id: QWFileName.py 12962 2016-12-09 20:06:16Z <a class="reference external" href="mailto:dubrovin&#37;&#52;&#48;SLAC&#46;STANFORD&#46;EDU">dubrovin<span>&#64;</span>SLAC<span>&#46;</span>STANFORD<span>&#46;</span>EDU</a> $</p>
+<p>&#64;author Mikhail S. Dubrovin</p>
+<dl class="class">
+<dt id="QWFileName.QWFileName">
+<em class="property">class </em><code class="descclassname">QWFileName.</code><code class="descname">QWFileName</code><span class="sig-paren">(</span><em>parent=None</em>, <em>butname='Browse'</em>, <em>label='File:'</em>, <em>path='/reg/neh/home/dubrovin/LCLS/rel-expmon/log.txt'</em>, <em>mode='r'</em>, <em>fltr='*.txt *.data *.png *.gif *.jpg *.jpegn *'</em>, <em>show_frame=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QWFileName.html#QWFileName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QWFileName.QWFileName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">CalibManager.Frame.Frame</span></code></p>
+<p>Widget for file name input</p>
+</dd></dl>
+
+<span class="target" id="module-QWLogger"></span><p>QWLogger - GUI for Logger</p>
+<p>This software was developed for the SIT project.
+If you use all or part of it, please give an appropriate acknowledgment.</p>
+<p>&#64;version $Id: QWLogger.py 13157 2017-02-18 00:05:34Z <a class="reference external" href="mailto:dubrovin&#37;&#52;&#48;SLAC&#46;STANFORD&#46;EDU">dubrovin<span>&#64;</span>SLAC<span>&#46;</span>STANFORD<span>&#46;</span>EDU</a> $</p>
+<p>&#64;author Mikhail S. Dubrovin</p>
+<dl class="class">
+<dt id="QWLogger.QWLogger">
+<em class="property">class </em><code class="descclassname">QWLogger.</code><code class="descname">QWLogger</code><span class="sig-paren">(</span><em>log</em>, <em>cp</em>, <em>show_buttons=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QWLogger.html#QWLogger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QWLogger.QWLogger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt4.QtGui.QWidget</span></code></p>
+<p>GUI for Logger</p>
+<dl class="method">
+<dt id="QWLogger.QWLogger.getConfirmation">
+<code class="descname">getConfirmation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/QWLogger.html#QWLogger.getConfirmation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QWLogger.QWLogger.getConfirmation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pop-up box for confirmation</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-QWPopupSelectColorBar"></span><p>Popup GUI for (str) item selection from the list of items</p>
+<span class="target" id="module-QWPopupSelectItem"></span><p>Popup GUI for (str) item selection from the list of items</p>
+<span class="target" id="module-QWSpectrum"></span><div class="section" id="class-qwspectrum-supports-widget-for-spectrum">
+<h2>Class <a class="reference internal" href="#module-QWSpectrum" title="QWSpectrum"><code class="xref py py-class docutils literal"><span class="pre">QWSpectrum</span></code></a> - supports widget for spectrum<a class="headerlink" href="#class-qwspectrum-supports-widget-for-spectrum" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Create</span> <span class="n">GUViewHist</span> <span class="nb">object</span> <span class="n">within</span> <span class="n">pyqt</span> <span class="n">QApplication</span>
+<span class="o">--------------------------------------------------</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+<span class="kn">from</span> <span class="nn">graphqt.QWSpectrum</span> <span class="k">import</span> <span class="n">QWSpectrum</span>
+
+<span class="n">arr</span> <span class="o">=</span> <span class="n">image_with_random_peaks</span><span class="p">((</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">QWSpectrum</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">arr</span><span class="p">,</span> <span class="n">show_frame</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1">#, show_buts=False)</span>
+
+<span class="n">Connect</span><span class="o">/</span><span class="n">disconnecr</span> <span class="n">recipient</span> <span class="n">to</span> <span class="n">signals</span>
+<span class="o">---------------------------------------</span>
+
+<span class="c1">### w.connect_color_table_is_changed_to(recipient)</span>
+<span class="c1">### w.disconnect_color_table_is_changed_from(recipient) :</span>
+<span class="c1">### w.test_color_table_is_changed_reception(self)</span>
+
+<span class="n">For</span> <span class="bp">self</span><span class="o">.</span><span class="n">hist</span><span class="p">:</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">hist</span><span class="o">.</span><span class="n">connect_axes_limits_changed_to</span><span class="p">(</span><span class="n">recipient</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">hist</span><span class="o">.</span><span class="n">connect_histogram_updated_to</span><span class="p">(</span><span class="n">recipient</span><span class="p">)</span>
+<span class="bp">self</span><span class="o">.</span><span class="n">hist</span><span class="o">.</span><span class="n">disconnect_histogram_updated_from</span><span class="p">(</span><span class="n">recipient</span><span class="p">)</span>
+
+
+<span class="n">Methods</span>
+<span class="o">-------</span>
+<span class="n">w</span><span class="o">.</span><span class="n">on_but_save</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">on_but_reset</span><span class="p">()</span>
+<span class="n">ctab</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">color_table</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">on_colorbar</span><span class="p">()</span> <span class="c1"># emits signal color_table_is_changed</span>
+<span class="n">w</span><span class="o">.</span><span class="n">draw_mean_std</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">draw_stat</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">rms</span><span class="p">,</span> <span class="n">err_mean</span><span class="p">,</span> <span class="n">err_rms</span><span class="p">,</span> <span class="n">neff</span><span class="p">,</span> <span class="n">skew</span><span class="p">,</span> <span class="n">kurt</span><span class="p">,</span> <span class="n">err_err</span><span class="p">,</span> <span class="n">sum_w</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">draw_cursor_locator</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ibin</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_tool_tips</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set_style</span><span class="p">()</span>
+
+<span class="n">Internal</span> <span class="n">methods</span>
+<span class="o">-----------------</span>
+
+<span class="n">Re</span><span class="o">-</span><span class="n">defines</span> <span class="n">methods</span>
+<span class="o">------------------</span>
+<span class="n">closeEvent</span>
+
+<span class="n">Global</span> <span class="n">scope</span> <span class="n">methods</span>
+<span class="o">--------------------</span>
+<span class="n">test_guspectrum</span><span class="p">(</span><span class="n">tname</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>See:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#module-IVMain" title="IVMain"><code class="xref py py-class docutils literal"><span class="pre">IVMain</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainTabs" title="IVMainTabs"><code class="xref py py-class docutils literal"><span class="pre">IVMainTabs</span></code></a></li>
+<li><a class="reference internal" href="#module-IVConfigParameters" title="IVConfigParameters"><code class="xref py py-class docutils literal"><span class="pre">IVConfigParameters</span></code></a></li>
+<li><a class="reference internal" href="#module-IVImageCursorInfo" title="IVImageCursorInfo"><code class="xref py py-class docutils literal"><span class="pre">IVImageCursorInfo</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainTabs" title="IVMainTabs"><code class="xref py py-class docutils literal"><span class="pre">IVMainTabs</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabDataControl" title="IVTabDataControl"><code class="xref py py-class docutils literal"><span class="pre">IVTabDataControl</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabFileName" title="IVTabFileName"><code class="xref py py-class docutils literal"><span class="pre">IVTabFileName</span></code></a></li>
+</ul>
+</dd>
+</dl>
+<p>Created on 2017-02-06 by Mikhail Dubrovin</p>
+<dl class="class">
+<dt id="QWSpectrum.QWSpectrum">
+<em class="property">class </em><code class="descclassname">QWSpectrum.</code><code class="descname">QWSpectrum</code><span class="sig-paren">(</span><em>parent=None, arr=None, coltab=array([4280942847, 4280877311, 4280811775, 4280746239, 4280680703,        4280549631, 4280484095, 4280418559, 4280353023, 4280287487,        4280221951, 4280090879, 4280025343, 4279959807, 4279894271,        4279828735, 4279763199, 4279697663, 4279566591, 4279501055,        4279435519, 4279369983, 4279304447, 4279238911, 4279173375,        4279042303, 4278976767, 4278911231, 4278845695, 4278780159,        4278714623, 4278583551, 4278518015, 4278452479, 4278386943,        4278321407, 4278255871, 4278190335, 4278190591, 4278190847,        4278191103, 4278191359, 4278191615, 4278191871, 4278192383,        4278192639, 4278192895, 4278193151, 4278193407, 4278193663,        4278193919, 4278194431, 4278194687, 4278194943, 4278195199,        4278195455, 4278195711, 4278195967, 4278196479, 4278196735,        4278196991, 4278197247, 4278197503, 4278197759, 4278198271,        4278198527, 4278198783, 4278199039, 4278199295, 4278199551,        4278199807, 4278200319, 4278200575, 4278200831, 4278201087,        4278201343, 4278201599, 4278202111, 4278202367, 4278202623,        4278202879, 4278203135, 4278203391, 4278203647, 4278204159,        4278204415, 4278204671, 4278204927, 4278205183, 4278205439,        4278205951, 4278206207, 4278206463, 4278206719, 4278206975,        4278207231, 4278207487, 4278207999, 4278208255, 4278208511,        4278208767, 4278209023, 4278209279, 4278209535, 4278210047,        4278210303, 4278210559, 4278210815, 4278211071, 4278211327,        4278211839, 4278212095, 4278212351, 4278212607, 4278212863,        4278213119, 4278213375, 4278213887, 4278214143, 4278214399,        4278214655, 4278214911, 4278215167, 4278215679, 4278215935,        4278216191, 4278216447, 4278216703, 4278216959, 4278217215,        4278217727, 4278217983, 4278218239, 4278218495, 4278218751,        4278219007, 4278219519, 4278219775, 4278220031, 4278220287,        4278220543, 4278220799, 4278221055, 4278221567, 4278221823,        4278222079, 4278222335, 4278222591, 4278222847, 4278223103,        4278223615, 4278223871, 4278224127, 4278224383, 4278224639,        4278224895, 4278225407, 4278225663, 4278225919, 4278226175,        4278226431, 4278226687, 4278226943, 4278227455, 4278227711,        4278227967, 4278228223, 4278228479, 4278228735, 4278229247,        4278229503, 4278229759, 4278230015, 4278230271, 4278230527,        4278230783, 4278231295, 4278231551, 4278231807, 4278232063,        4278232319, 4278232575, 4278232831, 4278233343, 4278233599,        4278233855, 4278234111, 4278234367, 4278234623, 4278235135,        4278235391, 4278235647, 4278235903, 4278236159, 4278236415,        4278236671, 4278237183, 4278237439, 4278237695, 4278237951,        4278238207, 4278238463, 4278238975, 4278239231, 4278239487,        4278239743, 4278239999, 4278240255, 4278240511, 4278241023,        4278241279, 4278241535, 4278241791, 4278242047, 4278242303,        4278242815, 4278243071, 4278243327, 4278243583, 4278243839,        4278244095, 4278244351, 4278244863, 4278245119, 4278245375,        4278245631, 4278245887, 4278246143, 4278246399, 4278246911,        4278247167, 4278247423, 4278247679, 4278247935, 4278248191,        4278248703, 4278248959, 4278249215, 4278249471, 4278249727,        4278249983, 4278250239, 4278250751, 4278251007, 4278251263,        4278251519, 4278251775, 4278252031, 4278252543, 4278252799,        4278253055, 4278253311, 4278253567, 4278253823, 4278254079,        4278254591, 4278254847, 4278255103, 4278255359, 4278255615,        4278255615, 4278255613, 4278255612, 4278255611, 4278255610,        4278255609, 4278255608, 4278255607, 4278255605, 4278255604,        4278255603, 4278255602, 4278255601, 4278255600, 4278255599,        4278255597, 4278255596, 4278255595, 4278255594, 4278255593,        4278255592, 4278255590, 4278255589, 4278255588, 4278255587,        4278255586, 4278255585, 4278255584, 4278255582, 4278255581,        4278255580, 4278255579, 4278255578, 4278255577, 4278255575,        4278255574, 4278255573, 4278255572, 4278255571, 4278255570,        4278255569, 4278255567, 4278255566, 4278255565, 4278255564,        4278255563, 4278255562, 4278255561, 4278255559, 4278255558,        4278255557, 4278255556, 4278255555, 4278255554, 4278255552,        4278255551, 4278255550, 4278255549, 4278255548, 4278255547,        4278255546, 4278255544, 4278255543, 4278255542, 4278255541,        4278255540, 4278255539, 4278255537, 4278255536, 4278255535,        4278255534, 4278255533, 4278255532, 4278255531, 4278255529,        4278255528, 4278255527, 4278255526, 4278255525, 4278255524,        4278255522, 4278255521, 4278255520, 4278255519, 4278255518,        4278255517, 4278255516, 4278255514, 4278255513, 4278255512,        4278255511, 4278255510, 4278255509, 4278255508, 4278255506,        4278255505, 4278255504, 4278255503, 4278255502, 4278255501,        4278255499, 4278255498, 4278255497, 4278255496, 4278255495,        4278255494, 4278255493, 4278255491, 4278255490, 4278255489,        4278255488, 4278255487, 4278255486, 4278255484, 4278255483,        4278255482, 4278255481, 4278255480, 4278255479, 4278255478,        4278255476, 4278255475, 4278255474, 4278255473, 4278255472,        4278255471, 4278255469, 4278255468, 4278255467, 4278255466,        4278255465, 4278255464, 4278255463, 4278255461, 4278255460,        4278255459, 4278255458, 4278255457, 4278255456, 4278255455,        4278255453, 4278255452, 4278255451, 4278255450, 4278255449,        4278255448, 4278255446, 4278255445, 4278255444, 4278255443,        4278255442, 4278255441, 4278255440, 4278255438, 4278255437,        4278255436, 4278255435, 4278255434, 4278255433, 4278255431,        4278255430, 4278255429, 4278255428, 4278255427, 4278255426,        4278255425, 4278255423, 4278255422, 4278255421, 4278255420,        4278255419, 4278255418, 4278255417, 4278255415, 4278255414,        4278255413, 4278255412, 4278255411, 4278255410, 4278255408,        4278255407, 4278255406, 4278255405, 4278255404, 4278255403,        4278255402, 4278255400, 4278255399, 4278255398, 4278255397,        4278255396, 4278255395, 4278255393, 4278255392, 4278255391,        4278255390, 4278255389, 4278255388, 4278255387, 4278255385,        4278255384, 4278255383, 4278255382, 4278255381, 4278255380,        4278255378, 4278255377, 4278255376, 4278255375, 4278255374,        4278255373, 4278255372, 4278255370, 4278255369, 4278255368,        4278255367, 4278255366, 4278255365, 4278255364, 4278255362,        4278255361, 4278255360, 4278255360, 4278320896, 4278386432,        4278517504, 4278583040, 4278648576, 4278714112, 4278779648,        4278845184, 4278910720, 4279041792, 4279107328, 4279172864,        4279238400, 4279303936, 4279369472, 4279500544, 4279566080,        4279631616, 4279697152, 4279762688, 4279828224, 4279893760,        4280024832, 4280090368, 4280155904, 4280221440, 4280286976,        4280352512, 4280483584, 4280549120, 4280614656, 4280680192,        4280745728, 4280811264, 4280876800, 4281007872, 4281073408,        4281138944, 4281204480, 4281270016, 4281335552, 4281401088,        4281532160, 4281597696, 4281663232, 4281728768, 4281794304,        4281859840, 4281990912, 4282056448, 4282121984, 4282187520,        4282253056, 4282318592, 4282384128, 4282515200, 4282580736,        4282646272, 4282711808, 4282777344, 4282842880, 4282973952,        4283039488, 4283105024, 4283170560, 4283236096, 4283301632,        4283367168, 4283498240, 4283563776, 4283629312, 4283694848,        4283760384, 4283825920, 4283891456, 4284022528, 4284088064,        4284153600, 4284219136, 4284284672, 4284350208, 4284481280,        4284546816, 4284612352, 4284677888, 4284743424, 4284808960,        4284874496, 4285005568, 4285071104, 4285136640, 4285202176,        4285267712, 4285333248, 4285464320, 4285529856, 4285595392,        4285660928, 4285726464, 4285792000, 4285857536, 4285988608,        4286054144, 4286119680, 4286185216, 4286250752, 4286316288,        4286447360, 4286512896, 4286578432, 4286643968, 4286709504,        4286775040, 4286840576, 4286971648, 4287037184, 4287102720,        4287168256, 4287233792, 4287299328, 4287364864, 4287495936,        4287561472, 4287627008, 4287692544, 4287758080, 4287823616,        4287954688, 4288020224, 4288085760, 4288151296, 4288216832,        4288282368, 4288347904, 4288478976, 4288544512, 4288610048,        4288675584, 4288741120, 4288806656, 4288937728, 4289003264,        4289068800, 4289134336, 4289199872, 4289265408, 4289330944,        4289462016, 4289527552, 4289593088, 4289658624, 4289724160,        4289789696, 4289920768, 4289986304, 4290051840, 4290117376,        4290182912, 4290248448, 4290313984, 4290445056, 4290510592,        4290576128, 4290641664, 4290707200, 4290772736, 4290838272,        4290969344, 4291034880, 4291100416, 4291165952, 4291231488,        4291297024, 4291428096, 4291493632, 4291559168, 4291624704,        4291690240, 4291755776, 4291821312, 4291952384, 4292017920,        4292083456, 4292148992, 4292214528, 4292280064, 4292411136,        4292476672, 4292542208, 4292607744, 4292673280, 4292738816,        4292804352, 4292935424, 4293000960, 4293066496, 4293132032,        4293197568, 4293263104, 4293328640, 4293459712, 4293525248,        4293590784, 4293656320, 4293721856, 4293787392, 4293918464,        4293984000, 4294049536, 4294115072, 4294180608, 4294246144,        4294311680, 4294442752, 4294508288, 4294573824, 4294639360,        4294704896, 4294770432, 4294901504, 4294967040, 4294967040,        4294966784, 4294966528, 4294966272, 4294966016, 4294965504,        4294965248, 4294964992, 4294964736, 4294964480, 4294964224,        4294963712, 4294963456, 4294963200, 4294962944, 4294962688,        4294962432, 4294962176, 4294961664, 4294961408, 4294961152,        4294960896, 4294960640, 4294960384, 4294960128, 4294959616,        4294959360, 4294959104, 4294958848, 4294958592, 4294958336,        4294957824, 4294957568, 4294957312, 4294957056, 4294956800,        4294956544, 4294956288, 4294955776, 4294955520, 4294955264,        4294955008, 4294954752, 4294954496, 4294953984, 4294953728,        4294953472, 4294953216, 4294952960, 4294952704, 4294952448,        4294951936, 4294951680, 4294951424, 4294951168, 4294950912,        4294950656, 4294950144, 4294949888, 4294949632, 4294949376,        4294949120, 4294948864, 4294948608, 4294948096, 4294947840,        4294947584, 4294947328, 4294947072, 4294946816, 4294946560,        4294946048, 4294945792, 4294945536, 4294945280, 4294945024,        4294944768, 4294944256, 4294944000, 4294943744, 4294943488,        4294943232, 4294942976, 4294942720, 4294942208, 4294941952,        4294941696, 4294941440, 4294941184, 4294940928, 4294940416,        4294940160, 4294939904, 4294939648, 4294939392, 4294939136,        4294938880, 4294938368, 4294938112, 4294937856, 4294937600,        4294937344, 4294937088, 4294936832, 4294936320, 4294936064,        4294935808, 4294935552, 4294935296, 4294935040, 4294934528,        4294934272, 4294934016, 4294933760, 4294933504, 4294933248,        4294932992, 4294932480, 4294932224, 4294931968, 4294931712,        4294931456, 4294931200, 4294930688, 4294930432, 4294930176,        4294929920, 4294929664, 4294929408, 4294929152, 4294928640,        4294928384, 4294928128, 4294927872, 4294927616, 4294927360,        4294926848, 4294926592, 4294926336, 4294926080, 4294925824,        4294925568, 4294925312, 4294924800, 4294924544, 4294924288,        4294924032, 4294923776, 4294923520, 4294923264, 4294922752,        4294922496, 4294922240, 4294921984, 4294921728, 4294921472,        4294920960, 4294920704, 4294920448, 4294920192, 4294919936,        4294919680, 4294919424, 4294918912, 4294918656, 4294918400,        4294918144, 4294917888, 4294917632, 4294917120, 4294916864,        4294916608, 4294916352, 4294916096, 4294915840, 4294915584,        4294915072, 4294914816, 4294914560, 4294914304, 4294914048,        4294913792, 4294913280, 4294913024, 4294912768, 4294912512,        4294912256, 4294912000, 4294911744, 4294911232, 4294910976,        4294910720, 4294910464, 4294910208, 4294909952, 4294909696,        4294909184, 4294908928, 4294908672, 4294908416, 4294908160,        4294907904, 4294907392, 4294907136, 4294906880, 4294906624,        4294906368, 4294906112, 4294905856, 4294905344, 4294905088,        4294904832, 4294904576, 4294904320, 4294904064, 4294903552,        4294903296, 4294903040, 4294902784, 4294902528, 4294902272,        4294902016, 4294901760, 4294901761, 4294901762, 4294901763,        4294901764, 4294901765, 4294901766, 4294901768, 4294901769,        4294901770, 4294901771, 4294901772, 4294901773, 4294901775,        4294901776, 4294901777, 4294901778, 4294901779, 4294901780,        4294901781, 4294901783, 4294901784, 4294901785, 4294901786,        4294901787, 4294901788, 4294901790, 4294901791, 4294901792,        4294901793, 4294901794, 4294901795, 4294901796, 4294901798,        4294901799, 4294901800, 4294901801, 4294901802, 4294901803,        4294901805, 4294901806, 4294901807, 4294901808, 4294901809,        4294901810, 4294901811, 4294901813, 4294901814, 4294901815,        4294901816, 4294901817, 4294901818, 4294901819, 4294901821,        4294901822, 4294901823, 4294901824, 4294901825, 4294901826,        4294901828, 4294901829, 4294901830, 4294901831, 4294901832,        4294901833, 4294901834, 4294901836, 4294901837, 4294901838,        4294901839, 4294901840, 4294901841, 4294901843, 4294901844], dtype=uint32), show_frame=True, show_buts=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QWSpectrum.html#QWSpectrum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QWSpectrum.QWSpectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt4.QtGui.QWidget</span></code></p>
+<p>Widget for file name input</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-QWUtils"></span><p>&#64;version $Id: QWUtils.py 13133 2017-02-08 01:05:23Z <a class="reference external" href="mailto:dubrovin&#37;&#52;&#48;SLAC&#46;STANFORD&#46;EDU">dubrovin<span>&#64;</span>SLAC<span>&#46;</span>STANFORD<span>&#46;</span>EDU</a> $</p>
+<p>&#64;author Mikhail S. Dubrovin</p>
+<dl class="function">
+<dt id="QWUtils.changeCheckBoxListInPopupMenu">
+<code class="descclassname">QWUtils.</code><code class="descname">changeCheckBoxListInPopupMenu</code><span class="sig-paren">(</span><em>list</em>, <em>win_title='Set check boxes'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QWUtils.html#changeCheckBoxListInPopupMenu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QWUtils.changeCheckBoxListInPopupMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows the list of check-boxes as a dialog pop-up menu and returns the (un)changed list</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="QWUtils.selectFromListInPopupMenu">
+<code class="descclassname">QWUtils.</code><code class="descname">selectFromListInPopupMenu</code><span class="sig-paren">(</span><em>list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QWUtils.html#selectFromListInPopupMenu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QWUtils.selectFromListInPopupMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows the list as a pop-up menu and returns the selected item as a string or None</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="QWUtils.selectRadioButtonInPopupMenu">
+<code class="descclassname">QWUtils.</code><code class="descname">selectRadioButtonInPopupMenu</code><span class="sig-paren">(</span><em>dict_of_pars</em>, <em>win_title='Select option'</em>, <em>do_confirm=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/QWUtils.html#selectRadioButtonInPopupMenu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#QWUtils.selectRadioButtonInPopupMenu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Popup GUI to select radio button from the list:  dict_of_pars = {‘checked’:’radio1’, ‘list’:[‘radio0’, ‘radio1’, ‘radio2’]}</p>
+</dd></dl>
+
+<span class="target" id="module-IVMain"></span><div class="section" id="class-ivmain-is-a-qwidget-for-interactive-image">
+<h2>Class <a class="reference internal" href="#module-IVMain" title="IVMain"><code class="xref py py-class docutils literal"><span class="pre">IVMain</span></code></a> is a QWidget for interactive image<a class="headerlink" href="#class-ivmain-is-a-qwidget-for-interactive-image" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span>
+<span class="kn">from</span> <span class="nn">graphqt.IVMain</span> <span class="k">import</span> <span class="n">IVMain</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">IVMain</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">app</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>See:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#module-IVMain" title="IVMain"><code class="xref py py-class docutils literal"><span class="pre">IVMain</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainTabs" title="IVMainTabs"><code class="xref py py-class docutils literal"><span class="pre">IVMainTabs</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainButtons" title="IVMainButtons"><code class="xref py py-class docutils literal"><span class="pre">IVMainButtons</span></code></a></li>
+<li><a class="reference internal" href="#module-IVImageCursorInfo" title="IVImageCursorInfo"><code class="xref py py-class docutils literal"><span class="pre">IVImageCursorInfo</span></code></a></li>
+<li><a class="reference internal" href="#module-IVConfigParameters" title="IVConfigParameters"><code class="xref py py-class docutils literal"><span class="pre">IVConfigParameters</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabDataControl" title="IVTabDataControl"><code class="xref py py-class docutils literal"><span class="pre">IVTabDataControl</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabFileName" title="IVTabFileName"><code class="xref py py-class docutils literal"><span class="pre">IVTabFileName</span></code></a></li>
+<li><a class="reference external" href="https://lcls-psana.github.io/graphqt/py-modindex.html">graphqt documentation</a>.</li>
+</ul>
+</dd>
+</dl>
+<p>Created on February 1, 2017 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-IVMainTabs"></span><div class="section" id="class-ivmaintabs-tabs-in-ivmain-window">
+<h2>Class <a class="reference internal" href="#module-IVMainTabs" title="IVMainTabs"><code class="xref py py-class docutils literal"><span class="pre">IVMainTabs</span></code></a> - tabs in IVMain window<a class="headerlink" href="#class-ivmaintabs-tabs-in-ivmain-window" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span>
+<span class="kn">from</span> <span class="nn">graphqt.IVMainTabs</span> <span class="k">import</span> <span class="n">IVMainTabs</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">IVMainTabs</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>See:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#module-IVMain" title="IVMain"><code class="xref py py-class docutils literal"><span class="pre">IVMain</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainTabs" title="IVMainTabs"><code class="xref py py-class docutils literal"><span class="pre">IVMainTabs</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainButtons" title="IVMainButtons"><code class="xref py py-class docutils literal"><span class="pre">IVMainButtons</span></code></a></li>
+<li><a class="reference internal" href="#module-IVImageCursorInfo" title="IVImageCursorInfo"><code class="xref py py-class docutils literal"><span class="pre">IVImageCursorInfo</span></code></a></li>
+<li><a class="reference internal" href="#module-IVConfigParameters" title="IVConfigParameters"><code class="xref py py-class docutils literal"><span class="pre">IVConfigParameters</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabDataControl" title="IVTabDataControl"><code class="xref py py-class docutils literal"><span class="pre">IVTabDataControl</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabFileName" title="IVTabFileName"><code class="xref py py-class docutils literal"><span class="pre">IVTabFileName</span></code></a></li>
+<li><a class="reference external" href="https://lcls-psana.github.io/graphqt/py-modindex.html">graphqt documentation</a>.</li>
+</ul>
+</dd>
+</dl>
+<p>Created on 2017-02-18 by Mikhail Dubrovin</p>
+<dl class="class">
+<dt id="IVMainTabs.IVMainTabs">
+<em class="property">class </em><code class="descclassname">IVMainTabs.</code><code class="descname">IVMainTabs</code><span class="sig-paren">(</span><em>parent=None</em>, <em>app=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IVMainTabs.html#IVMainTabs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IVMainTabs.IVMainTabs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">PyQt4.QtGui.QWidget</span></code></p>
+<p>GUI for tabs</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-IVMainButtons"></span><div class="section" id="class-ivmainbuttons-window-with-buttons-for-ivmain">
+<h2>Class <a class="reference internal" href="#module-IVMainButtons" title="IVMainButtons"><code class="xref py py-class docutils literal"><span class="pre">IVMainButtons</span></code></a> window with buttons for IVMain<a class="headerlink" href="#class-ivmainbuttons-window-with-buttons-for-ivmain" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span>
+<span class="kn">from</span> <span class="nn">graphqt.IVMainButtons</span> <span class="k">import</span> <span class="n">IVMainButtons</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">w</span>  <span class="o">=</span> <span class="n">IVMainButtons</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>See:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#module-IVMain" title="IVMain"><code class="xref py py-class docutils literal"><span class="pre">IVMain</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainTabs" title="IVMainTabs"><code class="xref py py-class docutils literal"><span class="pre">IVMainTabs</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainButtons" title="IVMainButtons"><code class="xref py py-class docutils literal"><span class="pre">IVMainButtons</span></code></a></li>
+<li><a class="reference internal" href="#module-IVImageCursorInfo" title="IVImageCursorInfo"><code class="xref py py-class docutils literal"><span class="pre">IVImageCursorInfo</span></code></a></li>
+<li><a class="reference internal" href="#module-IVConfigParameters" title="IVConfigParameters"><code class="xref py py-class docutils literal"><span class="pre">IVConfigParameters</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabDataControl" title="IVTabDataControl"><code class="xref py py-class docutils literal"><span class="pre">IVTabDataControl</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabFileName" title="IVTabFileName"><code class="xref py py-class docutils literal"><span class="pre">IVTabFileName</span></code></a></li>
+<li><a class="reference external" href="https://lcls-psana.github.io/graphqt/py-modindex.html">graphqt documentation</a>.</li>
+</ul>
+</dd>
+</dl>
+<p>Created on February 1, 2017 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-IVTabDataControl"></span><div class="section" id="class-ivtabdatacontrol-window-for-data-control">
+<h2>Class <a class="reference internal" href="#module-IVTabDataControl" title="IVTabDataControl"><code class="xref py py-class docutils literal"><span class="pre">IVTabDataControl</span></code></a> - window for data control<a class="headerlink" href="#class-ivtabdatacontrol-window-for-data-control" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span>
+<span class="kn">from</span> <span class="nn">graphqt.IVTabDataControl</span> <span class="k">import</span> <span class="n">IVTabDataControl</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">IVTabDataControl</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">show_mode</span><span class="o">=</span><span class="mi">0377</span><span class="p">,</span> <span class="n">show_mode_evctl</span><span class="o">=</span><span class="mi">017</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">w_evt</span><span class="o">.</span><span class="n">connect_new_event_number_to</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_on_new_event_number_reception</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>See:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#module-IVMain" title="IVMain"><code class="xref py py-class docutils literal"><span class="pre">IVMain</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainTabs" title="IVMainTabs"><code class="xref py py-class docutils literal"><span class="pre">IVMainTabs</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainButtons" title="IVMainButtons"><code class="xref py py-class docutils literal"><span class="pre">IVMainButtons</span></code></a></li>
+<li><a class="reference internal" href="#module-IVImageCursorInfo" title="IVImageCursorInfo"><code class="xref py py-class docutils literal"><span class="pre">IVImageCursorInfo</span></code></a></li>
+<li><a class="reference internal" href="#module-IVConfigParameters" title="IVConfigParameters"><code class="xref py py-class docutils literal"><span class="pre">IVConfigParameters</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabDataControl" title="IVTabDataControl"><code class="xref py py-class docutils literal"><span class="pre">IVTabDataControl</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabFileName" title="IVTabFileName"><code class="xref py py-class docutils literal"><span class="pre">IVTabFileName</span></code></a></li>
+<li><a class="reference external" href="https://lcls-psana.github.io/graphqt/py-modindex.html">graphqt documentation</a>.</li>
+</ul>
+</dd>
+</dl>
+<p>Created on 2017-04-12 by Mikhail Dubrovin</p>
+<dl class="class">
+<dt id="IVTabDataControl.IVTabDataControl">
+<em class="property">class </em><code class="descclassname">IVTabDataControl.</code><code class="descname">IVTabDataControl</code><span class="sig-paren">(</span><em>cp</em>, <em>log</em>, <em>parent=None</em>, <em>show_mode=15</em>, <em>show_mode_evctl=15</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IVTabDataControl.html#IVTabDataControl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IVTabDataControl.IVTabDataControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">expmon.QWDataControl.QWDataControl</span></code></p>
+<p>Data control parameters window for tab “Data”
+derived from QWDataControl to connect signals with IV-app recipients</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-IVTabFileName"></span><div class="section" id="class-ivtabfilename-file-name-control-window">
+<h2>Class <a class="reference internal" href="#module-IVTabFileName" title="IVTabFileName"><code class="xref py py-class docutils literal"><span class="pre">IVTabFileName</span></code></a> file name control window<a class="headerlink" href="#class-ivtabfilename-file-name-control-window" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span>
+<span class="kn">from</span> <span class="nn">graphqt.IVTabFileName</span> <span class="k">import</span> <span class="n">IVTabFileName</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">IVTabFileName</span><span class="p">(</span><span class="n">show_mode</span><span class="o">=</span><span class="mi">03</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">w_fname</span><span class="o">.</span><span class="n">connect_path_is_changed_to_recipient</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_signal_reception</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">w_calib</span><span class="o">.</span><span class="n">connect_path_is_changed_to_recipient</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_signal_reception</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>See:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#module-IVMain" title="IVMain"><code class="xref py py-class docutils literal"><span class="pre">IVMain</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainTabs" title="IVMainTabs"><code class="xref py py-class docutils literal"><span class="pre">IVMainTabs</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainButtons" title="IVMainButtons"><code class="xref py py-class docutils literal"><span class="pre">IVMainButtons</span></code></a></li>
+<li><a class="reference internal" href="#module-IVImageCursorInfo" title="IVImageCursorInfo"><code class="xref py py-class docutils literal"><span class="pre">IVImageCursorInfo</span></code></a></li>
+<li><a class="reference internal" href="#module-IVConfigParameters" title="IVConfigParameters"><code class="xref py py-class docutils literal"><span class="pre">IVConfigParameters</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabDataControl" title="IVTabDataControl"><code class="xref py py-class docutils literal"><span class="pre">IVTabDataControl</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabFileName" title="IVTabFileName"><code class="xref py py-class docutils literal"><span class="pre">IVTabFileName</span></code></a></li>
+<li><a class="reference external" href="https://lcls-psana.github.io/graphqt/py-modindex.html">graphqt documentation</a>.</li>
+</ul>
+</dd>
+</dl>
+<p>Created on 2017-02-18 by Mikhail Dubrovin</p>
+<dl class="class">
+<dt id="IVTabFileName.IVTabFileName">
+<em class="property">class </em><code class="descclassname">IVTabFileName.</code><code class="descname">IVTabFileName</code><span class="sig-paren">(</span><em>parent=None</em>, <em>show_mode=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IVTabFileName.html#IVTabFileName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IVTabFileName.IVTabFileName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">CalibManager.Frame.Frame</span></code></p>
+<p>File name input GUI</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-IVConfigParameters"></span><div class="section" id="class-ivconfigparameters-supports-configuration-parameters-for-application">
+<h2>Class <a class="reference internal" href="#module-IVConfigParameters" title="IVConfigParameters"><code class="xref py py-class docutils literal"><span class="pre">IVConfigParameters</span></code></a> supports configuration parameters for application<a class="headerlink" href="#class-ivconfigparameters-supports-configuration-parameters-for-application" title="Permalink to this headline">¶</a></h2>
+<p>This software was developed for the SIT project.
+If you use all or part of it, please give an appropriate acknowledgment.</p>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">expmon.Logger</span> <span class="k">import</span> <span class="n">log</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">setPrintBits</span><span class="p">(</span><span class="mi">0377</span><span class="p">)</span>
+<span class="n">cp</span><span class="o">.</span><span class="n">readParametersFromFile</span><span class="p">()</span>
+<span class="n">cp</span><span class="o">.</span><span class="n">printParameters</span><span class="p">()</span>
+<span class="n">cp</span><span class="o">.</span><span class="n">log_level</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="s1">&#39;debug&#39;</span><span class="p">)</span>
+<span class="n">cp</span><span class="o">.</span><span class="n">saveParametersInFile</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>See:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#module-IVMain" title="IVMain"><code class="xref py py-class docutils literal"><span class="pre">IVMain</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainTabs" title="IVMainTabs"><code class="xref py py-class docutils literal"><span class="pre">IVMainTabs</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainButtons" title="IVMainButtons"><code class="xref py py-class docutils literal"><span class="pre">IVMainButtons</span></code></a></li>
+<li><a class="reference internal" href="#module-IVImageCursorInfo" title="IVImageCursorInfo"><code class="xref py py-class docutils literal"><span class="pre">IVImageCursorInfo</span></code></a></li>
+<li><a class="reference internal" href="#module-IVConfigParameters" title="IVConfigParameters"><code class="xref py py-class docutils literal"><span class="pre">IVConfigParameters</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabDataControl" title="IVTabDataControl"><code class="xref py py-class docutils literal"><span class="pre">IVTabDataControl</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabFileName" title="IVTabFileName"><code class="xref py py-class docutils literal"><span class="pre">IVTabFileName</span></code></a></li>
+<li><a class="reference external" href="https://lcls-psana.github.io/graphqt/py-modindex.html">graphqt documentation</a>.</li>
+</ul>
+</dd>
+</dl>
+<p>Created on 2016-11-22 by Mikhail Dubrovin</p>
+<dl class="class">
+<dt id="IVConfigParameters.IVConfigParameters">
+<em class="property">class </em><code class="descclassname">IVConfigParameters.</code><code class="descname">IVConfigParameters</code><span class="sig-paren">(</span><em>fname=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IVConfigParameters.html#IVConfigParameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IVConfigParameters.IVConfigParameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">expmon.PSConfigParameters.PSConfigParameters</span></code></p>
+<p>A storage of configuration parameters for Image Vievier (iv)</p>
+<dl class="method">
+<dt id="IVConfigParameters.IVConfigParameters.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>fname=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/IVConfigParameters.html#IVConfigParameters.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IVConfigParameters.IVConfigParameters.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>fname : str - the file name with configuration parameters, if not specified then use default.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-IVImageCursorInfo"></span><div class="section" id="class-ivimagecursorinfo-is-a-qwidget-for-interactive-image">
+<h2>Class <a class="reference internal" href="#module-IVImageCursorInfo" title="IVImageCursorInfo"><code class="xref py py-class docutils literal"><span class="pre">IVImageCursorInfo</span></code></a> is a QWidget for interactive image<a class="headerlink" href="#class-ivimagecursorinfo-is-a-qwidget-for-interactive-image" title="Permalink to this headline">¶</a></h2>
+<p>QWidget shows cursor coordinates and hovered pixel intensity.</p>
+<dl class="docutils">
+<dt>Usage ::</dt>
+<dd><p class="first">from PyQt4 import QtGui, QtCore
+from graphqt.IVImageCursorInfo import IVImageCursorInfo</p>
+<p class="last">app = QtGui.QApplication(sys.argv)
+w = IVImageCursorInfo(parent=None)
+w.setWindowTitle(‘Cursor info’)
+w.show()
+app.exec_()</p>
+</dd>
+<dt>See:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#module-IVMain" title="IVMain"><code class="xref py py-class docutils literal"><span class="pre">IVMain</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainTabs" title="IVMainTabs"><code class="xref py py-class docutils literal"><span class="pre">IVMainTabs</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainButtons" title="IVMainButtons"><code class="xref py py-class docutils literal"><span class="pre">IVMainButtons</span></code></a></li>
+<li><a class="reference internal" href="#module-IVImageCursorInfo" title="IVImageCursorInfo"><code class="xref py py-class docutils literal"><span class="pre">IVImageCursorInfo</span></code></a></li>
+<li><a class="reference internal" href="#module-IVConfigParameters" title="IVConfigParameters"><code class="xref py py-class docutils literal"><span class="pre">IVConfigParameters</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabDataControl" title="IVTabDataControl"><code class="xref py py-class docutils literal"><span class="pre">IVTabDataControl</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabFileName" title="IVTabFileName"><code class="xref py py-class docutils literal"><span class="pre">IVTabFileName</span></code></a></li>
+<li><a class="reference external" href="https://lcls-psana.github.io/graphqt/py-modindex.html">graphqt documentation</a>.</li>
+</ul>
+</dd>
+</dl>
+<p>Created on February 1, 2017 by Mikhail Dubrovin</p>
+</div>
+<span class="target" id="module-QIcons"></span><p>&#64;version $Id: QIcons.py 13111 2017-02-02 01:57:56Z <a class="reference external" href="mailto:dubrovin&#37;&#52;&#48;SLAC&#46;STANFORD&#46;EDU">dubrovin<span>&#64;</span>SLAC<span>&#46;</span>STANFORD<span>&#46;</span>EDU</a> $</p>
+<p>&#64;author Mikhail S. Dubrovin</p>
+<span class="target" id="module-Logger"></span><p>Logger - logger for graphqt</p>
+<p>Usage:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">CalibManager.Logger</span> <span class="k">import</span> <span class="n">logger</span> <span class="k">as</span> <span class="n">log</span>
+<span class="c1"># or</span>
+<span class="kn">from</span> <span class="nn">graphqt.Logger</span> <span class="k">import</span> <span class="n">log</span>
+
+<span class="c1"># set level: &#39;debug&#39;,&#39;info&#39;,&#39;warning&#39;,&#39;error&#39;,&#39;critical&#39;</span>
+<span class="n">log</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="s1">&#39;warning&#39;</span><span class="p">)</span> 
+
+<span class="c1"># print messages of all levels: 1,2,4,8,16 for &#39;debug&#39;,&#39;info&#39;,...</span>
+<span class="n">log</span><span class="o">.</span><span class="n">setPrintBits</span><span class="p">(</span><span class="mi">0377</span><span class="p">)</span> 
+
+<span class="n">log</span><span class="o">.</span><span class="n">debug</span>   <span class="p">(</span><span class="s1">&#39;Some message&#39;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">info</span>    <span class="p">(</span><span class="s1">&#39;Some message&#39;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">warning</span> <span class="p">(</span><span class="s1">&#39;Some message&#39;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">error</span>   <span class="p">(</span><span class="s1">&#39;Some message&#39;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
+<span class="n">log</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s1">&#39;Some message&#39;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">levels</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">getListOfLevels</span><span class="p">()</span>
+<span class="n">level</span>  <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">getLevel</span><span class="p">()</span>
+<span class="n">fname</span>  <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">getLogFileName</span><span class="p">()</span>
+<span class="n">fnamet</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">getLogTotalFileName</span><span class="p">()</span>
+<span class="n">tss</span>    <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">getStrStartTime</span><span class="p">()</span>
+<span class="n">ts</span>     <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">timeStamp</span><span class="p">()</span>
+<span class="n">log</span>    <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">getLogContent</span><span class="p">()</span>
+<span class="n">logtot</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">getLogContentTotal</span><span class="p">()</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">saveLogInFile</span><span class="p">()</span>
+<span class="n">log</span><span class="o">.</span><span class="n">saveLogTotalInFile</span><span class="p">()</span>
+<span class="c1"># or</span>
+<span class="n">log</span><span class="o">.</span><span class="n">saveLogInFile</span><span class="p">(</span><span class="s1">&#39;file.txt&#39;</span><span class="p">)</span>
+
+<span class="n">log</span><span class="o">.</span><span class="n">setGUILogger</span><span class="p">(</span><span class="n">guilogger</span><span class="p">)</span> <span class="c1"># will callback guilogger.appendGUILog(msg)</span>
+</pre></div>
+</div>
+<p>&#64;see class <code class="xref py py-class docutils literal"><span class="pre">CalibManager.Logger</span></code></p>
+<dl class="docutils">
+<dt>&#64;see project modules</dt>
+<dd><ul class="first last simple">
+<li><code class="xref py py-class docutils literal"><span class="pre">CalibManager.GUILogger.py</span></code></li>
+<li><code class="xref py py-class docutils literal"><span class="pre">CalibManager.ConfigParameters</span></code></li>
+</ul>
+</dd>
+</dl>
+<p>This software was developed for the SIT project.
+If you use all or part of it, please give an appropriate acknowledgment.</p>
+<p>&#64;version $Id:Logger.py 11923 2016-05-17 21:14:33Z <a class="reference external" href="mailto:dubrovin&#37;&#52;&#48;SLAC&#46;STANFORD&#46;EDU">dubrovin<span>&#64;</span>SLAC<span>&#46;</span>STANFORD<span>&#46;</span>EDU</a> $</p>
+<p>&#64;author Mikhail S. Dubrovin</p>
+<span class="target" id="module-Styles"></span><p>&#64;version $Id: Styles.py 13109 2017-01-31 18:49:38Z <a class="reference external" href="mailto:dubrovin&#37;&#52;&#48;SLAC&#46;STANFORD&#46;EDU">dubrovin<span>&#64;</span>SLAC<span>&#46;</span>STANFORD<span>&#46;</span>EDU</a> $</p>
+<p>&#64;author Mikhail S. Dubrovin</p>
+<span class="target" id="module-AxisLabeling"></span><p>Created on Dec 5, 2015 from <a class="reference external" href="http://www.justintalbot.com/research/axis-labeling/">http://www.justintalbot.com/research/axis-labeling/</a></p>
+<p>&#64;author: Talbot, Lin, Hanrahan</p>
+<span class="target" id="module-ColorTable"></span><div class="section" id="colortable-collection-of-methods-to-generate-color-bars">
+<h2><a class="reference internal" href="#module-ColorTable" title="ColorTable"><code class="xref py py-class docutils literal"><span class="pre">ColorTable</span></code></a> collection of methods to generate color bars<a class="headerlink" href="#colortable-collection-of-methods-to-generate-color-bars" title="Permalink to this headline">¶</a></h2>
+<p>Usage</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">graphqt.ColorTable</span> <span class="k">as</span> <span class="nn">ct</span>
+
+<span class="n">ctab</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">color_table_monochr256</span><span class="p">()</span>
+<span class="n">ctab</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">color_table_rainbow</span><span class="p">(</span><span class="n">ncolors</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hang1</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">hang2</span><span class="o">=-</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ctab</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">color_table_interpolated</span><span class="p">()</span>
+<span class="n">ctab</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">color_table_interpolated</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">650</span><span class="p">,</span> <span class="mi">700</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="mh">0xffffff</span><span class="p">,</span> <span class="mh">0xffff00</span><span class="p">,</span> <span class="mh">0x00ff00</span><span class="p">,</span> <span class="mh">0xff0000</span><span class="p">,</span> <span class="mh">0xff00ff</span><span class="p">,</span> <span class="mh">0x0000ff</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>See:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference internal" href="#module-IVMain" title="IVMain"><code class="xref py py-class docutils literal"><span class="pre">IVMain</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainTabs" title="IVMainTabs"><code class="xref py py-class docutils literal"><span class="pre">IVMainTabs</span></code></a></li>
+<li><a class="reference internal" href="#module-IVMainButtons" title="IVMainButtons"><code class="xref py py-class docutils literal"><span class="pre">IVMainButtons</span></code></a></li>
+<li><a class="reference internal" href="#module-IVImageCursorInfo" title="IVImageCursorInfo"><code class="xref py py-class docutils literal"><span class="pre">IVImageCursorInfo</span></code></a></li>
+<li><a class="reference internal" href="#module-IVConfigParameters" title="IVConfigParameters"><code class="xref py py-class docutils literal"><span class="pre">IVConfigParameters</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabDataControl" title="IVTabDataControl"><code class="xref py py-class docutils literal"><span class="pre">IVTabDataControl</span></code></a></li>
+<li><a class="reference internal" href="#module-IVTabFileName" title="IVTabFileName"><code class="xref py py-class docutils literal"><span class="pre">IVTabFileName</span></code></a></li>
+<li><a class="reference external" href="https://lcls-psana.github.io/graphqt/py-modindex.html">graphqt documentation</a>.</li>
+</ul>
+</dd>
+</dl>
+<p>Created on Dec 6, 2015 by Mikhail Dubrovin</p>
+<dl class="class">
+<dt id="ColorTable.ColorTable">
+<em class="property">class </em><code class="descclassname">ColorTable.</code><code class="descname">ColorTable</code><span class="sig-paren">(</span><em>ncolors=1000</em>, <em>hang1=0</em>, <em>hang2=360</em>, <em>vmin=-10000</em>, <em>vmax=10000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#ColorTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.ColorTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates and provide access to color table</p>
+<dl class="method">
+<dt id="ColorTable.ColorTable.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>ncolors=1000</em>, <em>hang1=0</em>, <em>hang2=360</em>, <em>vmin=-10000</em>, <em>vmax=10000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#ColorTable.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.ColorTable.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes color table - list of QColors of length ncolors</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ColorTable.ColorTable.color_for_value">
+<code class="descname">color_for_value</code><span class="sig-paren">(</span><em>v</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#ColorTable.color_for_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.ColorTable.color_for_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns color mapped to the value in the color table</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ColorTable.ColorTable.int_ctable">
+<code class="descname">int_ctable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#ColorTable.int_ctable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.ColorTable.int_ctable" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts list of QColor to list of integer rgba values</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ColorTable.ColorTable.make_ctable_for_hue_range">
+<code class="descname">make_ctable_for_hue_range</code><span class="sig-paren">(</span><em>ncolors=1000</em>, <em>hang1=0</em>, <em>hang2=360</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#ColorTable.make_ctable_for_hue_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.ColorTable.make_ctable_for_hue_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Makes color table in the range of hue values</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ColorTable.ColorTable.set_hue_range">
+<code class="descname">set_hue_range</code><span class="sig-paren">(</span><em>hang1</em>, <em>hang2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#ColorTable.set_hue_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.ColorTable.set_hue_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the range of hue angles and re-generate color table</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ColorTable.ColorTable.set_ncolors">
+<code class="descname">set_ncolors</code><span class="sig-paren">(</span><em>ncolors</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#ColorTable.set_ncolors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.ColorTable.set_ncolors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the number of color in table and re-generate color table</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ColorTable.ColorTable.set_value_range">
+<code class="descname">set_value_range</code><span class="sig-paren">(</span><em>vmin</em>, <em>vmax</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#ColorTable.set_value_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.ColorTable.set_value_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the range of values which will be mapped to color table</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ColorTable.Storage">
+<em class="property">class </em><code class="descclassname">ColorTable.</code><code class="descname">Storage</code><a class="reference internal" href="_modules/ColorTable.html#Storage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.Storage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store for shared parameters.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ColorTable.apply_color_table">
+<code class="descclassname">ColorTable.</code><code class="descname">apply_color_table</code><span class="sig-paren">(</span><em>arr</em>, <em>ctable=None</em>, <em>amin=None</em>, <em>amax=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#apply_color_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.apply_color_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns numpy array with colors in stead of intensities</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ColorTable.array_for_color_bar">
+<code class="descclassname">ColorTable.</code><code class="descname">array_for_color_bar</code><span class="sig-paren">(</span><em>ctab=array([4278190080, 4278255873, 4278321666, 4278387459, 4278453252,        4278519045, 4278584838, 4278650631, 4278716424, 4278782217,        4278848010, 4278913803, 4278979596, 4279045389, 4279111182,        4279176975, 4279242768, 4279308561, 4279374354, 4279440147,        4279505940, 4279571733, 4279637526, 4279703319, 4279769112,        4279834905, 4279900698, 4279966491, 4280032284, 4280098077,        4280163870, 4280229663, 4280295456, 4280361249, 4280427042,        4280492835, 4280558628, 4280624421, 4280690214, 4280756007,        4280821800, 4280887593, 4280953386, 4281019179, 4281084972,        4281150765, 4281216558, 4281282351, 4281348144, 4281413937,        4281479730, 4281545523, 4281611316, 4281677109, 4281742902,        4281808695, 4281874488, 4281940281, 4282006074, 4282071867,        4282137660, 4282203453, 4282269246, 4282335039, 4282400832,        4282466625, 4282532418, 4282598211, 4282664004, 4282729797,        4282795590, 4282861383, 4282927176, 4282992969, 4283058762,        4283124555, 4283190348, 4283256141, 4283321934, 4283387727,        4283453520, 4283519313, 4283585106, 4283650899, 4283716692,        4283782485, 4283848278, 4283914071, 4283979864, 4284045657,        4284111450, 4284177243, 4284243036, 4284308829, 4284374622,        4284440415, 4284506208, 4284572001, 4284637794, 4284703587,        4284769380, 4284835173, 4284900966, 4284966759, 4285032552,        4285098345, 4285164138, 4285229931, 4285295724, 4285361517,        4285427310, 4285493103, 4285558896, 4285624689, 4285690482,        4285756275, 4285822068, 4285887861, 4285953654, 4286019447,        4286085240, 4286151033, 4286216826, 4286282619, 4286348412,        4286414205, 4286479998, 4286545791, 4286611584, 4286677377,        4286743170, 4286808963, 4286874756, 4286940549, 4287006342,        4287072135, 4287137928, 4287203721, 4287269514, 4287335307,        4287401100, 4287466893, 4287532686, 4287598479, 4287664272,        4287730065, 4287795858, 4287861651, 4287927444, 4287993237,        4288059030, 4288124823, 4288190616, 4288256409, 4288322202,        4288387995, 4288453788, 4288519581, 4288585374, 4288651167,        4288716960, 4288782753, 4288848546, 4288914339, 4288980132,        4289045925, 4289111718, 4289177511, 4289243304, 4289309097,        4289374890, 4289440683, 4289506476, 4289572269, 4289638062,        4289703855, 4289769648, 4289835441, 4289901234, 4289967027,        4290032820, 4290098613, 4290164406, 4290230199, 4290295992,        4290361785, 4290427578, 4290493371, 4290559164, 4290624957,        4290690750, 4290756543, 4290822336, 4290888129, 4290953922,        4291019715, 4291085508, 4291151301, 4291217094, 4291282887,        4291348680, 4291414473, 4291480266, 4291546059, 4291611852,        4291677645, 4291743438, 4291809231, 4291875024, 4291940817,        4292006610, 4292072403, 4292138196, 4292203989, 4292269782,        4292335575, 4292401368, 4292467161, 4292532954, 4292598747,        4292664540, 4292730333, 4292796126, 4292861919, 4292927712,        4292993505, 4293059298, 4293125091, 4293190884, 4293256677,        4293322470, 4293388263, 4293454056, 4293519849, 4293585642,        4293651435, 4293717228, 4293783021, 4293848814, 4293914607,        4293980400, 4294046193, 4294111986, 4294177779, 4294243572,        4294309365, 4294375158, 4294440951, 4294506744, 4294572537,        4294638330, 4294704123, 4294769916, 4294835709, 4294901502,        4294967295], dtype=uint32), orient='V', width=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#array_for_color_bar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.array_for_color_bar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 2-d array made of repeated 1-d array ctab to display as a color bar</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ColorTable.color_table_interpolated">
+<code class="descclassname">ColorTable.</code><code class="descname">color_table_interpolated</code><span class="sig-paren">(</span><em>points=[0, 50, 200, 300, 500, 600, 700], colors=[0, 255, 16711935, 16711680, 65280, 16776960, 16777215]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#color_table_interpolated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.color_table_interpolated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns numpy array of colors linearly-interpolated between points with defined colors</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ColorTable.color_table_linear">
+<code class="descclassname">ColorTable.</code><code class="descname">color_table_linear</code><span class="sig-paren">(</span><em>ncolors=100</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#color_table_linear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.color_table_linear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns numpy array with ncolors constructed from entire range of RGB colors</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ColorTable.color_table_monochr256">
+<code class="descclassname">ColorTable.</code><code class="descname">color_table_monochr256</code><span class="sig-paren">(</span><em>inverted=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#color_table_monochr256"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.color_table_monochr256" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns numpy array with monochrome table of 256 colors</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ColorTable.interpolate_colors">
+<code class="descclassname">ColorTable.</code><code class="descname">interpolate_colors</code><span class="sig-paren">(</span><em>ctab</em>, <em>p1</em>, <em>p2</em>, <em>c1</em>, <em>c2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#interpolate_colors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.interpolate_colors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills color table ctab between index/points p1 and p2 for interpolated colors from c1 to c2</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ColorTable.next_color_table">
+<code class="descclassname">ColorTable.</code><code class="descname">next_color_table</code><span class="sig-paren">(</span><em>ict=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ColorTable.html#next_color_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ColorTable.next_color_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns color table selected in loop or requested by index ict : int among pre-defined</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-Frame"></span><p>&#64;version $Id: Frame.py 12945 2016-12-08 02:07:56Z <a class="reference external" href="mailto:dubrovin&#37;&#52;&#48;SLAC&#46;STANFORD&#46;EDU">dubrovin<span>&#64;</span>SLAC<span>&#46;</span>STANFORD<span>&#46;</span>EDU</a> $</p>
+<p>&#64;author Mikhail S. Dubrovin</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+</tbody>
+</table>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="py-modindex.html" title="Python Module Index"
+              >modules</a> |
+            <a href="genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+              <br/>
+              <a href="_sources/index.rst.txt"
+                rel="nofollow">Show Source</a>
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Mikhail Dubrovin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

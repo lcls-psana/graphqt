@@ -1,0 +1,276 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>GUUtils &#8212; graphqt-doc 1 documentation</title>
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">graphqt-doc 1 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for GUUtils</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!@PYTHON@</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">:py:class:`GUUtils` - re-usable utils</span>
+<span class="sd">======================================</span>
+
+<span class="sd">Usage::</span>
+
+<span class="sd">    from graphqt.GUUtils import select_item_from__popup_menu, QtGui</span>
+<span class="sd">    app = QtGui.QApplication(sys.argv)    </span>
+<span class="sd">    lst = (&#39;apple&#39;, &#39;orange&#39;, &#39;pear&#39;, &#39;peache&#39;, &#39;plum&#39;) </span>
+<span class="sd">    item = select_item_in_popup_menu(lst)</span>
+<span class="sd">    print &#39;selected: %s&#39; % item</span>
+
+<span class="sd">    from graphqt.GUUtils import print_rect</span>
+<span class="sd">    print_rect(r, cmt=&#39;&#39;)</span>
+
+<span class="sd">Created on 2016-10-21 by Mikhail Dubrovin</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#------------------------------</span>
+
+<span class="c1">#import os</span>
+<span class="c1">#from PyQt4 import QtGui, QtCore</span>
+<span class="kn">from</span> <span class="nn">PyQt4.QtCore</span> <span class="k">import</span> <span class="n">Qt</span>
+<span class="c1">#from PyQt4.QtGui import QGraphicsRectItem</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="c1">#------------------------------</span>
+
+<span class="c1">#class GUUtils() :</span>
+<span class="c1">#    def __init__(self) :</span>
+<span class="c1">#        pass</span>
+
+<span class="c1">#------------------------------</span>
+
+<span class="k">def</span> <span class="nf">print_rect</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">cmt</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">:</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span> <span class="n">r</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span> <span class="n">r</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span> <span class="n">r</span><span class="o">.</span><span class="n">height</span><span class="p">()</span>
+    <span class="n">L</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">B</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">left</span><span class="p">(),</span> <span class="n">r</span><span class="o">.</span><span class="n">right</span><span class="p">(),</span> <span class="n">r</span><span class="o">.</span><span class="n">top</span><span class="p">(),</span> <span class="n">r</span><span class="o">.</span><span class="n">bottom</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> x=</span><span class="si">%8.2f</span><span class="s1">  y=</span><span class="si">%8.2f</span><span class="s1">  w=</span><span class="si">%8.2f</span><span class="s1">  h=</span><span class="si">%8.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cmt</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> L=</span><span class="si">%8.2f</span><span class="s1">  B=</span><span class="si">%8.2f</span><span class="s1">  R=</span><span class="si">%8.2f</span><span class="s1">  T=</span><span class="si">%8.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cmt</span><span class="p">)</span><span class="o">*</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span>
+
+<span class="c1">#------------------------------</span>
+
+<div class="viewcode-block" id="select_item_from_popup_menu"><a class="viewcode-back" href="../index.html#GUUtils.select_item_from_popup_menu">[docs]</a><span class="k">def</span> <span class="nf">select_item_from_popup_menu</span><span class="p">(</span><span class="nb">list</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Shows the list as a pop-up menu and returns the selected item as a string or None&quot;&quot;&quot;</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QMenu</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">list</span> <span class="p">:</span> <span class="n">w</span><span class="o">.</span><span class="n">addAction</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">exec_</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QCursor</span><span class="o">.</span><span class="n">pos</span><span class="p">())</span>
+    <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">item</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">())</span> <span class="c1"># str(QString)</span></div>
+
+<span class="c1">#------------------------------</span>
+
+<div class="viewcode-block" id="select_color"><a class="viewcode-back" href="../index.html#GUUtils.select_color">[docs]</a><span class="k">def</span> <span class="nf">select_color</span><span class="p">(</span><span class="n">colini</span><span class="o">=</span><span class="n">Qt</span><span class="o">.</span><span class="n">blue</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Select color using QColorDialog&quot;&quot;&quot;</span>
+    <span class="n">QCD</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QColorDialog</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">QCD</span><span class="p">(</span><span class="n">colini</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">setOptions</span><span class="p">(</span><span class="n">QCD</span><span class="o">.</span><span class="n">ShowAlphaChannel</span><span class="p">)</span><span class="c1"># | QCD.DontUseNativeDialog | QCD.NoButtons</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+    <span class="n">color</span><span class="o">=</span><span class="n">w</span><span class="o">.</span><span class="n">selectedColor</span><span class="p">()</span>
+    <span class="c1">#color = QtGui.QColorDialog.getColor()</span>
+    <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">color</span> <span class="c1"># QColor or None</span></div>
+
+<span class="c1">#------------------------------</span>
+
+<div class="viewcode-block" id="proc_stat"><a class="viewcode-back" href="../index.html#GUUtils.proc_stat">[docs]</a><span class="k">def</span> <span class="nf">proc_stat</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Copied from CalibManager/src/PlotImgSpeWidget.py</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">center</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">bins</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">bins</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">w</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">weights</span><span class="p">)])</span>
+
+    <span class="n">sum_w</span>  <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">sum_w</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">:</span> <span class="k">return</span>  <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    
+    <span class="n">sum_w2</span> <span class="o">=</span> <span class="p">(</span><span class="n">weights</span><span class="o">*</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">neff</span>   <span class="o">=</span> <span class="n">sum_w</span><span class="o">*</span><span class="n">sum_w</span><span class="o">/</span><span class="n">sum_w2</span> <span class="k">if</span> <span class="n">sum_w2</span><span class="o">&gt;</span><span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">sum_1</span>  <span class="o">=</span> <span class="p">(</span><span class="n">weights</span><span class="o">*</span><span class="n">center</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">sum_1</span><span class="o">/</span><span class="n">sum_w</span>
+    <span class="n">d</span>      <span class="o">=</span> <span class="n">center</span> <span class="o">-</span> <span class="n">mean</span>
+    <span class="n">d2</span>     <span class="o">=</span> <span class="n">d</span> <span class="o">*</span> <span class="n">d</span>
+    <span class="n">wd2</span>    <span class="o">=</span> <span class="n">weights</span><span class="o">*</span><span class="n">d2</span>
+    <span class="n">m2</span>     <span class="o">=</span> <span class="p">(</span><span class="n">wd2</span><span class="p">)</span>   <span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">sum_w</span>
+    <span class="n">m3</span>     <span class="o">=</span> <span class="p">(</span><span class="n">wd2</span><span class="o">*</span><span class="n">d</span><span class="p">)</span> <span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">sum_w</span>
+    <span class="n">m4</span>     <span class="o">=</span> <span class="p">(</span><span class="n">wd2</span><span class="o">*</span><span class="n">d2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">sum_w</span>
+
+    <span class="c1">#sum_2  = (weights*center*center).sum()</span>
+    <span class="c1">#err2 = sum_2/sum_w - mean*mean</span>
+    <span class="c1">#err  = math.sqrt(err2)</span>
+
+    <span class="n">rms</span>  <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">m2</span><span class="p">)</span> <span class="k">if</span> <span class="n">m2</span><span class="o">&gt;</span><span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">rms2</span> <span class="o">=</span> <span class="n">m2</span>
+    
+    <span class="n">err_mean</span> <span class="o">=</span> <span class="n">rms</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">neff</span><span class="p">)</span>
+    <span class="n">err_rms</span>  <span class="o">=</span> <span class="n">err_mean</span><span class="o">/</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>    
+
+    <span class="n">skew</span><span class="p">,</span> <span class="n">kurt</span><span class="p">,</span> <span class="n">var_4</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">rms</span><span class="o">&gt;</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">rms2</span><span class="o">&gt;</span><span class="mi">0</span> <span class="p">:</span>
+        <span class="n">skew</span>  <span class="o">=</span> <span class="n">m3</span><span class="o">/</span><span class="p">(</span><span class="n">rms2</span> <span class="o">*</span> <span class="n">rms</span><span class="p">)</span> 
+        <span class="n">kurt</span>  <span class="o">=</span> <span class="n">m4</span><span class="o">/</span><span class="p">(</span><span class="n">rms2</span> <span class="o">*</span> <span class="n">rms2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span>
+        <span class="n">var_4</span> <span class="o">=</span> <span class="p">(</span><span class="n">m4</span> <span class="o">-</span> <span class="n">rms2</span><span class="o">*</span><span class="n">rms2</span><span class="o">*</span><span class="p">(</span><span class="n">neff</span><span class="o">-</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">neff</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">neff</span> <span class="k">if</span> <span class="n">neff</span><span class="o">&gt;</span><span class="mi">1</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">err_err</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">var_4</span><span class="p">))</span> <span class="k">if</span> <span class="n">var_4</span><span class="o">&gt;</span><span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span> 
+    <span class="c1">#print  &#39;mean:%f, rms:%f, err_mean:%f, err_rms:%f, neff:%f&#39; % (mean, rms, err_mean, err_rms, neff)</span>
+    <span class="c1">#print  &#39;skew:%f, kurt:%f, err_err:%f&#39; % (skew, kurt, err_err)</span>
+    <span class="k">return</span> <span class="n">mean</span><span class="p">,</span> <span class="n">rms</span><span class="p">,</span> <span class="n">err_mean</span><span class="p">,</span> <span class="n">err_rms</span><span class="p">,</span> <span class="n">neff</span><span class="p">,</span> <span class="n">skew</span><span class="p">,</span> <span class="n">kurt</span><span class="p">,</span> <span class="n">err_err</span><span class="p">,</span> <span class="n">sum_w</span></div>
+
+<span class="c1">#------------------------------</span>
+
+<div class="viewcode-block" id="proc_stat_v2"><a class="viewcode-back" href="../index.html#GUUtils.proc_stat_v2">[docs]</a><span class="k">def</span> <span class="nf">proc_stat_v2</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">centers</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Returns mean and rms for input histogram arrays.</span>
+
+<span class="sd">        Simplified version of proc_stat from CalibManager.PlotImgSpeWidget</span>
+<span class="sd">        mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w = proc_stat(weights,bins)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">math</span>
+
+    <span class="n">sum_w</span>  <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">sum_w</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">:</span> <span class="k">return</span>  <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    
+    <span class="n">sum_w2</span> <span class="o">=</span> <span class="p">(</span><span class="n">weights</span><span class="o">*</span><span class="n">weights</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">neff</span>   <span class="o">=</span> <span class="n">sum_w</span><span class="o">*</span><span class="n">sum_w</span><span class="o">/</span><span class="n">sum_w2</span>
+    <span class="n">sum_1</span>  <span class="o">=</span> <span class="p">(</span><span class="n">weights</span><span class="o">*</span><span class="n">centers</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">sum_1</span><span class="o">/</span><span class="n">sum_w</span>
+    <span class="n">d</span>      <span class="o">=</span> <span class="n">centers</span> <span class="o">-</span> <span class="n">mean</span>
+    <span class="n">d2</span>     <span class="o">=</span> <span class="n">d</span> <span class="o">*</span> <span class="n">d</span>
+    <span class="n">wd2</span>    <span class="o">=</span> <span class="n">weights</span><span class="o">*</span><span class="n">d2</span>
+    <span class="n">m2</span>     <span class="o">=</span> <span class="p">(</span><span class="n">wd2</span><span class="p">)</span>   <span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">sum_w</span>
+    <span class="c1">#m3     = (wd2*d) .sum() / sum_w</span>
+    <span class="c1">#m4     = (wd2*d2).sum() / sum_w</span>
+
+    <span class="c1">#sum_2  = (weights*center*center).sum()</span>
+    <span class="c1">#err2 = sum_2/sum_w - mean*mean</span>
+    <span class="c1">#err  = math.sqrt(err2)</span>
+
+    <span class="n">rms</span>  <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">m2</span><span class="p">)</span> <span class="k">if</span> <span class="n">m2</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">mean</span><span class="p">,</span> <span class="n">rms</span></div>
+
+<span class="c1">#------------------------------</span>
+
+<span class="k">def</span> <span class="nf">equal_rects</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">r1</span><span class="o">.</span><span class="n">left</span><span class="p">()</span>   <span class="o">!=</span> <span class="n">r1</span><span class="o">.</span><span class="n">left</span><span class="p">()</span> <span class="p">:</span>   <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">r1</span><span class="o">.</span><span class="n">right</span><span class="p">()</span>  <span class="o">!=</span> <span class="n">r1</span><span class="o">.</span><span class="n">right</span><span class="p">()</span>  <span class="p">:</span> <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">r1</span><span class="o">.</span><span class="n">bottom</span><span class="p">()</span> <span class="o">!=</span> <span class="n">r1</span><span class="o">.</span><span class="n">bottom</span><span class="p">()</span> <span class="p">:</span> <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">r1</span><span class="o">.</span><span class="n">top</span><span class="p">()</span>    <span class="o">!=</span> <span class="n">r1</span><span class="o">.</span><span class="n">top</span><span class="p">()</span>    <span class="p">:</span> <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+<span class="c1">#------------------------------</span>
+<span class="c1">#------------------------------</span>
+<span class="c1">#------------------------------</span>
+
+<span class="k">def</span> <span class="nf">test_select_item_from_popup_menu</span><span class="p">():</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>    
+    <span class="n">lst</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;apple&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;pear&#39;</span><span class="p">,</span> <span class="s1">&#39;peache&#39;</span><span class="p">,</span> <span class="s1">&#39;plum&#39;</span><span class="p">)</span> 
+    <span class="n">item</span> <span class="o">=</span> <span class="n">select_item_from_popup_menu</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+    <span class="nb">print</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> is selected&#39;</span> <span class="o">%</span> <span class="n">item</span>
+
+<span class="c1">#------------------------------</span>
+
+<span class="k">def</span> <span class="nf">test_select_color</span><span class="p">():</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>    
+    <span class="n">color</span> <span class="o">=</span> <span class="n">select_color</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="s1">&#39;Selected color:&#39;</span><span class="p">,</span> <span class="n">color</span>
+
+<span class="c1">#------------------------------</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span> <span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span> <span class="p">:</span>
+        <span class="n">test_select_item_from_popup_menu</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;Use command:</span><span class="se">\n</span><span class="s1">&gt; </span><span class="si">%s</span><span class="s1"> &lt;test-id-string&gt;&#39;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="nb">print</span> <span class="s1">&#39;Test: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span>   <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;1&#39;</span> <span class="p">:</span> <span class="n">test_select_item_from_popup_menu</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;2&#39;</span> <span class="p">:</span> <span class="n">test_select_color</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;3&#39;</span> <span class="p">:</span> <span class="n">test01</span><span class="p">()</span>
+    <span class="k">else</span> <span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;Unknown test id: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;Test </span><span class="si">%s</span><span class="s1"> is completed&#39;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1">#------------------------------</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="../py-modindex.html" title="Python Module Index"
+              >modules</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Mikhail Dubrovin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

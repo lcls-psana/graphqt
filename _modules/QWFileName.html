@@ -1,0 +1,223 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>QWFileName &#8212; graphqt-doc 1 documentation</title>
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">graphqt-doc 1 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for QWFileName</h1><div class="highlight"><pre>
+<span></span><span class="c1">#------------------------------</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">@version $Id: QWFileName.py 12962 2016-12-09 20:06:16Z dubrovin@SLAC.STANFORD.EDU $</span>
+
+<span class="sd">@author Mikhail S. Dubrovin</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#------------------------------</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">graphqt.Frame</span> <span class="k">import</span> <span class="n">Frame</span>
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+
+<span class="c1">#------------------------------</span>
+
+<div class="viewcode-block" id="QWFileName"><a class="viewcode-back" href="../index.html#QWFileName.QWFileName">[docs]</a><span class="k">class</span> <span class="nc">QWFileName</span><span class="p">(</span><span class="n">Frame</span><span class="p">)</span> <span class="p">:</span> <span class="c1"># QtGui.QWidget</span>
+    <span class="sd">&quot;&quot;&quot;Widget for file name input</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">butname</span><span class="o">=</span><span class="s1">&#39;Browse&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;File:&#39;</span><span class="p">,</span>\
+                 <span class="n">path</span><span class="o">=</span><span class="s1">&#39;/reg/neh/home/dubrovin/LCLS/rel-expmon/log.txt&#39;</span><span class="p">,</span>\
+                 <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span>\
+                 <span class="n">fltr</span><span class="o">=</span><span class="s1">&#39;*.txt *.data *.png *.gif *.jpg *.jpeg</span><span class="se">\n</span><span class="s1"> *&#39;</span><span class="p">,</span>\
+                 <span class="n">show_frame</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="p">:</span>
+
+        <span class="c1">#QtGui.QWidget.__init__(self, parent)</span>
+        <span class="n">Frame</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">mlw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vis</span><span class="o">=</span><span class="n">show_frame</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fltr</span> <span class="o">=</span> <span class="n">fltr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_frame</span> <span class="o">=</span> <span class="n">show_frame</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lab</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QLabel</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">but</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QPushButton</span><span class="p">(</span><span class="n">butname</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edi</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QLineEdit</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edi</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span> 
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbox</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbox</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lab</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbox</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">edi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbox</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">but</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hbox</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hbox</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_tool_tips</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_style</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">but</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">SIGNAL</span><span class="p">(</span><span class="s1">&#39;clicked()&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_but</span><span class="p">)</span>
+
+<span class="c1">#------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span>
+
+<span class="c1">#------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">set_tool_tips</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">but</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Select input file.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edi</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Path to the file (read-only).</span><span class="se">\n</span><span class="s1">Click on button to change it.&#39;</span><span class="p">)</span> 
+
+<span class="c1">#------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">set_style</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s1">&#39;File name selection widget&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumWidth</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edi</span><span class="o">.</span><span class="n">setMinimumWidth</span><span class="p">(</span><span class="mi">210</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setFixedHeight</span><span class="p">(</span><span class="mi">50</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_frame</span> <span class="k">else</span> <span class="mi">34</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_frame</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span><span class="o">-</span><span class="mi">9</span><span class="p">)</span>
+
+        <span class="c1">#style = &quot;background-color: rgb(255, 255, 220); color: rgb(0, 0, 0);&quot; # Yellowish</span>
+        <span class="c1">#style = &quot;background-color: rgb(100, 240, 200); color: rgb(0, 0, 0);&quot; # Greenish</span>
+        <span class="c1">#style = &quot;background-color: rgb(255, 200, 220); color: rgb(0, 0, 0);&quot; # Pinkish</span>
+        <span class="c1">#style = &quot;background-color: rgb(240, 240, 100); color: rgb(0, 0, 0);&quot; # YellowBkg</span>
+        <span class="c1">#self.setStyleSheet(style)</span>
+
+        <span class="c1">#self.setMinimumSize(725,360)</span>
+        <span class="c1">#self.setFixedSize(750,270)</span>
+        <span class="c1">#self.setMaximumWidth(800)</span>
+ 
+<span class="c1">#------------------------------</span>
+ 
+    <span class="k">def</span> <span class="nf">on_but</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QFileDialog</span><span class="o">.</span><span class="n">getSaveFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Output file&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fltr</span><span class="p">))</span> \
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;w&#39;</span> <span class="k">else</span> \
+                    <span class="nb">str</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QFileDialog</span><span class="o">.</span><span class="n">getOpenFileName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;Input file&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fltr</span><span class="p">))</span>
+
+        <span class="n">dname</span><span class="p">,</span> <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s1">&#39;r&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">lexists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span> <span class="p">:</span>
+            <span class="k">return</span>
+            <span class="c1">#raise IOError(&#39;File %s is not available&#39; % self.path)</span>
+
+        <span class="k">elif</span> <span class="n">dname</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="ow">or</span> <span class="n">fname</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="p">:</span>
+            <span class="k">return</span>
+            <span class="c1">#logger.info(&#39;Input directiry name or file name is empty... use default values&#39;, __name__)</span>
+            <span class="c1">#print&#39;Input directiry name or file name is empty... use default values&#39;</span>
+
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edi</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">SIGNAL</span><span class="p">(</span><span class="s1">&#39;path_is_changed(QString)&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+            <span class="c1">#logger.info(&#39;Selected file:\n&#39; + self.path, __name__)</span>
+            <span class="c1">#print &#39;Selected file: %s&#39; % self.path</span>
+
+<span class="c1">#------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">connect_path_is_changed_to_recipient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recip</span><span class="p">)</span> <span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">SIGNAL</span><span class="p">(</span><span class="s1">&#39;path_is_changed(QString)&#39;</span><span class="p">),</span> <span class="n">recip</span><span class="p">)</span>
+
+<span class="c1">#------------------------------</span>
+ 
+    <span class="k">def</span> <span class="nf">test_signal_reception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="p">:</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">: str=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span></div>
+
+<span class="c1">#------------------------------</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span> <span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">QWFileName</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">butname</span><span class="o">=</span><span class="s1">&#39;Select&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Path:&#39;</span><span class="p">,</span>\
+                   <span class="n">path</span><span class="o">=</span><span class="s1">&#39;/reg/neh/home/dubrovin/LCLS/rel-expmon/log.txt&#39;</span><span class="p">,</span> <span class="n">show_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">connect_path_is_changed_to_recipient</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_signal_reception</span><span class="p">)</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+<span class="c1">#------------------------------</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="../py-modindex.html" title="Python Module Index"
+              >modules</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Mikhail Dubrovin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

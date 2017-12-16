@@ -1,0 +1,391 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ColorTable &#8212; graphqt-doc 1 documentation</title>
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">graphqt-doc 1 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ColorTable</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!@PYTHON@</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">:py:class:`ColorTable` collection of methods to generate color bars</span>
+<span class="sd">===================================================================</span>
+
+<span class="sd">Usage ::</span>
+
+<span class="sd">    import graphqt.ColorTable as ct</span>
+
+<span class="sd">    ctab = ct.color_table_monochr256()</span>
+<span class="sd">    ctab = ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20)</span>
+<span class="sd">    ctab = ct.color_table_interpolated()</span>
+<span class="sd">    ctab = ct.color_table_interpolated(points=[0, 100, 200, 400, 500, 650, 700], colors=[0xffffff, 0xffff00, 0x00ff00, 0xff0000, 0xff00ff, 0x0000ff, 0])</span>
+
+<span class="sd">See:</span>
+<span class="sd">    - :class:`IVMain`</span>
+<span class="sd">    - :class:`IVMainTabs`</span>
+<span class="sd">    - :class:`IVMainButtons`</span>
+<span class="sd">    - :class:`IVImageCursorInfo`</span>
+<span class="sd">    - :class:`IVConfigParameters`</span>
+<span class="sd">    - :class:`IVTabDataControl`</span>
+<span class="sd">    - :class:`IVTabFileName`</span>
+<span class="sd">    - `graphqt documentation &lt;https://lcls-psana.github.io/graphqt/py-modindex.html&gt;`_.</span>
+
+<span class="sd">Created on Dec 6, 2015 by Mikhail Dubrovin</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#------------------------------</span>
+
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span> <span class="c1">#, QtCore</span>
+<span class="kn">from</span> <span class="nn">PyQt4.QtCore</span> <span class="k">import</span> <span class="n">Qt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">floor</span>
+
+<span class="c1">#------------------------------</span>
+
+<div class="viewcode-block" id="Storage"><a class="viewcode-back" href="../index.html#ColorTable.Storage">[docs]</a><span class="k">class</span> <span class="nc">Storage</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Store for shared parameters.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ictab</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">color_table_index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ictab</span></div>
+
+<span class="c1">#------------------------------</span>
+<span class="n">STOR</span> <span class="o">=</span> <span class="n">Storage</span><span class="p">()</span>
+<span class="c1">#------------------------------</span>
+
+<span class="k">def</span> <span class="nf">print_colors</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="p">:</span>
+    <span class="n">sh</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">shape</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">arr</span> <span class="p">:</span>
+      <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">row</span> <span class="p">:</span>
+        <span class="n">qc</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QColor</span><span class="p">(</span><span class="n">v</span> <span class="o">&amp;</span> <span class="mh">0xFFFFFF</span><span class="p">)</span> <span class="c1"># rgb part only</span>
+        <span class="c1">#print v, qc.red(), qc.green(), qc.blue() </span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="si">%4d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">qc</span><span class="o">.</span><span class="n">red</span><span class="p">(),</span>
+      <span class="nb">print</span> <span class="s1">&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="apply_color_table"><a class="viewcode-back" href="../index.html#ColorTable.apply_color_table">[docs]</a><span class="k">def</span> <span class="nf">apply_color_table</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">ctable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">amin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">amax</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39; Returns numpy array with colors in stead of intensities</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># color_table_monochr256()</span>
+    <span class="c1"># color_table_linear(ncolors=100)</span>
+    <span class="n">ctab</span> <span class="o">=</span> <span class="n">ctable</span> <span class="k">if</span> <span class="n">ctable</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">color_table_rainbow</span><span class="p">(</span><span class="n">ncolors</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hang1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hang2</span><span class="o">=</span><span class="mi">360</span><span class="p">)</span>
+    <span class="c1"># color_table_monochr256() # color_table_def()</span>
+    <span class="nb">min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="k">if</span> <span class="n">amin</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">amin</span>
+    <span class="nb">max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="k">if</span> <span class="n">amax</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">amax</span>
+    <span class="k">if</span> <span class="nb">min</span><span class="o">==</span><span class="nb">max</span> <span class="p">:</span> <span class="nb">max</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ctab</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nb">max</span><span class="o">-</span><span class="nb">min</span><span class="p">)</span>
+    <span class="n">ict</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="n">f</span><span class="o">*</span><span class="p">(</span><span class="n">arr</span><span class="o">-</span><span class="nb">min</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span> <span class="c1"># array of indexes in color table</span>
+
+    <span class="n">imax</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ctab</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">cond</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">ict</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">,</span> <span class="n">ict</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">ctab</span><span class="p">))</span>
+    <span class="n">ict</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">select</span><span class="p">((</span><span class="n">cond</span><span class="p">,</span> <span class="n">ict</span><span class="o">&gt;</span><span class="n">imax</span><span class="p">),</span> <span class="p">(</span><span class="n">ict</span><span class="p">,</span> <span class="n">imax</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ctab</span><span class="p">[</span><span class="n">ict</span><span class="p">]</span></div>
+
+    <span class="c1">#print &#39;XXX:indexes:\n&#39;, ict</span>
+    <span class="c1">#a = ctab[ict]    </span>
+    <span class="c1">#print &#39;XXX:arr of colors:\n&#39;, a</span>
+    <span class="c1">#print_colors(a)</span>
+    <span class="c1">#return a</span>
+
+
+<div class="viewcode-block" id="color_table_monochr256"><a class="viewcode-back" href="../index.html#ColorTable.color_table_monochr256">[docs]</a><span class="k">def</span> <span class="nf">color_table_monochr256</span><span class="p">(</span><span class="n">inverted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39; Returns numpy array with monochrome table of 256 colors</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">ncolors</span><span class="o">=</span><span class="mi">256</span>
+    <span class="n">inds</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncolors</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">inverted</span> <span class="k">else</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncolors</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">c</span> <span class="o">+</span> <span class="n">c</span><span class="o">*</span><span class="mh">0x100</span> <span class="o">+</span> <span class="n">c</span><span class="o">*</span><span class="mh">0x10000</span> <span class="o">+</span> <span class="mh">0xff000000</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">inds</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>  </div>
+
+
+<div class="viewcode-block" id="color_table_linear"><a class="viewcode-back" href="../index.html#ColorTable.color_table_linear">[docs]</a><span class="k">def</span> <span class="nf">color_table_linear</span><span class="p">(</span><span class="n">ncolors</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39; Returns numpy array with ncolors constructed from entire range of RGB colors</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">ncolors</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mh">0xffffff</span><span class="o">*</span><span class="n">c</span><span class="o">*</span><span class="n">f</span> <span class="o">+</span> <span class="mh">0xff000000</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncolors</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>  </div>
+
+
+<div class="viewcode-block" id="interpolate_colors"><a class="viewcode-back" href="../index.html#ColorTable.interpolate_colors">[docs]</a><span class="k">def</span> <span class="nf">interpolate_colors</span><span class="p">(</span><span class="n">ctab</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;Fills color table ctab between index/points p1 and p2 for interpolated colors from c1 to c2</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1">#print p1, p2, c1, c2</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="mh">0xff000000</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mh">0x00ff0000</span>
+    <span class="n">G</span> <span class="o">=</span> <span class="mh">0x0000ff00</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="mh">0x000000ff</span>
+    <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="p">(</span><span class="n">c1</span><span class="o">&amp;</span><span class="n">R</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="mi">16</span><span class="p">,</span> <span class="p">(</span><span class="n">c2</span><span class="o">&amp;</span><span class="n">R</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="mi">16</span>
+    <span class="n">g1</span><span class="p">,</span> <span class="n">g2</span> <span class="o">=</span> <span class="p">(</span><span class="n">c1</span><span class="o">&amp;</span><span class="n">G</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="mi">8</span><span class="p">,</span>  <span class="p">(</span><span class="n">c2</span><span class="o">&amp;</span><span class="n">G</span><span class="p">)</span><span class="o">&gt;&gt;</span><span class="mi">8</span>
+    <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span> <span class="o">=</span> <span class="n">c1</span><span class="o">&amp;</span><span class="n">B</span><span class="p">,</span> <span class="n">c2</span><span class="o">&amp;</span><span class="n">B</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="n">p2</span><span class="o">-</span><span class="n">p1</span>
+    <span class="c1">#print &#39;XXX: c1, c2, p1, p2, r1, r2, g1, g2,  b1, b2:&#39;, hex(c1), hex(c2), p1, p2, r1, r2, g1, g2, b1, b2</span>
+
+    <span class="k">if</span> <span class="n">np</span><span class="o">&lt;</span><span class="mi">1</span> <span class="p">:</span>
+        <span class="n">ctab</span><span class="p">[</span><span class="n">p1</span><span class="p">]</span> <span class="o">=</span> <span class="n">c1</span> <span class="o">+</span> <span class="n">A</span>
+        <span class="k">return</span>
+
+    <span class="n">fr</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">r2</span><span class="o">-</span><span class="n">r1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span>
+    <span class="n">fg</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">g2</span><span class="o">-</span><span class="n">g1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span>
+    <span class="n">fb</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">b2</span><span class="o">-</span><span class="n">b1</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span>
+
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">p2</span><span class="p">)</span> <span class="p">:</span>
+        <span class="n">dp</span> <span class="o">=</span> <span class="n">p</span><span class="o">-</span><span class="n">p1</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">r1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">floor</span><span class="p">(</span><span class="n">fr</span><span class="o">*</span><span class="n">dp</span><span class="p">))</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="n">g1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">floor</span><span class="p">(</span><span class="n">fg</span><span class="o">*</span><span class="n">dp</span><span class="p">))</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">b1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">floor</span><span class="p">(</span><span class="n">fb</span><span class="o">*</span><span class="n">dp</span><span class="p">))</span>
+
+        <span class="n">ctab</span><span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="n">A</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">g</span><span class="o">*</span><span class="mh">0x100</span> <span class="o">+</span> <span class="n">r</span><span class="o">*</span><span class="mh">0x10000</span></div>
+
+        <span class="c1">#print &#39;hex(r), hex(r&lt;&lt;16)&#39;, hex(r), hex(r&lt;&lt;16)</span>
+        <span class="c1">#print &#39;hex(b), hex(b&lt;&lt;8)&#39;,  hex(b), hex(b&lt;&lt;8)</span>
+
+        <span class="c1">#ctab[p] = A + (b + g&lt;&lt;8 + r&lt;&lt;16) &amp; 0xffffff</span>
+
+        <span class="c1">#color = ctab[p]</span>
+        <span class="c1">#qc = QtGui.QColor(color &amp; 0xFFFFFF) # rgb part only</span>
+        <span class="c1">#print &#39;XXX: point:%4d   %10s %4d %4d %4d&#39; % (p, hex(color), qc.red(), qc.green(), qc.blue())</span>
+
+
+<span class="c1">#def color_table_interpolated(points=[0,      200,      400,      600,      800],\</span>
+<span class="c1">#                             colors=[0, 0x0000ff, 0x00ff00, 0xff0000, 0xffffff]) :</span>
+<span class="c1">#def color_table_interpolated(points=[0,      200,      400,      600,      800],\</span>
+<span class="c1">#                             colors=[0, 0x0000ff, 0xff0000, 0x00ff00, 0xffffff]) :</span>
+<div class="viewcode-block" id="color_table_interpolated"><a class="viewcode-back" href="../index.html#ColorTable.color_table_interpolated">[docs]</a><span class="k">def</span> <span class="nf">color_table_interpolated</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span>      <span class="mi">50</span><span class="p">,</span>      <span class="mi">200</span><span class="p">,</span>      <span class="mi">300</span><span class="p">,</span>      <span class="mi">500</span><span class="p">,</span>      <span class="mi">600</span><span class="p">,</span>      <span class="mi">700</span><span class="p">],</span>\
+                             <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mh">0x0000ff</span><span class="p">,</span> <span class="mh">0xff00ff</span><span class="p">,</span> <span class="mh">0xff0000</span><span class="p">,</span> <span class="mh">0x00ff00</span><span class="p">,</span> <span class="mh">0xffff00</span><span class="p">,</span> <span class="mh">0xffffff</span><span class="p">])</span> <span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39; Returns numpy array of colors linearly-interpolated between points with defined colors</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1">#print &#39;XXX: number of colors: %d&#39; % points[-1]</span>
+    <span class="n">ctab</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">points</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="p">:</span>
+        <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span> <span class="o">=</span> <span class="n">p</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">interpolate_colors</span><span class="p">(</span><span class="n">ctab</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ctab</span></div>
+    <span class="c1">#return color_table_monochr256()</span>
+
+
+<span class="k">def</span> <span class="nf">color_table_rainbow</span><span class="p">(</span><span class="n">ncolors</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hang1</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">hang2</span><span class="o">=-</span><span class="mi">20</span><span class="p">)</span> <span class="p">:</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">ColorTable</span><span class="p">(</span><span class="n">ncolors</span><span class="p">,</span> <span class="n">hang1</span><span class="p">,</span> <span class="n">hang2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ct</span><span class="o">.</span><span class="n">np_ctable</span><span class="p">()</span>
+
+<span class="c1">#------------------------------</span>
+
+<div class="viewcode-block" id="next_color_table"><a class="viewcode-back" href="../index.html#ColorTable.next_color_table">[docs]</a><span class="k">def</span> <span class="nf">next_color_table</span><span class="p">(</span><span class="n">ict</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Returns color table selected in loop or requested by index ict : int among pre-defined</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">ict</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="n">STOR</span><span class="o">.</span><span class="n">ictab</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">else</span>           <span class="p">:</span> <span class="n">STOR</span><span class="o">.</span><span class="n">ictab</span> <span class="o">=</span> <span class="n">ict</span>
+    <span class="c1">#print &#39;Color table # %d&#39; % STOR.ictab</span>
+    <span class="k">if</span>   <span class="n">STOR</span><span class="o">.</span><span class="n">ictab</span> <span class="o">==</span> <span class="mi">2</span> <span class="p">:</span> <span class="k">return</span> <span class="n">color_table_rainbow</span><span class="p">(</span><span class="n">ncolors</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hang1</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">hang2</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">STOR</span><span class="o">.</span><span class="n">ictab</span> <span class="o">==</span> <span class="mi">3</span> <span class="p">:</span> <span class="k">return</span> <span class="n">color_table_monochr256</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">STOR</span><span class="o">.</span><span class="n">ictab</span> <span class="o">==</span> <span class="mi">4</span> <span class="p">:</span> <span class="k">return</span> <span class="n">color_table_monochr256</span><span class="p">(</span><span class="n">inverted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">STOR</span><span class="o">.</span><span class="n">ictab</span> <span class="o">==</span> <span class="mi">5</span> <span class="p">:</span> <span class="k">return</span> <span class="n">color_table_rainbow</span><span class="p">(</span><span class="n">ncolors</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hang1</span><span class="o">=-</span><span class="mi">120</span><span class="p">,</span> <span class="n">hang2</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">STOR</span><span class="o">.</span><span class="n">ictab</span> <span class="o">==</span> <span class="mi">6</span> <span class="p">:</span> <span class="k">return</span> <span class="n">color_table_rainbow</span><span class="p">(</span><span class="n">ncolors</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hang1</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">hang2</span><span class="o">=-</span><span class="mi">120</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">STOR</span><span class="o">.</span><span class="n">ictab</span> <span class="o">==</span> <span class="mi">7</span> <span class="p">:</span> <span class="k">return</span> <span class="n">color_table_interpolated</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">STOR</span><span class="o">.</span><span class="n">ictab</span> <span class="o">==</span> <span class="mi">8</span> <span class="p">:</span> <span class="k">return</span> <span class="n">color_table_interpolated</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">650</span><span class="p">,</span> <span class="mi">700</span><span class="p">],</span>\
+                                <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="mh">0xffffff</span><span class="p">,</span> <span class="mh">0xffff00</span><span class="p">,</span> <span class="mh">0x00ff00</span><span class="p">,</span> <span class="mh">0xff0000</span><span class="p">,</span> <span class="mh">0xff00ff</span><span class="p">,</span> <span class="mh">0x0000ff</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span> 
+    <span class="k">else</span> <span class="p">:</span>
+        <span class="n">STOR</span><span class="o">.</span><span class="n">ictab</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">color_table_rainbow</span><span class="p">()</span></div>
+        <span class="c1">#return color_table_monochr256()</span>
+        <span class="c1">#return color_table_interpolated()</span>
+
+<span class="c1">#------------------------------</span>
+
+<span class="k">def</span> <span class="nf">get_pixmap</span><span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;H&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">30</span><span class="p">))</span> <span class="p">:</span>
+    <span class="n">ctab</span> <span class="o">=</span> <span class="n">next_color_table</span><span class="p">(</span><span class="n">ict</span><span class="o">=</span><span class="n">ind</span><span class="p">)</span>
+    <span class="n">arr</span>  <span class="o">=</span> <span class="n">array_for_color_bar</span><span class="p">(</span><span class="n">ctab</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="n">orient</span><span class="p">)</span><span class="c1">#, width = 10)</span>
+    <span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">)</span> <span class="o">=</span> <span class="n">arr</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QImage</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QImage</span><span class="o">.</span><span class="n">Format_ARGB32</span><span class="p">)</span>
+    <span class="n">pixmap</span><span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QPixmap</span><span class="o">.</span><span class="n">fromImage</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">scaled</span><span class="p">(</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">Qt</span><span class="o">.</span><span class="n">IgnoreAspectRatio</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">FastTransformation</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">pixmap</span>
+
+<span class="c1">#------------------------------</span>
+
+<div class="viewcode-block" id="array_for_color_bar"><a class="viewcode-back" href="../index.html#ColorTable.array_for_color_bar">[docs]</a><span class="k">def</span> <span class="nf">array_for_color_bar</span><span class="p">(</span><span class="n">ctab</span><span class="o">=</span><span class="n">color_table_monochr256</span><span class="p">(),</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="p">:</span> 
+    <span class="sd">&quot;&quot;&quot;Returns 2-d array made of repeated 1-d array ctab to display as a color bar</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="p">[(</span><span class="n">c</span><span class="p">,</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">ctab</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="k">if</span> <span class="n">orient</span><span class="o">==</span><span class="s1">&#39;V&#39;</span> <span class="k">else</span>\
+          <span class="p">[</span><span class="n">ctab</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">width</span><span class="p">)]</span>
+    <span class="n">npa</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span> <span class="c1">#.T</span>
+    <span class="c1">#print &#39;XXX array for color bar:\n&#39;, npa</span>
+    <span class="c1">#print &#39;XXX shape: &#39;, npa.shape</span>
+    <span class="k">return</span> <span class="n">npa</span></div>
+
+<span class="c1">#------------------------------</span>
+<span class="c1">#------------------------------</span>
+<span class="c1">#------------------------------</span>
+
+<div class="viewcode-block" id="ColorTable"><a class="viewcode-back" href="../index.html#ColorTable.ColorTable">[docs]</a><span class="k">class</span> <span class="nc">ColorTable</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Creates and provide access to color table</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="ColorTable.__init__"><a class="viewcode-back" href="../index.html#ColorTable.ColorTable.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ncolors</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hang1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hang2</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">10000</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">10000</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Makes color table - list of QColors of length ncolors </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">make_ctable_for_hue_range</span><span class="p">(</span><span class="n">ncolors</span><span class="p">,</span> <span class="n">hang1</span><span class="p">,</span> <span class="n">hang2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_value_range</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="ColorTable.make_ctable_for_hue_range"><a class="viewcode-back" href="../index.html#ColorTable.ColorTable.make_ctable_for_hue_range">[docs]</a>    <span class="k">def</span> <span class="nf">make_ctable_for_hue_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ncolors</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">hang1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hang2</span><span class="o">=</span><span class="mi">360</span><span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;Makes color table in the range of hue values</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ncolors</span> <span class="o">=</span> <span class="n">ncolors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hang1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">hang1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hang2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">hang2</span><span class="p">)</span>
+
+        <span class="n">dhang</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hang2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">hang1</span><span class="p">)</span><span class="o">/</span><span class="n">ncolors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ctable</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ic</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncolors</span><span class="p">)</span> <span class="p">:</span>
+            <span class="n">hang</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hang1</span> <span class="o">+</span> <span class="n">dhang</span> <span class="o">*</span> <span class="n">ic</span>
+            <span class="n">hnorm</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">hang</span> <span class="o">%</span> <span class="mi">360</span><span class="p">)</span><span class="o">/</span><span class="mf">360.</span>
+            <span class="c1">#print &#39;hang:%7.2f  rest(hang,360)=%7.2f&#39; % (hang, hang % 360)</span>
+            <span class="n">qc</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QColor</span><span class="p">()</span>
+            <span class="n">qc</span><span class="o">.</span><span class="n">setHsvF</span><span class="p">(</span><span class="n">hnorm</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ctable</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">qc</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ColorTable.int_ctable"><a class="viewcode-back" href="../index.html#ColorTable.ColorTable.int_ctable">[docs]</a>    <span class="k">def</span> <span class="nf">int_ctable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;converts list of QColor to list of integer rgba values</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">rgba</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctable</span><span class="p">]</span></div>
+
+
+    <span class="k">def</span> <span class="nf">np_ctable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">int_ctable</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ColorTable.set_ncolors"><a class="viewcode-back" href="../index.html#ColorTable.ColorTable.set_ncolors">[docs]</a>    <span class="k">def</span> <span class="nf">set_ncolors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ncolors</span><span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;Sets the number of color in table and re-generate color table</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">make_ctable_for_hue_range</span><span class="p">(</span><span class="n">ncolors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hang1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hang2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_value_range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="p">)</span></div>
+
+        
+<div class="viewcode-block" id="ColorTable.set_hue_range"><a class="viewcode-back" href="../index.html#ColorTable.ColorTable.set_hue_range">[docs]</a>    <span class="k">def</span> <span class="nf">set_hue_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hang1</span><span class="p">,</span> <span class="n">hang2</span><span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;Sets the range of hue angles and re-generate color table</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">make_ctable_for_hue_range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncolors</span><span class="p">,</span> <span class="n">hang1</span><span class="p">,</span> <span class="n">hang2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_value_range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="p">)</span></div>
+
+                
+<div class="viewcode-block" id="ColorTable.set_value_range"><a class="viewcode-back" href="../index.html#ColorTable.ColorTable.set_value_range">[docs]</a>    <span class="k">def</span> <span class="nf">set_value_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;Sets the range of values which will be mapped to color table</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">vmin</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">vmax</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vfct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncolors</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ColorTable.color_for_value"><a class="viewcode-back" href="../index.html#ColorTable.ColorTable.color_for_value">[docs]</a>    <span class="k">def</span> <span class="nf">color_for_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;Returns color mapped to the value in the color table</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span>   <span class="n">v</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="p">:</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctable</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="p">:</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctable</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vfct</span><span class="o">*</span><span class="n">v</span><span class="p">]</span>
+        <span class="k">else</span>               <span class="p">:</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ctable</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+
+      
+    <span class="k">def</span> <span class="nf">print_color_table</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>    
+        <span class="k">for</span> <span class="n">ic</span><span class="p">,</span> <span class="n">qc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ctable</span><span class="p">)</span> <span class="p">:</span>
+            <span class="nb">print</span> <span class="s1">&#39;i:</span><span class="si">%4d</span><span class="s1">  R:</span><span class="si">%3d</span><span class="s1">  G:</span><span class="si">%3d</span><span class="s1">  B:</span><span class="si">%3d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ic</span><span class="p">,</span> <span class="n">qc</span><span class="o">.</span><span class="n">red</span><span class="p">(),</span> <span class="n">qc</span><span class="o">.</span><span class="n">green</span><span class="p">(),</span> <span class="n">qc</span><span class="o">.</span><span class="n">blue</span><span class="p">())</span></div>
+
+<span class="c1">#------------------------------</span>
+
+<span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">ColorTable</span><span class="p">()</span>
+    <span class="n">ct</span><span class="o">.</span><span class="n">print_color_table</span><span class="p">()</span>
+    
+<span class="c1">#------------------------------</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">test</span><span class="p">()</span>
+
+<span class="c1">#------------------------------       </span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="../py-modindex.html" title="Python Module Index"
+              >modules</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Mikhail Dubrovin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

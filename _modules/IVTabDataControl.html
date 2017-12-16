@@ -1,0 +1,175 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>IVTabDataControl &#8212; graphqt-doc 1 documentation</title>
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">graphqt-doc 1 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for IVTabDataControl</h1><div class="highlight"><pre>
+<span></span><span class="c1">#------------------------------</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Class :py:class:`IVTabDataControl` - window for data control</span>
+<span class="sd">============================================================</span>
+
+<span class="sd">Usage ::</span>
+
+<span class="sd">    import sys</span>
+<span class="sd">    from PyQt4 import QtGui</span>
+<span class="sd">    from graphqt.IVTabDataControl import IVTabDataControl</span>
+<span class="sd">    app = QtGui.QApplication(sys.argv)</span>
+<span class="sd">    w = IVTabDataControl(cp, log, show_mode=0377, show_mode_evctl=017)</span>
+<span class="sd">    w.w_evt.connect_new_event_number_to(w.test_on_new_event_number_reception)</span>
+<span class="sd">    w.show()</span>
+<span class="sd">    app.exec_()</span>
+
+<span class="sd">See:</span>
+<span class="sd">    - :class:`IVMain`</span>
+<span class="sd">    - :class:`IVMainTabs`</span>
+<span class="sd">    - :class:`IVMainButtons`</span>
+<span class="sd">    - :class:`IVImageCursorInfo`</span>
+<span class="sd">    - :class:`IVConfigParameters`</span>
+<span class="sd">    - :class:`IVTabDataControl`</span>
+<span class="sd">    - :class:`IVTabFileName`</span>
+<span class="sd">    - `graphqt documentation &lt;https://lcls-psana.github.io/graphqt/py-modindex.html&gt;`_.</span>
+
+<span class="sd">Created on 2017-04-12 by Mikhail Dubrovin</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#------------------------------</span>
+
+<span class="kn">from</span> <span class="nn">expmon.QWDataControl</span> <span class="k">import</span> <span class="n">QWDataControl</span>
+
+<span class="c1">#------------------------------</span>
+
+<div class="viewcode-block" id="IVTabDataControl"><a class="viewcode-back" href="../index.html#IVTabDataControl.IVTabDataControl">[docs]</a><span class="k">class</span> <span class="nc">IVTabDataControl</span><span class="p">(</span><span class="n">QWDataControl</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Data control parameters window for tab &quot;Data&quot;</span>
+<span class="sd">        derived from QWDataControl to connect signals with IV-app recipients</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_mode</span><span class="o">=</span><span class="mi">017</span><span class="p">,</span> <span class="n">show_mode_evctl</span><span class="o">=</span><span class="mi">017</span><span class="p">)</span> <span class="p">:</span>
+        <span class="n">QWDataControl</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="n">show_mode</span><span class="o">=</span><span class="n">show_mode</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+
+        <span class="c1">#self.event_control().set_show_mode(show_mode_evctl)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_evt</span><span class="o">.</span><span class="n">set_show_mode</span><span class="p">(</span><span class="n">show_mode_evctl</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cp</span><span class="o">.</span><span class="n">ivmain</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span> <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_evt</span><span class="o">.</span><span class="n">connect_new_event_number_to</span><span class="p">(</span><span class="n">cp</span><span class="o">.</span><span class="n">ivmain</span><span class="o">.</span><span class="n">on_new_event_number</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_evt</span><span class="o">.</span><span class="n">connect_start_button_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w_evt</span><span class="o">.</span><span class="n">on_timeout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">w_evt</span><span class="o">.</span><span class="n">connect_stop_button_to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">w_evt</span><span class="o">.</span><span class="n">on_timer_stop</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">test_on_new_event_number_reception</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span> <span class="p">:</span>
+        <span class="nb">print</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">: num=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span><span class="p">,</span> <span class="n">num</span><span class="p">)</span></div>
+
+<span class="c1">#------------------------------</span>
+<span class="c1">#------------------------------</span>
+<span class="c1">#------------------------------</span>
+<span class="c1">#------------------------------</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span> <span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+    <span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+
+    <span class="kn">from</span> <span class="nn">graphqt.IVConfigParameters</span> <span class="k">import</span> <span class="n">cp</span>
+    <span class="kn">from</span> <span class="nn">graphqt.Logger</span> <span class="k">import</span> <span class="n">log</span>
+
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">IVTabDataControl</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">show_mode</span><span class="o">=</span><span class="mi">0377</span><span class="p">,</span> <span class="n">show_mode_evctl</span><span class="o">=</span><span class="mi">017</span><span class="p">)</span>
+    <span class="c1">#w = IVTabDataControl(cp, log, show_mode=0377, show_mode_evctl=017)</span>
+    <span class="c1">#w.event_control().set_show_mode(show_mode=017)</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QPoint</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">))</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">w_evt</span><span class="o">.</span><span class="n">connect_new_event_number_to</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">test_on_new_event_number_reception</span><span class="p">)</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+<span class="c1">#------------------------------</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="../py-modindex.html" title="Python Module Index"
+              >modules</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Mikhail Dubrovin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>

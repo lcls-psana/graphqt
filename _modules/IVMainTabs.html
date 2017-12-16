@@ -1,0 +1,311 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>IVMainTabs &#8212; graphqt-doc 1 documentation</title>
+    <link rel="stylesheet" href="../_static/agogo.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head>
+  <body>
+    <div class="header-wrapper" role="banner">
+      <div class="header">
+        <div class="headertitle"><a
+          href="../index.html">graphqt-doc 1 documentation</a></div>
+        <div class="rel" role="navigation" aria-label="related navigation">
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a>
+        </div>
+       </div>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content">
+        <div class="document">
+            
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for IVMainTabs</h1><div class="highlight"><pre>
+<span></span>
+<span class="c1">#------------------------------</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Class :py:class:`IVMainTabs` - tabs in IVMain window</span>
+<span class="sd">====================================================</span>
+
+<span class="sd">Usage ::</span>
+
+<span class="sd">    import sys</span>
+<span class="sd">    from PyQt4 import QtGui</span>
+<span class="sd">    from graphqt.IVMainTabs import IVMainTabs</span>
+<span class="sd">    app = QtGui.QApplication(sys.argv)</span>
+<span class="sd">    w = IVMainTabs()</span>
+<span class="sd">    w.show()</span>
+<span class="sd">    app.exec_()</span>
+
+<span class="sd">See:</span>
+<span class="sd">    - :class:`IVMain`</span>
+<span class="sd">    - :class:`IVMainTabs`</span>
+<span class="sd">    - :class:`IVMainButtons`</span>
+<span class="sd">    - :class:`IVImageCursorInfo`</span>
+<span class="sd">    - :class:`IVConfigParameters`</span>
+<span class="sd">    - :class:`IVTabDataControl`</span>
+<span class="sd">    - :class:`IVTabFileName`</span>
+<span class="sd">    - `graphqt documentation &lt;https://lcls-psana.github.io/graphqt/py-modindex.html&gt;`_.</span>
+
+<span class="sd">Created on 2017-02-18 by Mikhail Dubrovin</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1">#------------------------------</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">PyQt4</span> <span class="k">import</span> <span class="n">QtGui</span><span class="p">,</span> <span class="n">QtCore</span>
+
+<span class="kn">from</span> <span class="nn">graphqt.IVConfigParameters</span> <span class="k">import</span> <span class="n">cp</span>
+<span class="kn">from</span> <span class="nn">graphqt.Logger</span>             <span class="k">import</span> <span class="n">log</span>
+<span class="kn">from</span> <span class="nn">graphqt.IVTabDataControl</span>   <span class="k">import</span> <span class="n">IVTabDataControl</span>
+<span class="kn">from</span> <span class="nn">graphqt.IVTabFileName</span>      <span class="k">import</span> <span class="n">IVTabFileName</span>
+
+<span class="c1">#from graphqt.QIcons            import icon</span>
+<span class="c1">#from graphqt.Frame             import Frame</span>
+
+<span class="c1">#------------------------------</span>
+
+<span class="c1">#class IVMainTabs(Frame) :</span>
+<div class="viewcode-block" id="IVMainTabs"><a class="viewcode-back" href="../index.html#IVMainTabs.IVMainTabs">[docs]</a><span class="k">class</span> <span class="nc">IVMainTabs</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QWidget</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;GUI for tabs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">orientation</span> <span class="o">=</span> <span class="s1">&#39;H&#39;</span>
+    <span class="c1">#orientation = &#39;V&#39;</span>
+    <span class="n">tab_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;File&#39;</span><span class="p">,</span> <span class="s1">&#39;Data&#39;</span><span class="p">,</span> <span class="s1">&#39;Mask Editor&#39;</span><span class="p">,</span> <span class="s1">&#39;Peaks&#39;</span><span class="p">,</span> <span class="s1">&#39;Etc.&#39;</span><span class="p">]</span>
+    <span class="n">number_of_tabs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tab_names</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">app</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="p">:</span>
+
+        <span class="c1">#Frame.__init__(self, parent, mlw=1)</span>
+        <span class="n">QtGui</span><span class="o">.</span><span class="n">QWidget</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_tab</span> <span class="o">=</span> <span class="n">cp</span><span class="o">.</span><span class="n">current_tab</span>
+        <span class="n">cp</span><span class="o">.</span><span class="n">guitabs</span> <span class="o">=</span> <span class="bp">self</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gui_win</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hboxW</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">make_tab_bar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gui_selector</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">==</span> <span class="s1">&#39;H&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QVBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> 
+        <span class="k">else</span> <span class="p">:</span>                       <span class="bp">self</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> 
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_bar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">addLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hboxW</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setLayout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">box</span><span class="o">.</span><span class="n">addStretch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">show_tool_tips</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_style</span><span class="p">()</span>
+
+    <span class="c1">#-------------------</span>
+
+    <span class="k">def</span> <span class="nf">show_tool_tips</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_bar</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="s1">&#39;Select tab&#39;</span><span class="p">)</span> 
+
+
+    <span class="k">def</span> <span class="nf">set_style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setMinimumHeight</span><span class="p">(</span><span class="mi">250</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setContentsMargins</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QMargins</span><span class="p">(</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span><span class="o">-</span><span class="mi">9</span><span class="p">))</span>
+        <span class="c1">#self.setContentsMargins(QtCore.QMargins(-5,-5,-5,-5))</span>
+
+        <span class="c1">#self.adjustSize()</span>
+        <span class="c1">#self.        setStyleSheet(cp.styleBkgd)</span>
+        <span class="c1">#self.butSave.setStyleSheet(cp.styleButton)</span>
+        <span class="c1">#self.butFBrowser.setVisible(False)</span>
+        <span class="c1">#self.butExit.setText(&#39;&#39;)</span>
+        <span class="c1">#self.butExit.setFlat(True)</span>
+        <span class="c1">#self.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)</span>
+ 
+
+    <span class="k">def</span> <span class="nf">make_tab_bar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="p">:</span>
+        <span class="c1">#if mode != None : self.tab_bar.close()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_bar</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QTabBar</span><span class="p">()</span>
+        <span class="c1">#self.tab_bar = EMQTabBar(width=100)</span>
+
+        <span class="c1">#len(self.tab_names)</span>
+        <span class="k">for</span> <span class="n">tab_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_names</span> <span class="p">:</span>
+            <span class="n">tab_ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_bar</span><span class="o">.</span><span class="n">addTab</span><span class="p">(</span><span class="n">tab_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tab_bar</span><span class="o">.</span><span class="n">setTabTextColor</span><span class="p">(</span><span class="n">tab_ind</span><span class="p">,</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QColor</span><span class="p">(</span><span class="s1">&#39;blue&#39;</span><span class="p">))</span> <span class="c1">#gray, red, grayblue</span>
+
+        <span class="c1">#self.tab_bar.setTabsClosable(True)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">orientation</span> <span class="o">==</span> <span class="s1">&#39;H&#39;</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tab_bar</span><span class="o">.</span><span class="n">setShape</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QTabBar</span><span class="o">.</span><span class="n">RoundedNorth</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tab_bar</span><span class="o">.</span><span class="n">setShape</span><span class="p">(</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QTabBar</span><span class="o">.</span><span class="n">RoundedWest</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_tab_by_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_tab</span><span class="o">.</span><span class="n">value</span><span class="p">())</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_bar</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">SIGNAL</span><span class="p">(</span><span class="s1">&#39;currentChanged(int)&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_tab_bar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_bar</span><span class="p">,</span> <span class="n">QtCore</span><span class="o">.</span><span class="n">SIGNAL</span><span class="p">(</span><span class="s1">&#39;tabCloseRequested(int)&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_tab_close</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">set_tab_by_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tab_name</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">try</span>    <span class="p">:</span>
+            <span class="n">tab_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">tab_name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">:</span>
+            <span class="n">tab_index</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_tab</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_names</span><span class="p">[</span><span class="n">tab_index</span><span class="p">])</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.make_tab_bar - set tab: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">tab_name</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_bar</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">tab_index</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">gui_selector</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="k">try</span>    <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">gui_win</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span> <span class="p">:</span> <span class="k">pass</span>
+
+        <span class="k">try</span>    <span class="p">:</span> <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">gui_win</span>
+        <span class="k">except</span> <span class="p">:</span> <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gui_win</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">itab</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_names</span><span class="p">))</span> <span class="p">:</span>
+            <span class="n">tab_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_tab</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">tab_name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">tab_names</span><span class="p">[</span><span class="n">itab</span><span class="p">]</span> <span class="p">:</span>
+               <span class="bp">self</span><span class="o">.</span><span class="n">gui_win</span> <span class="o">=</span> <span class="n">IVTabDataControl</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_mode</span><span class="o">=</span><span class="mi">017</span><span class="p">,</span> <span class="n">show_mode_evctl</span><span class="o">=</span><span class="mi">017</span><span class="p">)</span> <span class="k">if</span> <span class="n">tab_name</span><span class="o">==</span><span class="s1">&#39;Data&#39;</span> <span class="k">else</span>\
+                              <span class="n">IVTabFileName</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">show_mode</span><span class="o">=</span><span class="mi">01</span><span class="p">)</span>    <span class="k">if</span> <span class="n">tab_name</span><span class="o">==</span><span class="s1">&#39;File&#39;</span> <span class="k">else</span>\
+                              <span class="n">QtGui</span><span class="o">.</span><span class="n">QTextEdit</span><span class="p">(</span><span class="s1">&#39;Window for </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_names</span><span class="p">[</span><span class="n">itab</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hboxW</span><span class="o">.</span><span class="n">addWidget</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gui_win</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">on_tab_bar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+        <span class="n">tab_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tab_bar</span><span class="o">.</span><span class="n">tabText</span><span class="p">(</span><span class="n">ind</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_tab</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">tab_name</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Selected tab: </span><span class="si">%i</span><span class="s1"> - </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ind</span><span class="p">,</span> <span class="n">tab_name</span><span class="p">)</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gui_selector</span><span class="p">()</span>
+
+
+    <span class="k">def</span> <span class="nf">on_tab_close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ind</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.on_tab_close ind:</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">,</span> <span class="n">ind</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tab_bar</span><span class="o">.</span><span class="n">removeTab</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span>
+
+
+    <span class="c1">#def resizeEvent(self, e):</span>
+        <span class="c1">#pass</span>
+        <span class="c1">#self.frame.setGeometry(self.rect())</span>
+        <span class="c1">#log.debug(&#39;resizeEvent&#39;, self._name) </span>
+        <span class="c1">#print &#39;IVMainTabs resizeEvent: %s&#39; % str(self.size())</span>
+
+
+    <span class="c1">#def moveEvent(self, e):</span>
+        <span class="c1">#log.debug(&#39;moveEvent&#39;, self._name) </span>
+        <span class="c1">#self.position = self.mapToGlobal(self.pos())</span>
+        <span class="c1">#self.position = self.pos()</span>
+        <span class="c1">#log.debug(&#39;moveEvent - pos:&#39; + str(self.position), __name__)       </span>
+        <span class="c1">#pass</span>
+
+
+    <span class="k">def</span> <span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;closeEvent&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="c1">#log.info(&#39;%s.closeEvent&#39; % self._name)</span>
+
+        <span class="k">try</span>    <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">gui_win</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">except</span> <span class="p">:</span> <span class="k">pass</span>
+
+        <span class="c1">#try    : del self.gui_win</span>
+        <span class="c1">#except : pass</span>
+
+        <span class="n">QtGui</span><span class="o">.</span><span class="n">QWidget</span><span class="o">.</span><span class="n">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">cp</span><span class="o">.</span><span class="n">guitabs</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+    <span class="k">def</span> <span class="nf">on_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;on_exit&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<span class="c1">#------------------------------</span>
+<span class="c1">#------------------------------</span>
+<span class="c1">#------------------------------</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span> <span class="p">:</span>
+    <span class="n">app</span> <span class="o">=</span> <span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">IVMainTabs</span><span class="p">()</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">QtCore</span><span class="o">.</span><span class="n">QPoint</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">))</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+<span class="c1">#------------------------------</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+        </div>
+        <div class="sidebar">
+          <h3>Table Of Contents</h3>
+          
+          <div role="search">
+            <h3 style="margin-top: 1.5em;">Search</h3>
+            <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+            </form>
+          </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+    <div class="footer-wrapper">
+      <div class="footer">
+        <div class="left">
+          <div role="navigation" aria-label="related navigaton">
+            <a href="../py-modindex.html" title="Python Module Index"
+              >modules</a> |
+            <a href="../genindex.html" title="General Index"
+              >index</a>
+          </div>
+          <div role="note" aria-label="source link">
+          </div>
+        </div>
+
+        <div class="right">
+          
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Mikhail Dubrovin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.
+    </div>
+        </div>
+        <div class="clearer"></div>
+      </div>
+    </div>
+
+  </body>
+</html>
