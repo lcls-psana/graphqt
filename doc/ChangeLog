@@ -11,6 +11,18 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+Tag: V01-00-19
+2017-12-15 Mikhail S. Dubrovin
+- tune iv, some progress on FW, update doc
+	new file:   ../examples/test-QGraphicsView.py
+	new file:   FWRuler.py
+	new file:   FWViewAxis.py
+	modified:   FWViewColorBar.py
+	modified:   GUView.py
+	modified:   GUViewHist.py
+	modified:   IVMain.py
+        modified:   ../doc/web/index.rst
+
 Tag: V01-00-18
 2017-12-11 Mikhail S. Dubrovin
 - add FWViewColorBar, refactoring other modules

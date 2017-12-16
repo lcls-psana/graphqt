@@ -55,6 +55,21 @@ graphqt documentation
    :show-inheritance:
    :special-members:
 
+.. automodule:: FWViewColorBar
+   :members:
+   :show-inheritance:
+   :special-members:
+
+.. automodule:: FWViewRuler
+   :members:
+   :show-inheritance:
+   :special-members:
+
+.. automodule:: FWViewAxis
+   :members:
+   :show-inheritance:
+   :special-members:
+
 .. automodule:: GUQGraphicsRectItem
    :members:
    :show-inheritance:

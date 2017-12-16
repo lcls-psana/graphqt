@@ -13,7 +13,7 @@ Usage ::
     import graphqt.ColorTable as ct
 
     ctab = ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20)
-    w = FWViewColorBar(None, coltab=ctab, orient='H', length=200, width=50, keys_on=True)
+    w = FWViewColorBar(None, coltab=ctab, orient='H', wlength=200, wwidth=50, keys_on=True)
 
     # Main methods
     #-------------
@@ -54,14 +54,14 @@ class FWViewColorBar(FWViewImage) :
     
     def __init__(self, parent=None,\
                  coltab=ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20),\
-                 orient='H', length=200, width=50, keys_on=True) :
+                 orient='H', wlength=200, wwidth=50, keys_on=True) :
         self.orient = orient
         #print 'XXX FWViewColorBar.orient: %s' % self.orient
         arrct = ct.array_for_color_bar(coltab, orient)
         self._ctab_ind = None
         self._ctab = coltab
-        self.length = length
-        self.width = width
+        self.wlength = wlength
+        self.wwidth  = wwidth
         self.keys_on = keys_on
         FWViewImage.__init__(self, parent, arrct, coltab=None, origin='UL', scale_ctl='')
         self._name  = self.__class__.__name__
@@ -73,11 +73,11 @@ class FWViewColorBar(FWViewImage) :
         """
         FWViewImage.set_style(self)
         if self.orient=='H' :
-            self.setMinimumSize(self.length, 2)
-            self.setFixedHeight(self.width)
+            self.setMinimumSize(self.wlength, 2)
+            self.setFixedHeight(self.wwidth)
         else :
-            self.setMinimumSize(2, self.length)
-            self.setFixedWidth(self.width)
+            self.setMinimumSize(2, self.wlength)
+            self.setFixedWidth(self.wwidth)
 
         #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
 

@@ -445,7 +445,7 @@ class GUViewHist(GUViewAxes) :
 
     def _add_path_to_scene(self, path, pen=QtGui.QPen(Qt.yellow), brush=QtGui.QBrush()) :
         self.lst_items.append(self.scene().addPath(path, pen, brush))
-        self.update_my_scene()
+        #self.update_my_scene() # ?????
 
 #------------------------------
 
@@ -473,7 +473,7 @@ class GUViewHist(GUViewAxes) :
         self.set_limits_horizontal(amin=binl[0], amax=binr[-1])
 
         self.set_limits()
-        self.update_my_scene()
+        #self.update_my_scene() # ?????
         self.check_axes_limits_changed()
 
         self.emit(QtCore.SIGNAL('histogram_updated()'))
@@ -508,11 +508,9 @@ class GUViewHist(GUViewAxes) :
         self.set_limits_vertical(None, vmax)
         self.raxes = QtCore.QRectF(self.amin, vmin, self.amax-self.amin, vmax-vmin) 
 
-        #rax = QtCore.QRectF(self.amin, vmin, self.amax-self.amin, vmax-vmin) 
-        #self.set_rect_axes(rax, set_def=True) # GUView
-
-        #self.check_limits()
+        #print 'XXX A'
         self.add_hist(values, (amin,amax), pen, brush, vtype)
+        #print 'XXX B'
         self.reset_original_hist()
 
 

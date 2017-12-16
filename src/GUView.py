@@ -168,6 +168,7 @@ class GUView(QtGui.QGraphicsView) :
     def set_rect_scene(self, rs) :
         self.scene().setSceneRect(rs)
         self.fitInView(rs, Qt.IgnoreAspectRatio)
+        #print 'XXX GUView.set_rect_scene after fitInView'
         self.update_my_scene()
 
 
@@ -290,6 +291,7 @@ class GUView(QtGui.QGraphicsView) :
         #print_rect(rs, cmt='XXX rect scene')
         self.scene().setSceneRect(rs)
         self.fitInView(rs, Qt.IgnoreAspectRatio) # Qt.IgnoreAspectRatio Qt.KeepAspectRatioByExpanding Qt.KeepAspectRatio
+        #print 'XXX GUView.set_view after fitInView'
 
 
     def check_axes_limits_changed(self):
@@ -325,6 +327,7 @@ class GUView(QtGui.QGraphicsView) :
         rs = QtCore.QRectF(x1, y1, x2-x1, y2-y1)
         sc.setSceneRect(rs)
         self.fitInView(rs, Qt.IgnoreAspectRatio)
+        #print 'XXX GUView.check_limits after fitInView'
 
 
     def update_my_scene(self) :
@@ -712,6 +715,7 @@ class GUView(QtGui.QGraphicsView) :
         rs = self.scene().sceneRect()    
         #print 'Rect of the scene =', rs
         self.fitInView(rs, Qt.IgnoreAspectRatio)
+        #print 'XXX GUView.resizeEvent after fitInView'
 
 
     #def paintEvent(e):

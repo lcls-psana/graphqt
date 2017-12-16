@@ -62,6 +62,10 @@ class IVMain(QtGui.QWidget) :
         QtGui.QWidget.__init__(self, parent=None)
         #self._name = self.__class__.__name__
 
+
+        self.nssd = 0
+
+
         cp.ivmain = self
         self.improd = None
 
@@ -262,6 +266,7 @@ class IVMain(QtGui.QWidget) :
 
     def set_spectral_data(self, arr, hcolor = Qt.green, set_hlims=True):
         log.debug('%s.set_spectral_data, set_hlims=%s' % (self._name,set_hlims))
+        #self.nssd+=1; print 'XXX %2d %s.set_spectral_data, set_hlims=%s' % (self.nssd, self._name, set_hlims)
         self.wspe.hist.remove_all_graphs()
         self.wspe.hist.add_array_as_hist(arr, pen=QtGui.QPen(hcolor, 0),\
                                          brush=QtGui.QBrush(hcolor), set_hlims=set_hlims)
