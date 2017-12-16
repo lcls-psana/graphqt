@@ -60,12 +60,12 @@ graphqt documentation
    :show-inheritance:
    :special-members:
 
-.. automodule:: FWViewRuler
+.. automodule:: FWViewAxis
    :members:
    :show-inheritance:
    :special-members:
 
-.. automodule:: FWViewAxis
+.. automodule:: FWRuler
    :members:
    :show-inheritance:
    :special-members:
