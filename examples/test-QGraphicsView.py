@@ -22,10 +22,17 @@ class MyQGraphicsView(QGraphicsView) :
        QGraphicsView.__init__(self, parent)
 
    def mousePressEvent(self, e):
-       pw = e.pos()
+       self.p0 = pw = e.pos()
+       self.r0 = self.sceneRect() #.center()
        ps = self.mapToScene(pw)
        print 'XXX: MyQGraphicsView.mousPressEvent in win: %4d %4d on scene: %.1f %.1f'%\
               (pw.x(), pw.y(), ps.x(), ps.y())
+
+   def mouseMoveEvent(self, e):
+       dp = self.mapToScene(e.pos() - self.p0)
+       r = QtCore.QRectF(self.r0)
+       r.moveCenter(r.center() - dp)
+       self.setSceneRect(r)
 
    def moveEvent(self, e):
        print 'XXX: MyQGraphicsView.moveEvent topLeft:', self.geometry().topLeft()
