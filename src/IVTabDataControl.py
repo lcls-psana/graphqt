@@ -37,7 +37,7 @@ class IVTabDataControl(QWDataControl) :
     """ Data control parameters window for tab "Data"
         derived from QWDataControl to connect signals with IV-app recipients
     """
-    def __init__(self, cp, log, parent=None, show_mode=017, show_mode_evctl=017) :
+    def __init__(self, cp, log, parent=None, show_mode=0o17, show_mode_evctl=0o17) :
         QWDataControl.__init__(self, cp, log, parent=None, orient='V', show_mode=show_mode)
         self._name = self.__class__.__name__
 
@@ -66,7 +66,7 @@ if __name__ == "__main__" :
     from graphqt.Logger import log
 
     app = QtGui.QApplication(sys.argv)
-    w = IVTabDataControl(cp, log, show_mode=0377, show_mode_evctl=017)
+    w = IVTabDataControl(cp, log, show_mode=0o377, show_mode_evctl=0o17)
     #w = IVTabDataControl(cp, log, show_mode=0377, show_mode_evctl=017)
     #w.event_control().set_show_mode(show_mode=017)
     w.move(QtCore.QPoint(50,50))

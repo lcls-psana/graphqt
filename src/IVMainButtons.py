@@ -103,7 +103,7 @@ class IVMainButtons(QtGui.QWidget) :
 
 if __name__ == "__main__" :
     import sys
-    log.setPrintBits(0377) 
+    log.setPrintBits(0o377) 
     app = QtGui.QApplication(sys.argv)
     w  = IVMainButtons(parent=None)
     w.setContentsMargins(-9,-9,-9,-9)

@@ -47,7 +47,7 @@ from graphqt.Frame              import Frame
 class IVTabFileName(Frame) :
     """ File name input GUI
     """
-    def __init__(self, parent=None, show_mode=01) :
+    def __init__(self, parent=None, show_mode=0o1) :
         Frame.__init__(self, parent, mlw=1)
         #QtGui.QWidget.__init__(self, parent=None)
         self._name = self.__class__.__name__
@@ -157,7 +157,7 @@ class IVTabFileName(Frame) :
 
 if __name__ == "__main__" :
     app = QtGui.QApplication(sys.argv)
-    w = IVTabFileName(show_mode=03)
+    w = IVTabFileName(show_mode=0o3)
     w.move(QtCore.QPoint(50,50))
     w.setWindowTitle(w._name)
     w.w_fname.connect_path_is_changed_to_recipient(w.test_signal_reception)
