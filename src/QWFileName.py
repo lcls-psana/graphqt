@@ -4,6 +4,7 @@
 
 @author Mikhail S. Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 
 import os
@@ -110,7 +111,7 @@ class QWFileName(Frame) : # QtGui.QWidget
 #------------------------------
  
     def test_signal_reception(self, s) :
-        print '%s.%s: str=%s' % (self._name, sys._getframe().f_code.co_name, s)
+        print('%s.%s: str=%s' % (self._name, sys._getframe().f_code.co_name, s))
 
 #------------------------------
 

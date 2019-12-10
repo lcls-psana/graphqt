@@ -95,6 +95,7 @@ See:
 
 Created on 2017-01-03 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 
 from PyQt4 import QtGui, QtCore
@@ -441,19 +442,19 @@ class FWView(QtGui.QGraphicsView) :
             self.close()
 
         elif e.key() == Qt.Key_R : 
-            print 'Reset original size'
+            print('Reset original size')
             self.reset_original_size()
 
         elif e.key() in (Qt.Key_W, Qt.Key_D)  : 
             change_def = e.key()==Qt.Key_D
-            print '%s: change scene rect %s' % (self._name, 'set new default' if change_def else '')
+            print('%s: change scene rect %s' % (self._name, 'set new default' if change_def else ''))
             v = ag.random_standard((4,), mu=0, sigma=20, dtype=np.int)
             rs = QtCore.QRectF(v[0], v[1], v[2]+100, v[3]+100)
-            print 'Set scene rect: %s' % str(rs)
+            print('Set scene rect: %s' % str(rs))
             self.set_rect_scene(rs, set_def=change_def)
 
         else :
-            print self.key_usage()
+            print(self.key_usage())
 
 #-----------------------------
 
@@ -492,7 +493,7 @@ class FWView(QtGui.QGraphicsView) :
         self.disconnect(self, QtCore.SIGNAL('mouse_press_event(QMouseEvent)'), recip)
 
     def test_mouse_press_event_reception(self, e) :
-        print 'FWViewImage.mouse_press_event, QMouseEvent point: x=%d y=%d' % (e.x(), e.y())
+        print('FWViewImage.mouse_press_event, QMouseEvent point: x=%d y=%d' % (e.x(), e.y()))
 
 #-----------------------------
 
@@ -513,7 +514,7 @@ class FWView(QtGui.QGraphicsView) :
 #-----------------------------
 
 def test_fwview(tname) :
-    print '%s:' % sys._getframe().f_code.co_name
+    print('%s:' % sys._getframe().f_code.co_name)
     b="background-color:yellow; border: 0px solid green"
     app = QtGui.QApplication(sys.argv)
     w = None
@@ -527,7 +528,7 @@ def test_fwview(tname) :
     elif tname == '7': w=FWView(None, rscene=QtCore.QRectF(0, 0, 100, 100), origin='DL', show_mode=1, scale_ctl='HV')
     elif tname == '8': w=FWView(None, rscene=QtCore.QRectF(0, 0, 100, 100), origin='DL', show_mode=3, scale_ctl='HV', bkgd=b)
     else :
-        print 'test %s is not implemented' % tname
+        print('test %s is not implemented' % tname)
         return
 
     w.connect_mouse_move_event_to(w.test_mouse_move_event_reception)
@@ -545,7 +546,7 @@ if __name__ == "__main__" :
     import pyimgalgos.NDArrGenerators as ag; global ag
 
     tname = sys.argv[1] if len(sys.argv) > 1 else '0'
-    print 50*'_', '\nTest %s' % tname
+    print(50*'_', '\nTest %s' % tname)
     test_fwview(tname)
     sys.exit('End of Test %s' % tname)
 

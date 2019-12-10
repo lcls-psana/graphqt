@@ -25,6 +25,7 @@ Usage ::
 
 Created on June 12, 2016 by Mikhail Dubrovin
 """
+from __future__ import print_function
 
 #import os
 #import math
@@ -130,7 +131,7 @@ class GURuler() :
             #print 'p1,p2, dt1, dtxt, vort', self.p1, self.p2, self.dt1, self.dtxt, self.vort
 
         else :
-            print 'ERROR: non-defined axis orientation'
+            print('ERROR: non-defined axis orientation')
 
 
     def add(self) :
@@ -203,7 +204,7 @@ if __name__ == "__main__" :
     import sys
 
     app = QtGui.QApplication(sys.argv)
-    print 'screenGeometry():', app.desktop().screenGeometry()
+    print('screenGeometry():', app.desktop().screenGeometry())
 
     rv = QtCore.QRectF(-0.3, -0.3, 1.6, 1.6)
     rs = QtCore.QRectF(0, 0, 1, 1)
@@ -211,7 +212,7 @@ if __name__ == "__main__" :
 
     s = QtGui.QGraphicsScene(rs)
     #s.setSceneRect(r)
-    print 'scene rect=', s.sceneRect()
+    print('scene rect=', s.sceneRect())
 
     v = QtGui.QGraphicsView(s)
     v.setGeometry(20, 20, 600, 400)

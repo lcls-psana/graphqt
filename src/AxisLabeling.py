@@ -3,6 +3,7 @@ Created on Dec 5, 2015 from http://www.justintalbot.com/research/axis-labeling/
 
 @author: Talbot, Lin, Hanrahan
 '''
+from __future__ import print_function
 import math
 import numpy as np
 
@@ -179,9 +180,9 @@ def test():
                      (0.1, 0.2, 2.5))
 
     for i,(vmin, vmax, size) in enumerate(list_of_tests) :
-      print '\nTest# %d:  vmin, vmax, size ='%i, vmin, vmax, size, 
+      print('\nTest# %d:  vmin, vmax, size ='%i, vmin, vmax, size, end=' ') 
       locs = best_label_locs(vmin, vmax, size, density=1, steps=None)
-      print '   best locs:', locs
+      print('   best locs:', locs)
 
 #-----------------------------
 if __name__ == '__main__':

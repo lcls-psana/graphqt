@@ -23,6 +23,7 @@ Usage ::
 
 Created on December 12, 2017 by Mikhail Dubrovin
 """
+from __future__ import print_function
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt, QPointF
@@ -103,7 +104,7 @@ class FWRuler() :
             #print 'p1,p2, dt1, dtxt, vort', self.p1, self.p2, self.dt1, self.dtxt, self.vort
 
         else :
-            print 'ERROR: non-defined axis orientation "%s". Use L, R, U, or D.' % str(self.orient)
+            print('ERROR: non-defined axis orientation "%s". Use L, R, U, or D.' % str(self.orient))
 
 
     def add(self) :
@@ -181,8 +182,8 @@ if __name__ == "__main__" :
     w = QtGui.QGraphicsView(s)
     w.setGeometry(20, 20, 600, 600)
 
-    print 'screenGeometry():', app.desktop().screenGeometry()
-    print 'scene rect=', s.sceneRect()
+    print('screenGeometry():', app.desktop().screenGeometry())
+    print('scene rect=', s.sceneRect())
 
     w.fitInView(rs, Qt.KeepAspectRatio) # Qt.IgnoreAspectRatio Qt.KeepAspectRatioByExpanding Qt.KeepAspectRatio
 

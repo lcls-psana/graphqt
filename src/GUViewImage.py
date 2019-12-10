@@ -75,6 +75,7 @@ Usage ::
 
 Created on September 9, 2016 by Mikhail Dubrovin
 """
+from __future__ import print_function
 
 #import os
 #import math
@@ -217,7 +218,7 @@ class GUViewImage(GUViewAxes) :
         self.disconnect(self, QtCore.SIGNAL('pixmap_is_updated()'), recip)
 
     def test_pixmap_is_updated_reception(self) :
-        print 'GUView.test_pixmap_is_updated_reception'
+        print('GUView.test_pixmap_is_updated_reception')
 
 #------------------------------
 
@@ -300,28 +301,28 @@ class GUViewImage(GUViewAxes) :
             self.close()
 
         elif e.key() == Qt.Key_R : 
-            print '%s: Reset original size' % self._name
+            print('%s: Reset original size' % self._name)
             self.reset_original_image_size() # see GUViewAxes
 
         elif e.key() == Qt.Key_N : 
-            print '%s: Set new pixel map of the same shape' % self._name
+            print('%s: Set new pixel map of the same shape' % self._name)
             s = self.pmi.pixmap().size()
             #self.set_pixmap_random((s.width(), s.height()))
             img = image_with_random_peaks((s.height(), s.width()))
             self.set_pixmap_from_arr(img)
 
         elif e.key() == Qt.Key_S : 
-            print '%s: Set new pixel map of different shape' % self._name
+            print('%s: Set new pixel map of different shape' % self._name)
             #s = self.pmi.pixmap().size()
             #self.set_pixmap_random((s.width(), s.height()))
             sh_new = ag.random_standard((2,), mu=1000, sigma=200, dtype=np.int)
             #sh_new = [(int(v) if v>100 else 100) for v in s_newh] 
-            print '%s: Set image with new shape %s' % (self._name, str(sh_new))
+            print('%s: Set image with new shape %s' % (self._name, str(sh_new)))
             img = image_with_random_peaks(sh_new)
             self.set_pixmap_from_arr(img)
 
         elif e.key() == Qt.Key_C : 
-            print 'Reset color table'
+            print('Reset color table')
             ctab = ct.next_color_table()
             self.set_color_table(coltab=ctab)
             self.set_pixmap_from_arr()
@@ -331,27 +332,27 @@ class GUViewImage(GUViewAxes) :
             arr = self.arr
             mean, std = arr.mean(), arr.std()
             amin, amax = mean-nsigma[0]*std, mean+nsigma[1]*std # None, None
-            print '%s: Set intensity min=%.1f max=%.1f' % (self._name, amin, amax)
+            print('%s: Set intensity min=%.1f max=%.1f' % (self._name, amin, amax))
             #------------------------------------
             self.set_intensity_limits(amin, amax)
             self.set_pixmap_from_arr()
  
         elif e.key() == Qt.Key_W : 
-            print '%s: change axes rect, do not change default)' % self._name
+            print('%s: change axes rect, do not change default)' % self._name)
             v = ag.random_standard((4,), mu=0, sigma=200, dtype=np.int)
             rax = QtCore.QRectF(v[0], v[1], v[2]+1000, v[3]+1000)
-            print 'Set new axes rect: %s' % str(rax)
+            print('Set new axes rect: %s' % str(rax))
             self.set_rect_axes(rax, set_def=False) # def in GUView
 
         elif e.key() == Qt.Key_D : 
-            print '%s: change default axes rect, set new default' % self._name
+            print('%s: change default axes rect, set new default' % self._name)
             v = ag.random_standard((4,), mu=0, sigma=200, dtype=np.int)
             rax = QtCore.QRectF(v[0], v[1], v[2]+1000, v[3]+1000)
-            print 'Set new default axes rect: %s' % str(rax)
+            print('Set new default axes rect: %s' % str(rax))
             self.set_rect_axes(rax) # def in GUView
 
         else :
-            print self.key_usage()
+            print(self.key_usage())
 
 #------------------------------
 
@@ -364,7 +365,7 @@ def image_with_random_peaks(shape=(500, 500)) :
 #-----------------------------
 
 def test_guiviewimage(tname) :
-    print '%s:' % sys._getframe().f_code.co_name
+    print('%s:' % sys._getframe().f_code.co_name)
     #import numpy as np
     #arr = np.random.random((1000, 1000))
     arr = image_with_random_peaks((1000, 1000))
@@ -387,7 +388,7 @@ def test_guiviewimage(tname) :
                         margl=0.12, margr=0.02, margt=0.02, margb=0.06)
 
     else :
-        print 'test %s is not implemented' % tname
+        print('test %s is not implemented' % tname)
         return
 
     w.connect_axes_limits_changed_to(w.test_axes_limits_changed_reception)
@@ -408,7 +409,7 @@ if __name__ == "__main__" :
     import sys; global sys
     import numpy as np; global np
     tname = sys.argv[1] if len(sys.argv) > 1 else '0'
-    print 50*'_', '\nTest %s' % tname
+    print(50*'_', '\nTest %s' % tname)
     test_guiviewimage(tname)
     sys.exit('End of Test %s' % tname)
 

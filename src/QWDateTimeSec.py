@@ -4,6 +4,7 @@ Created on June 14, 2017
 
 @author: Mikhail Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 
 #import os
@@ -163,7 +164,7 @@ class QWDateTimeSec(Frame) : # QtGui.QWidget
 
 
     def print_tsec_tstamp(self, tsec):
-        print 't(sec): %d  is  %s' % (tsec, str_tstamp('%Y-%m-%d %H:%M:%S', tsec))
+        print('t(sec): %d  is  %s' % (tsec, str_tstamp('%Y-%m-%d %H:%M:%S', tsec)))
 
 
     def set_tsec(self) :
@@ -241,31 +242,31 @@ def test_select_time(tname, fmt='%Y-%m-%d %H:%M:%S') :
     #print 'lst:', lst 
 
     ts = str_tstamp(fmt, time_sec=None)
-    print 'current time %s' % ts
+    print('current time %s' % ts)
     year_now = int(str_tstamp(fmt='%Y', time_sec=None))
     years = [str(y) for y in range(2008, year_now+2)]
-    print 'years: %s' % years
+    print('years: %s' % years)
 
     year = int(popup_select_item_from_list(None, years))
-    print 'Selected year: %d' % year
+    print('Selected year: %d' % year)
 
     months = sorted(['%02d'%m for m in range(1,13)])
     month = int(popup_select_item_from_list(None, months))
-    print 'Selected month: %d' % month
+    print('Selected month: %d' % month)
 
     days_in_feb = 29 if year%4 else 28
     days_in_month = [0, 31, days_in_feb, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     days = ['%02d'%d for d in range(1,days_in_month[month]+1)]
     day = int(popup_select_item_from_list(None, days))
-    print 'Selected day: %d' % day
+    print('Selected day: %d' % day)
 
     hours = sorted(['%02d'%h for h in range(0,25)])
     hour = int(popup_select_item_from_list(None, hours))
-    print 'Selected hour: %d' % hour
+    print('Selected hour: %d' % hour)
 
     minutes = sorted(['%02d'%m for m in range(0,60)])
     minute = int(popup_select_item_from_list(None, minutes))
-    print 'Selected minute: %d' % minute
+    print('Selected minute: %d' % minute)
 
     second=0
 
@@ -273,8 +274,8 @@ def test_select_time(tname, fmt='%Y-%m-%d %H:%M:%S') :
     struct = strptime(s_tstamp, fmt)
     tsec   = mktime(struct)
 
-    print 'Input date/time  : %s  time(sec) %d' % (s_tstamp, tsec)
-    print 'Reco ts from sec : %s' % str_tstamp(fmt, time_sec=tsec)
+    print('Input date/time  : %s  time(sec) %d' % (s_tstamp, tsec))
+    print('Reco ts from sec : %s' % str_tstamp(fmt, time_sec=tsec))
 
     #exp_name = popup_select_item_from_list(None, lst)
     #print 'exp_name = %s' % exp_name 
@@ -284,7 +285,7 @@ def test_select_time(tname, fmt='%Y-%m-%d %H:%M:%S') :
 if __name__ == "__main__" :
     import sys; global sys
     tname = sys.argv[1] if len(sys.argv) > 1 else '1'
-    print 50*'_', '\nTest %s' % tname
+    print(50*'_', '\nTest %s' % tname)
 
     app = QtGui.QApplication(sys.argv)
 

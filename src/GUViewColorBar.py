@@ -17,6 +17,7 @@ Usage ::
 
 Created on September 9, 2016 by Mikhail Dubrovin
 """
+from __future__ import print_function
 
 #-----------------------------
 
@@ -50,7 +51,7 @@ class GUViewColorBar(GUViewImage) :
 #-----------------------------
 
 def test_guiviewcolorbar(tname) :
-    print '%s:' % sys._getframe().f_code.co_name
+    print('%s:' % sys._getframe().f_code.co_name)
     #import numpy as np
     #arr = np.random.random((1000, 1000))
     #arr = image_with_random_peaks((1000, 1000))
@@ -63,7 +64,7 @@ def test_guiviewcolorbar(tname) :
         w = GUViewColorBar(None, coltab=ctab, rulers='R', margl=0, margr=0.5, margt=0.03, margb=0.03)
         
     else :
-        print 'test %s is not implemented' % tname
+        print('test %s is not implemented' % tname)
         return
     w.show()
     app.exec_()
@@ -74,7 +75,7 @@ if __name__ == "__main__" :
     import sys; global sys
     #import numpy as np; global np
     tname = sys.argv[1] if len(sys.argv) > 1 else '0'
-    print 50*'_', '\nTest %s' % tname
+    print(50*'_', '\nTest %s' % tname)
     test_guiviewcolorbar(tname)
     sys.exit('End of Test %s' % tname)
 

@@ -22,6 +22,7 @@ Usage::
 
     print_dic(d)
 """
+from __future__ import print_function
 #------------------------------
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt
@@ -101,7 +102,7 @@ class QWCheckList(QtGui.QListView):
 
 
     def on_clicked_test(self, item):
-        print "Clicked on item row:'%d' col:%d" % (item.row(), item.column())
+        print("Clicked on item row:'%d' col:%d" % (item.row(), item.column()))
 
 
     def on_item_changed(self, item):
@@ -114,7 +115,7 @@ class QWCheckList(QtGui.QListView):
     def on_item_changed_test(self, item):
         state = ['UNCHECKED', 'TRISTATE', 'CHECKED'][item.checkState()]
         item_txt = str(item.text())
-        print "Item with text '%s', is at state %s" % (item_txt, state)
+        print("Item with text '%s', is at state %s" % (item_txt, state))
         print_dic(self.dic_item_state)
 
         if item_txt == 'Opal1' :
@@ -129,7 +130,7 @@ class QWCheckList(QtGui.QListView):
 
 def print_dic(d, fmt='%s : %s') :
     for k,v in d.iteritems() : 
-        print fmt % (k.ljust(32),str(v).ljust(32))
+        print(fmt % (k.ljust(32),str(v).ljust(32)))
 
 #-----------------------------
 

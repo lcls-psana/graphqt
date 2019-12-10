@@ -76,6 +76,7 @@ Usage ::
 
 Created on September 9, 2016 by Mikhail Dubrovin
 """
+from __future__ import print_function
 
 #import os
 #import math
@@ -301,9 +302,9 @@ class GUViewHist(GUViewAxes) :
         self.disconnect(self, QtCore.SIGNAL('statistics_updated(float,float,float,float,float,float,float,float,float)'), recip)
 
     def test_statistics_std_reception(self, mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w) :
-        print 'GUViewHist.test_statistics_std_reception: ',\
+        print('GUViewHist.test_statistics_std_reception: ',\
               'mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w\n',\
-               mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w
+               mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w)
 
 #------------------------------
 
@@ -321,7 +322,7 @@ class GUViewHist(GUViewAxes) :
         self.disconnect(self, QtCore.SIGNAL('mean_std_updated(float,float)'), recip)
 
     def test_hist_mean_std_updated_reception(self, mean, rms) :
-        print 'GUViewHist.test_hist_mean_std_updated_reception mean: %.2f  rms: %.2f' % (mean, rms)
+        print('GUViewHist.test_hist_mean_std_updated_reception mean: %.2f  rms: %.2f' % (mean, rms))
 
 #------------------------------
 
@@ -415,13 +416,13 @@ class GUViewHist(GUViewAxes) :
 
         elif e.key() == Qt.Key_N :
             from graphqt.FWViewImage import image_with_random_peaks
-            print '%s: Test set new histogram' % self._name
+            print('%s: Test set new histogram' % self._name)
             arr = image_with_random_peaks((50, 50))
             self.remove_all_graphs()
             hcolor = Qt.green # Qt.yellow Qt.blue Qt.yellow 
             self.add_array_as_hist(arr, pen=QtGui.QPen(hcolor, 0), brush=QtGui.QBrush(hcolor))
         else :
-            print self.key_usage()
+            print(self.key_usage())
 
     
     def reset_original_hist(self) :
@@ -487,7 +488,7 @@ class GUViewHist(GUViewAxes) :
         self.connect(self, QtCore.SIGNAL('histogram_updated()'), recip)
 
     def test_histogram_updated_reception(self) :
-        print 'GUViewHist.test_histogram_updated_reception'
+        print('GUViewHist.test_histogram_updated_reception')
 
 #------------------------------
 

@@ -5,6 +5,7 @@ Module :py:class:`GUDragFactory` contains factory methods for draggable objects
 
 Created on 2016-10-09 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #-----------------------------
 
 #import os
@@ -59,11 +60,11 @@ def add_item(type, obj, parent=None, scene=None,\
     elif type == POLY  : return None # GUDragPoly(view, points)
     elif type == WEDG  : return None # GUDragWedge(view, points)
     else : 
-        print 'WARNING: Type %s is unknown' % type
+        print('WARNING: Type %s is unknown' % type)
         return None
 
 #-----------------------------
 if __name__ == "__main__" :
-    print 'Self test is not implemented...'
-    print 'use > python GUViewImageWithShapes.py'
+    print('Self test is not implemented...')
+    print('use > python GUViewImageWithShapes.py')
 #-----------------------------

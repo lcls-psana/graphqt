@@ -5,6 +5,7 @@ Class :py:class:`GUDragRect` - for draggable shape item
 
 Created on 2016-10-10 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #-----------------------------
 
 #import os
@@ -40,7 +41,7 @@ class GUDragRect(QGraphicsRectItem, GUDragBase) :
         elif isinstance(obj, QtCore.QRectF) :
             rect = obj
 
-        else : print 'GUDragRect - wrong init object type:', str(obj)
+        else : print('GUDragRect - wrong init object type:', str(obj))
         parent_for_base = None
         QGraphicsRectItem.__init__(self, rect, parent_for_base, scene)
         if self._mode == ADD :
@@ -228,6 +229,6 @@ class GUDragRect(QGraphicsRectItem, GUDragBase) :
 
 #-----------------------------
 if __name__ == "__main__" :
-    print 'Self test is not implemented...'
-    print 'use > python GUViewImageWithShapes.py'
+    print('Self test is not implemented...')
+    print('use > python GUViewImageWithShapes.py')
 #-----------------------------

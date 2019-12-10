@@ -10,6 +10,7 @@ Usage ::
 
 Created on 2016-09-09 by Mikhail Dubrovin
 """
+from __future__ import print_function
 
 #import os
 #import math
@@ -112,17 +113,17 @@ class GUViewGraph(GUViewAxes) :
             self.close()
 
         elif e.key() == Qt.Key_R : 
-            print 'Reset original size'
+            print('Reset original size')
             self.set_view()
             self.update_my_scene()
 
         elif e.key() == Qt.Key_N : 
-            print 'Set new pixel map'
+            print('Set new pixel map')
             s = self.pmi.pixmap().size()
             self.set_pixmap_random((s.width(), s.height()))
 
         else :
-            print self.key_usage()
+            print(self.key_usage())
 
     def _add_path_to_scene(self, path, pen=QtGui.QPen(Qt.yellow), brush=QtGui.QBrush()) :
         item = self.scene().addPath(path, pen, brush)

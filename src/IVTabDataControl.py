@@ -26,6 +26,7 @@ See:
 
 Created on 2017-04-12 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 
 from expmon.QWDataControl import QWDataControl
@@ -50,7 +51,7 @@ class IVTabDataControl(QWDataControl) :
 
 
     def test_on_new_event_number_reception(self, num) :
-        print '%s.%s: num=%s' % (self._name, sys._getframe().f_code.co_name, num)
+        print('%s.%s: num=%s' % (self._name, sys._getframe().f_code.co_name, num))
 
 #------------------------------
 #------------------------------

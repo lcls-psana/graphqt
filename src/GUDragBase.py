@@ -5,6 +5,7 @@ Class :py:class:`GUDragBase` is a base class for draggable objects
 
 Created on 2016-09-14 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #-----------------------------
 
 #import os
@@ -34,7 +35,7 @@ dic_mode_name_to_type = dict(zip(mode_names, mode_types))
 def print_warning(o, metframe) :
     wng = 'WARNING: %s.%16s - abstract interface method needs to be re-implemented in derived class.' \
           % (o.__class__.__name__, metframe.f_code.co_name)
-    print wng
+    print(wng)
     #raise NotImplementedError(wng)
 
 #-----------------------------
@@ -119,7 +120,7 @@ class GUDragBase(object) :
             self.setPen(self._pen_pos)
 
         else :
-            print 'GUDragBase: this point features are not implemented for item "%s"' % txt
+            print('GUDragBase: this point features are not implemented for item "%s"' % txt)
 
 #-----------------------------
 # Abstract interface methods
@@ -134,6 +135,6 @@ class GUDragBase(object) :
 
 #-----------------------------
 if __name__ == "__main__" :
-    print 'Self test is not implemented...'
-    print 'use > python GUViewImageWithShapes.py'
+    print('Self test is not implemented...')
+    print('use > python GUViewImageWithShapes.py')
 #-----------------------------

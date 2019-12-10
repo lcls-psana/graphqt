@@ -16,6 +16,7 @@ Usage::
 
 Created on 2016-10-21 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 
 #import os
@@ -38,8 +39,8 @@ import math
 def print_rect(r, cmt='') :
     x, y, w, h = r.x(), r.y(), r.width(), r.height()
     L, R, T, B = r.left(), r.right(), r.top(), r.bottom()
-    print '%s x=%8.2f  y=%8.2f  w=%8.2f  h=%8.2f' % (cmt, x, y, w, h)
-    print '%s L=%8.2f  B=%8.2f  R=%8.2f  T=%8.2f' % (len(cmt)*' ', L, B, R, T)
+    print('%s x=%8.2f  y=%8.2f  w=%8.2f  h=%8.2f' % (cmt, x, y, w, h))
+    print('%s L=%8.2f  B=%8.2f  R=%8.2f  T=%8.2f' % (len(cmt)*' ', L, B, R, T))
 
 #------------------------------
 
@@ -152,14 +153,14 @@ def test_select_item_from_popup_menu():
     app = QtGui.QApplication(sys.argv)    
     lst = ('apple', 'orange', 'pear', 'peache', 'plum') 
     item = select_item_from_popup_menu(lst)
-    print '%s is selected' % item
+    print('%s is selected' % item)
 
 #------------------------------
 
 def test_select_color():
     app = QtGui.QApplication(sys.argv)    
     color = select_color()
-    print 'Selected color:', color
+    print('Selected color:', color)
 
 #------------------------------
 
@@ -168,7 +169,7 @@ if __name__ == "__main__" :
     if len(sys.argv)<2 :
         test_select_item_from_popup_menu()
         sys.exit('Use command:\n> %s <test-id-string>' % sys.argv[0].split('/')[-1])
-    print 'Test: %s' % sys.argv[1]
+    print('Test: %s' % sys.argv[1])
     if   sys.argv[1]=='1' : test_select_item_from_popup_menu()
     elif sys.argv[1]=='2' : test_select_color()
     elif sys.argv[1]=='3' : test01()

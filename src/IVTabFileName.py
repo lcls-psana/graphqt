@@ -28,6 +28,7 @@ See:
 
 Created on 2017-02-18 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 import sys
 import os
@@ -108,7 +109,7 @@ class IVTabFileName(Frame) :
 
     def on_but_fname(self, fname):
         w = self.w_fname
-        print '%s.%s: fname=%s' % (self._name, sys._getframe().f_code.co_name, fname)
+        print('%s.%s: fname=%s' % (self._name, sys._getframe().f_code.co_name, fname))
         if not os.path.exists(fname) :
             log.warning('DOES NOT EXIST: %s'%(fname), self._name)
             w.edi.setStyleSheet(style.styleButtonBad)
@@ -147,7 +148,7 @@ class IVTabFileName(Frame) :
 
 
     def test_signal_reception(self, s) :
-        print '%s.%s: str=%s' % (self._name, sys._getframe().f_code.co_name, s)
+        print('%s.%s: str=%s' % (self._name, sys._getframe().f_code.co_name, s))
 
 #------------------------------
 #------------------------------

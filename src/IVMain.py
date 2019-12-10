@@ -25,6 +25,7 @@ See:
 
 Created on February 1, 2017 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #import os
 #import math
 
@@ -227,9 +228,9 @@ class IVMain(QtGui.QWidget) :
 
     def print_pars(self) :
         """Prints input parameters"""
-        print 'In print_pars:' 
+        print('In print_pars:') 
         for k,v in self.opts.items() :
-            print '%s %s %s' % (k.ljust(10), str(v).ljust(16), str(self.defs[k]).ljust(16))
+            print('%s %s %s' % (k.ljust(10), str(v).ljust(16), str(self.defs[k]).ljust(16)))
 
 #------------------------------
 
@@ -362,7 +363,7 @@ class IVMain(QtGui.QWidget) :
     def on_image_file_is_changed(self, fname):
         '''Responce on signal from IVFileName
         '''
-        print 'YYY: IVMain.on_image_file_is_changed %s'%fname
+        print('YYY: IVMain.on_image_file_is_changed %s'%fname)
         self.arr = self.get_image_array()
         #h,w = self.arr.shape
         #print 'ZZZ:shape', self.arr.shape

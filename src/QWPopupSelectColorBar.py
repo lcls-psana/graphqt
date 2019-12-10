@@ -7,6 +7,7 @@
 #------------------------------------------------------------------------
 
 """Popup GUI for (str) item selection from the list of items"""
+from __future__ import print_function
 
 #------------------------------
 
@@ -207,7 +208,7 @@ def test_select_color_table(tname) :
     #print 'lst:', lst 
     app = QtGui.QApplication(sys.argv)
     ctab_ind = popup_select_color_table(None)
-    print 'Selected color table index = %s' % ctab_ind 
+    print('Selected color table index = %s' % ctab_ind) 
 
 #------------------------------
  
@@ -215,7 +216,7 @@ def test_select_color_table(tname) :
 if __name__ == "__main__" :
     import sys; global sys
     tname = sys.argv[1] if len(sys.argv) > 1 else '0'
-    print 50*'_', '\nTest %s' % tname
+    print(50*'_', '\nTest %s' % tname)
     if   tname == '0': test_select_color_table(tname)
     #elif tname == '1': test_select_icon(tname)
     else : sys.exit('Test %s is not implemented' % tname)

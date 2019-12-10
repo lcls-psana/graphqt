@@ -73,6 +73,7 @@ Usage ::
 
 Created on September 9, 2016 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 
 from PyQt4 import QtGui, QtCore
@@ -511,7 +512,7 @@ class GUView(QtGui.QGraphicsView) :
         self.disconnect(self, QtCore.SIGNAL('axes_limits_changed(float,float,float,float)'), recip)
 
     def test_axes_limits_changed_reception(self, x1, x2, y1, y2) :
-        print 'GUView.test_axes_limits_changed_reception x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f' % (x1, x2, y1, y2)
+        print('GUView.test_axes_limits_changed_reception x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f' % (x1, x2, y1, y2))
 
 #------------------------------
 
@@ -668,7 +669,7 @@ class GUView(QtGui.QGraphicsView) :
         self.disconnect(self, QtCore.SIGNAL('wheel_is_stopped()'), recip)
 
     def test_wheel_is_stopped_reception(self) :
-        print 'GUView.test_wheel_is_stopped_reception'
+        print('GUView.test_wheel_is_stopped_reception')
 
 #------------------------------
 
@@ -700,7 +701,7 @@ class GUView(QtGui.QGraphicsView) :
 
 
     def test_view_is_closed_reception(self) :
-        print '%s.test_view_is_closed_reception' % self._name
+        print('%s.test_view_is_closed_reception' % self._name)
 
 
     #def moveEvent(self, e) :
@@ -734,30 +735,30 @@ class GUView(QtGui.QGraphicsView) :
             self.close()
 
         elif e.key() == Qt.Key_R : 
-            print '%s: Reset original size' % self._name
+            print('%s: Reset original size' % self._name)
             self.reset_original_size()
 
         elif e.key() == Qt.Key_W : 
-            print '%s: set rect of axes, do not change default' % self._name
+            print('%s: set rect of axes, do not change default' % self._name)
             v = ag.random_standard((4,), mu=0, sigma=20, dtype=np.int)
             rax = QtCore.QRectF(v[0], v[1], v[2]+100, v[3]+100)
-            print 'Set axes rect: %s' % str(rax)
+            print('Set axes rect: %s' % str(rax))
             self.set_rect_axes(rax, set_def=False)
 
         elif e.key() == Qt.Key_D : 
-            print '%s: change default axes rect, set new default' % self._name
+            print('%s: change default axes rect, set new default' % self._name)
             v = ag.random_standard((4,), mu=0, sigma=20, dtype=np.int)
             rax = QtCore.QRectF(v[0], v[1], v[2]+100, v[3]+100)
-            print 'Set new default axes rect: %s' % str(rax)
+            print('Set new default axes rect: %s' % str(rax))
             self.set_rect_axes(rax) # def in GUView
 
         else :
-            print self.key_usage()
+            print(self.key_usage())
 
 #-----------------------------
 
 def test_guiview(tname) :
-    print '%s:' % sys._getframe().f_code.co_name
+    print('%s:' % sys._getframe().f_code.co_name)
     app = QtGui.QApplication(sys.argv)
     w = None
     rectax=QtCore.QRectF(0, 0, 100, 100)
@@ -770,7 +771,7 @@ def test_guiview(tname) :
     elif tname == '6': w=GUView(None, rectax, origin='DR', scale_ctl='HV', show_mode=3)
     elif tname == '7': w=GUView(None, rectax, origin='UR', scale_ctl='HV', show_mode=3)
     else :
-        print 'test %s is not implemented' % tname
+        print('test %s is not implemented' % tname)
         return
 
     w.setGeometry(20, 20, 600, 600)
@@ -787,7 +788,7 @@ if __name__ == "__main__" :
     import sys; global sys
     import numpy as np; global np
     tname = sys.argv[1] if len(sys.argv) > 1 else '0'
-    print 50*'_', '\nTest %s' % tname
+    print(50*'_', '\nTest %s' % tname)
     test_guiview(tname)
     sys.exit('End of Test %s' % tname)
 

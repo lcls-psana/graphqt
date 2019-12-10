@@ -7,6 +7,7 @@
 #------------------------------------------------------------------------
 
 """Popup GUI for (str) item selection from the list of items"""
+from __future__ import print_function
 
 #------------------------------
 
@@ -144,17 +145,17 @@ def popup_select_item_from_list(parent, lst) :
  
 def test_select_exp(tname) :
     lst = sorted(os.listdir('/reg/d/psdm/CXI/'))
-    print 'lst:', lst 
+    print('lst:', lst) 
     app = QtGui.QApplication(sys.argv)
     exp_name = popup_select_item_from_list(None, lst)
-    print 'exp_name = %s' % exp_name 
+    print('exp_name = %s' % exp_name) 
 
 #------------------------------
 
 if __name__ == "__main__" :
     import sys; global sys
     tname = sys.argv[1] if len(sys.argv) > 1 else '0'
-    print 50*'_', '\nTest %s' % tname
+    print(50*'_', '\nTest %s' % tname)
     if   tname == '0': test_select_exp(tname)
     #elif tname == '1': test_select_icon(tname)
     else : sys.exit('Test %s is not implemented' % tname)

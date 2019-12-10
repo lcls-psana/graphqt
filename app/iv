@@ -1,5 +1,6 @@
 #!@PYTHON@
 #------------------------------
+from __future__ import print_function
 import os
 import sys
 from optparse import OptionParser
@@ -43,21 +44,21 @@ class IMAGE_VIEWER :
 #------------------------------
 
     def print_raw(self) :
-        print 'Command:', ' '.join(sys.argv)
-        print '  opts: ', self.opts
-        print '  defs: ', self.defs
-        print '  args: ', self.args
+        print('Command:', ' '.join(sys.argv))
+        print('  opts: ', self.opts)
+        print('  defs: ', self.defs)
+        print('  args: ', self.args)
 
 #------------------------------
 
     def print_pars(self) :
         """Prints input parameters"""
-        print 'Command:', ' '.join(sys.argv)+\
+        print('Command:', ' '.join(sys.argv)+\
               '\nStart %s' % self.__init__.__doc__+\
               '\nwith argument %s and optional parameters:\n' % str(self.args)+\
-              '<key>      <value>          <default>'
+              '<key>      <value>          <default>')
         for k,v in self.opts.items() :
-            print '%s %s %s' % (k.ljust(10), str(v).ljust(16), str(self.defs[k]).ljust(16))
+            print('%s %s %s' % (k.ljust(10), str(v).ljust(16), str(self.defs[k]).ljust(16)))
 
 #------------------------------
 

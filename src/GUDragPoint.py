@@ -5,6 +5,7 @@ Class :py:class:`GUDragPoint` - for draggable shape item
 
 Created on 2016-10-11 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #-----------------------------
 
 #import os
@@ -195,6 +196,6 @@ class GUDragPoint(QGraphicsPathItem, GUDragBase) :
 
 #-----------------------------
 if __name__ == "__main__" :
-    print 'Self test is not implemented...'
-    print 'use > python GUViewImageWithShapes.py'
+    print('Self test is not implemented...')
+    print('use > python GUViewImageWithShapes.py')
 #-----------------------------

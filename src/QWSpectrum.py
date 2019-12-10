@@ -63,6 +63,7 @@ See:
  
 Created on 2017-02-06 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 
 import os
@@ -168,7 +169,7 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
         fname = 'fig-spectrum.png'
         fname = str(QtGui.QFileDialog.getSaveFileName(self, 'Output file', fname, filter=fltr))
         if fname == '' : return
-        print 'QWSpectrum.on_but_save: save image in file: %s' % fname
+        print('QWSpectrum.on_but_save: save image in file: %s' % fname)
         #p = QtGui.QPixmap.grabWindow(self.winId())
         p = QtGui.QPixmap.grabWidget(self, self.rect())
         p.save(fname, 'jpg')
@@ -289,7 +290,7 @@ class QWSpectrum(QtGui.QWidget) : # QtGui.QWidget, Frame
 #------------------------------
 
 def test_guspectrum(tname) :
-    print '%s:' % sys._getframe().f_code.co_name
+    print('%s:' % sys._getframe().f_code.co_name)
 
     arr = image_with_random_peaks((50, 50))
     app = QtGui.QApplication(sys.argv)
@@ -313,7 +314,7 @@ if __name__ == "__main__" :
     import sys; global sys
     import numpy as np; global np
     tname = sys.argv[1] if len(sys.argv) > 1 else '0'
-    print 50*'_', '\nTest %s' % tname
+    print(50*'_', '\nTest %s' % tname)
     test_guspectrum(tname)
     sys.exit('End of Test %s' % tname)
 

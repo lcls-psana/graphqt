@@ -36,6 +36,7 @@ Usage ::
 
 Created on December 14, 2016 by Mikhail Dubrovin
 """
+from __future__ import print_function
 
 from graphqt.GUView  import GUView, QtGui, QtCore, Qt
 from graphqt.GURuler import GURuler
@@ -133,7 +134,7 @@ class GUViewAxes(GUView) :
 #-----------------------------
 
 def test_guiview(tname) :
-    print '%s:' % sys._getframe().f_code.co_name
+    print('%s:' % sys._getframe().f_code.co_name)
     app = QtGui.QApplication(sys.argv)
     w = None
     rectax=QtCore.QRectF(0, 0, 100, 100)
@@ -146,7 +147,7 @@ def test_guiview(tname) :
     elif tname == '6': w=GUViewAxes(None, rectax, origin='DR', rulers='TRLB', margl=0.12, margr=0.12, margt=0.06, margb=0.06)
     elif tname == '7': w=GUViewAxes(None, rectax, origin='UR', rulers='TRLB', margl=0.12, margr=0.12, margt=0.06, margb=0.06)
     else :
-        print 'test %s is not implemented' % tname
+        print('test %s is not implemented' % tname)
         return
 
     w.connect_axes_limits_changed_to(w.test_axes_limits_changed_reception)
@@ -160,7 +161,7 @@ if __name__ == "__main__" :
     import sys; global sys
     import numpy as np; global np
     tname = sys.argv[1] if len(sys.argv) > 1 else '0'
-    print 50*'_', '\nTest %s' % tname
+    print(50*'_', '\nTest %s' % tname)
     test_guiview(tname)
     sys.exit('End of Test %s' % tname)
 

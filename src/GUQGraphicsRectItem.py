@@ -5,6 +5,7 @@ Class :py:class:`GUQGraphicsRectItem` is derived from QGraphicsRectItem to inter
 
 Created on June 12, 2016 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #import os
 #import math
 from PyQt4 import QtGui#, QtCore
@@ -56,7 +57,7 @@ class GUQGraphicsRectItem(QGraphicsRectItem) :
 
 
     def mouseMoveEvent(self, e) :
-        print 'GUQGraphicsRectItem: mouseMoveEvent'
+        print('GUQGraphicsRectItem: mouseMoveEvent')
         QGraphicsRectItem.mouseMoveEvent(self, e)
 
 

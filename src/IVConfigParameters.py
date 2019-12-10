@@ -29,6 +29,7 @@ See:
 
 Created on 2016-11-22 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 
 # import os
@@ -48,7 +49,7 @@ class IVConfigParameters(PSConfigParameters) :
         """
         #log.setPrintBits(0377)
         #log.debug('In c-tor', self._name)
-        print 'In %s c-tor' % self._name
+        print('In %s c-tor' % self._name)
 
         PSConfigParameters.__init__(self)
 

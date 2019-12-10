@@ -42,6 +42,7 @@ See:
 
 Created on November 9, 2017 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 
 import graphqt.ColorTable as ct
@@ -128,7 +129,7 @@ class FWViewColorBar(FWViewImage) :
         self.disconnect(self, QtCore.SIGNAL('new_color_table_index_is_selected(int)'), recip)
 
     def test_new_color_table_index_is_selected_reception(self, ind) :
-        print '  FWViewColorBar.test_new_color_table_index_is_selected_reception: %s' % str(self._ctab_ind)
+        print('  FWViewColorBar.test_new_color_table_index_is_selected_reception: %s' % str(self._ctab_ind))
 
 #------------------------------
 
@@ -139,7 +140,7 @@ class FWViewColorBar(FWViewImage) :
         self.disconnect(self, QtCore.SIGNAL('new_color_table()'), recip)
 
     def test_new_color_table_reception(self) :
-        print '  FWViewColorBar.test_new_color_table_reception: %s' % str(self._ctab[:5])
+        print('  FWViewColorBar.test_new_color_table_reception: %s' % str(self._ctab[:5]))
 
 #------------------------------
 
@@ -168,20 +169,20 @@ class FWViewColorBar(FWViewImage) :
             self.close()
 
         elif e.key() == Qt.Key_R : 
-            print 'Reset original size'
+            print('Reset original size')
             self.set_colorbar_table_ind(ctab_ind=0)
 
         elif e.key() == Qt.Key_N : 
-            print 'Set next color table'
+            print('Set next color table')
             self.set_colorbar_table_ind(ctab_ind=None)
 
         else :
-            print self.key_usage()
+            print(self.key_usage())
   
 #------------------------------
 
 def test_wfviewcolorbar(tname) :
-    print '%s:' % sys._getframe().f_code.co_name
+    print('%s:' % sys._getframe().f_code.co_name)
     import numpy as np
     arr = np.random.random((1000, 100))
     #arr = image_with_random_peaks((1000, 1000))
@@ -194,7 +195,7 @@ def test_wfviewcolorbar(tname) :
     if   tname == '0': w = FWViewColorBar(None, coltab=ctab, orient='H')
     elif tname == '1': w = FWViewColorBar(None, coltab=ctab, orient='V')
     else :
-        print 'test %s is not implemented' % tname
+        print('test %s is not implemented' % tname)
         return
 
     w.setWindowTitle(w._name)
@@ -212,7 +213,7 @@ if __name__ == "__main__" :
     import sys; global sys
     #import numpy as np; global np
     tname = sys.argv[1] if len(sys.argv) > 1 else '0'
-    print 50*'_', '\nTest %s' % tname
+    print(50*'_', '\nTest %s' % tname)
     test_wfviewcolorbar(tname)
     sys.exit('End of Test %s' % tname)
 

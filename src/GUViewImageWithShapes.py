@@ -15,6 +15,7 @@ Usage ::
 
 Created on 2016-10-10 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 
 #import os
@@ -63,7 +64,7 @@ class GUViewImageWithShapes(GUViewImage) :
         if self.add_request is not None :
             self.set_scale_control('')
 
-            print 'process request to add %s' % dic_drag_type_to_name[self.add_request]
+            print('process request to add %s' % dic_drag_type_to_name[self.add_request])
             parent = None if self.add_request == POINT else self
             item = add_item(self.add_request, sp, parent, scene=self.scene())
             item.setZValue(100 if self.add_request == POINT else 30)
@@ -143,15 +144,15 @@ class GUViewImageWithShapes(GUViewImage) :
         elif e.key() in d.keys() :
             type = d[e.key()]
             self.add_request = type # e.g. RECT
-            print 'click-drag-release mouse button on image to add %s' % dic_drag_type_to_name[type]
+            print('click-drag-release mouse button on image to add %s' % dic_drag_type_to_name[type])
             self.setShapesEnabled(False)
 
         elif e.key() == Qt.Key_D : 
-            print 'delete selected item'
+            print('delete selected item')
             self.delete_item(self.selected_item())
 
         elif e.key() == Qt.Key_S : 
-            print 'switch interactive session between scene and shapes'
+            print('switch interactive session between scene and shapes')
             
             if self.scale_control() :
                 self.set_scale_control(scale_ctl='')
@@ -160,7 +161,7 @@ class GUViewImageWithShapes(GUViewImage) :
                 self.set_scale_control(scale_ctl='HV')
                 self.setShapesEnabled(False)
         else :
-            print self.key_usage()
+            print(self.key_usage())
 
 #------------------------------
 

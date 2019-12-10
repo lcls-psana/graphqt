@@ -24,6 +24,7 @@ See:
 
 Created on Dec 6, 2015 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 
 from PyQt4 import QtGui #, QtCore
@@ -51,8 +52,8 @@ def print_colors(arr) :
       for v in row :
         qc = QtGui.QColor(v & 0xFFFFFF) # rgb part only
         #print v, qc.red(), qc.green(), qc.blue() 
-        print '%4d' % qc.red(),
-      print ''
+        print('%4d' % qc.red(), end=' ')
+      print('')
 
 
 def apply_color_table(arr, ctable=None, amin=None, amax=None) :
@@ -277,7 +278,7 @@ class ColorTable():
       
     def print_color_table(self):    
         for ic, qc in enumerate(self.ctable) :
-            print 'i:%4d  R:%3d  G:%3d  B:%3d' % (ic, qc.red(), qc.green(), qc.blue())
+            print('i:%4d  R:%3d  G:%3d  B:%3d' % (ic, qc.red(), qc.green(), qc.blue()))
 
 #------------------------------
 

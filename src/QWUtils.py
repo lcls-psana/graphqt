@@ -4,6 +4,7 @@
 
 @author Mikhail S. Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 
 #import os
@@ -72,29 +73,29 @@ def test_all(tname) :
     if tname == '0':
         instrs = ['SXR', 'AMO', 'XPP', 'CXI', 'MEC']
         resp = selectFromListInPopupMenu(instrs) 
-        print 'Selected:', resp
+        print('Selected:', resp)
 
     elif tname == '1':
         list_of_cbox = [['VAR1', True], ['VAR2', False], ['VAR3', False], ['VAR4', False], ['VAR5', False]]
         resp = changeCheckBoxListInPopupMenu(list_of_cbox, win_title='Select vars(s)')
-        for (var,stat) in list_of_cbox : print var, stat
-        print 'resp:', resp
+        for (var,stat) in list_of_cbox : print(var, stat)
+        print('resp:', resp)
         
     elif tname == '2': 
         dict_of_pars = {'checked':'radio1', 'list':['radio0', 'radio1', 'radio2']}
         resp = selectRadioButtonInPopupMenu(dict_of_pars, win_title='Select vars(s)', do_confirm=True)
-        for (k,v) in dict_of_pars.iteritems() : print k, v
-        print 'resp:', resp
+        for (k,v) in dict_of_pars.iteritems() : print(k, v)
+        print('resp:', resp)
 
     else :
-        print 'Sorry, not-implemented test "%s"' % tname
+        print('Sorry, not-implemented test "%s"' % tname)
 
 #------------------------------
 
 if __name__ == "__main__" :
     import sys; global sys
     tname = sys.argv[1] if len(sys.argv) > 1 else '0'
-    print 50*'_', '\nTest %s' % tname
+    print(50*'_', '\nTest %s' % tname)
     test_all(tname)
     sys.exit('End of test %s' % tname)
 

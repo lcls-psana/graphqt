@@ -57,6 +57,7 @@ See:
 
 Created on September 9, 2016 by Mikhail Dubrovin
 """
+from __future__ import print_function
 #------------------------------
 
 from math import floor
@@ -123,31 +124,31 @@ class FWViewImage(FWView) :
     def keyPressEvent(self, e) :
         #print 'keyPressEvent, key=', e.key()         
         if   e.key() == Qt.Key_Escape :
-            print 'Close app'
+            print('Close app')
             self.close()
 
         elif e.key() == Qt.Key_R : 
-            print 'Reset original size'
+            print('Reset original size')
             self.reset_original_size()
 
         elif e.key() == Qt.Key_N : 
-            print 'Set new pixel map'
+            print('Set new pixel map')
             s = self.pmi.pixmap().size()
             img = image_with_random_peaks((s.height(), s.width()))
             self.set_pixmap_from_arr(img, set_def=False)
 
         elif e.key() in (Qt.Key_W, Qt.Key_D)  : 
             change_def = e.key()==Qt.Key_D
-            print '%s: change scene rect %s' % (self._name, 'set new default' if change_def else '')
+            print('%s: change scene rect %s' % (self._name, 'set new default' if change_def else ''))
             v = ag.random_standard((4,), mu=0, sigma=200, dtype=np.int)
             rs = QtCore.QRectF(v[0], v[1], v[2]+1000, v[3]+1000)
-            print 'Set scene rect: %s' % str(rs)
+            print('Set scene rect: %s' % str(rs))
             #self.set_rect_scene(rs, set_def=change_def)
             img = image_with_random_peaks((rs.height(), rs.width()))
             self.set_pixmap_from_arr(img, set_def=change_def)
 
         else :
-            print self.key_usage()
+            print(self.key_usage())
 
 #------------------------------
 
@@ -213,7 +214,7 @@ def image_with_random_peaks(shape=(500, 500)) :
 #------------------------------
 
 def test_wfviewimage(tname) :
-    print '%s:' % sys._getframe().f_code.co_name
+    print('%s:' % sys._getframe().f_code.co_name)
     #import numpy as np
     #arr = np.random.random((1000, 1000))
     arr = image_with_random_peaks((1000, 1000))
@@ -247,7 +248,7 @@ def test_wfviewimage(tname) :
         a = np.arange(15).reshape((5, 3))
         w = FWViewImage(None, a, coltab=ctab, origin='UL', scale_ctl='HV')
     else :
-        print 'test %s is not implemented' % tname
+        print('test %s is not implemented' % tname)
         return
 
     w.connect_mouse_press_event_to(w.test_mouse_press_event_reception)
@@ -264,7 +265,7 @@ if __name__ == "__main__" :
     import numpy as np; global np
     import pyimgalgos.NDArrGenerators as ag; global ag
     tname = sys.argv[1] if len(sys.argv) > 1 else '0'
-    print 50*'_', '\nTest %s' % tname
+    print(50*'_', '\nTest %s' % tname)
     test_wfviewimage(tname)
     sys.exit('End of Test %s' % tname)
 

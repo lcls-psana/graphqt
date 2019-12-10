@@ -18,6 +18,7 @@ Usage ::
 
 Created on September 9, 2016 by Mikhail Dubrovin
 """
+from __future__ import print_function
 
 #import os
 from math import floor
@@ -366,7 +367,7 @@ class GUViewAxesDL(QtGui.QGraphicsView) :
             self.close()
 
         elif e.key() == Qt.Key_R : 
-            print 'Reset original size'
+            print('Reset original size')
             self.set_view()
             self.update_my_scene()
 
@@ -393,7 +394,7 @@ class GUViewAxesDL(QtGui.QGraphicsView) :
 #-----------------------------
 
 def test_guiview(tname) :
-    print '%s:' % sys._getframe().f_code.co_name
+    print('%s:' % sys._getframe().f_code.co_name)
     app = QtGui.QApplication(sys.argv)
     w = None
     if tname == '0': w=GUViewAxesDL(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=3)
@@ -403,7 +404,7 @@ def test_guiview(tname) :
     if tname == '4': w=GUViewAxesDL(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=True,  scale_ctl=3)
     if tname == '5': w=GUViewAxesDL(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=3, rulers='L')
     if tname == '6': w=GUViewAxesDL(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=3, rulers='B')
-    else : print 'test %s is not implemented' % tname
+    else : print('test %s is not implemented' % tname)
     w.show()
     app.exec_()
 
@@ -413,7 +414,7 @@ if __name__ == "__main__" :
     import sys; global sys
     import numpy as np; global np
     tname = sys.argv[1] if len(sys.argv) > 1 else '0'
-    print 50*'_', '\nTest %s' % tname
+    print(50*'_', '\nTest %s' % tname)
     test_guiview(tname)
     sys.exit('End of Test %s' % tname)
 
