@@ -12,7 +12,7 @@ from graphqt.IVConfigParameters import cp
 from expmon.PSQThreadWorker import PSQThreadWorker
 #------------------------------
 
-class IMAGE_VIEWER :
+class IMAGE_VIEWER(object) :
     def __init__(self) :
         """Image Viever (iv)"""
 

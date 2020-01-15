@@ -19,6 +19,7 @@ Usage ::
 Created on September 9, 2016 by Mikhail Dubrovin
 """
 from __future__ import print_function
+from __future__ import division
 
 #import os
 from math import floor

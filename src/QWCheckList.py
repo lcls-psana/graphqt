@@ -91,7 +91,7 @@ class QWCheckList(QtGui.QListView):
             self.model().itemChanged.disconnect(self.on_item_changed)
             #del self.model()
         model = QtGui.QStandardItemModel()
-        for k,v in self.dic_item_state.iteritems() :
+        for k,v in self.dic_item_state.items() :
             item = QtGui.QStandardItem('%s' % k)
             item.setCheckState(Qt.Checked if v else Qt.Unchecked)
             item.setCheckable(True)
@@ -129,7 +129,7 @@ class QWCheckList(QtGui.QListView):
 #-----------------------------
 
 def print_dic(d, fmt='%s : %s') :
-    for k,v in d.iteritems() : 
+    for k,v in d.items() : 
         print(fmt % (k.ljust(32),str(v).ljust(32)))
 
 #-----------------------------

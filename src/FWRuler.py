@@ -30,7 +30,7 @@ from PyQt4.QtCore import Qt, QPointF
 
 from graphqt.AxisLabeling import best_label_locs
 
-class FWRuler() :
+class FWRuler(object) :
     def __init__(self, scene, orient='U', **kwargs) :
 
         self.scene  = scene

@@ -84,7 +84,7 @@ def test_all(tname) :
     elif tname == '2': 
         dict_of_pars = {'checked':'radio1', 'list':['radio0', 'radio1', 'radio2']}
         resp = selectRadioButtonInPopupMenu(dict_of_pars, win_title='Select vars(s)', do_confirm=True)
-        for (k,v) in dict_of_pars.iteritems() : print(k, v)
+        for (k,v) in dict_of_pars.items() : print(k, v)
         print('resp:', resp)
 
     else :

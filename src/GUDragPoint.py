@@ -6,6 +6,7 @@ Class :py:class:`GUDragPoint` - for draggable shape item
 Created on 2016-10-11 by Mikhail Dubrovin
 """
 from __future__ import print_function
+from __future__ import division
 #-----------------------------
 
 #import os

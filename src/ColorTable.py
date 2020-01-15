@@ -25,6 +25,7 @@ See:
 Created on Dec 6, 2015 by Mikhail Dubrovin
 """
 from __future__ import print_function
+from __future__ import division
 #------------------------------
 
 from PyQt4 import QtGui #, QtCore
@@ -34,7 +35,7 @@ from math import floor
 
 #------------------------------
 
-class Storage :
+class Storage(object) :
     """Store for shared parameters."""
     def __init__(self) :
         self.ictab = 0
@@ -86,7 +87,7 @@ def color_table_monochr256(inverted=False) :
     ''' Returns numpy array with monochrome table of 256 colors
     '''
     ncolors=256
-    inds = range(ncolors-1,-1,-1) if inverted else range(ncolors)
+    inds = list(range(ncolors-1,-1,-1)) if inverted else list(range(ncolors))
     return np.array([c + c*0x100 + c*0x10000 + 0xff000000 for c in inds], dtype=np.uint32)  
 
 
@@ -208,7 +209,7 @@ def array_for_color_bar(ctab=color_table_monochr256(), orient='V', width=2) :
 #------------------------------
 #------------------------------
 
-class ColorTable():
+class ColorTable(object):
     '''Creates and provide access to color table
     '''
     def __init__(self, ncolors=1000, hang1=0, hang2=360, vmin=-10000, vmax=10000):

@@ -36,7 +36,7 @@ from PyQt4.QtCore import Qt, QPointF
 #from pyapps.graphqt.AxisLabeling import best_label_locs
 from AxisLabeling import best_label_locs
 
-class GURuler() :
+class GURuler(object) :
     
     HD=0; HU=1; VL=2; VR=3
     orient_inds  = (HD, HU, VL, VR)

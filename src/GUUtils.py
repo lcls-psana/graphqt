@@ -17,6 +17,7 @@ Usage::
 Created on 2016-10-21 by Mikhail Dubrovin
 """
 from __future__ import print_function
+from __future__ import division
 #------------------------------
 
 #import os

@@ -4,6 +4,7 @@ Created on Dec 5, 2015 from http://www.justintalbot.com/research/axis-labeling/
 @author: Talbot, Lin, Hanrahan
 '''
 from __future__ import print_function
+from __future__ import division
 import math
 import numpy as np
 
@@ -29,7 +30,7 @@ import numpy as np
 #    manually set your view extent to include the min and max ticks if they are outside
 #    the data range. This should produce the same results as the paper. 
 
-class Extended():
+class Extended(object):
 #class Extended(tckr.Locator):
 
     # density is labels per inch
