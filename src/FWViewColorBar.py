@@ -46,6 +46,7 @@ from __future__ import print_function
 #------------------------------
 
 import graphqt.ColorTable as ct
+from PyQt5 import QtCore, QtGui, QtWidgets
 from graphqt.FWViewImage import *
 from graphqt.QWPopupSelectColorBar import popup_select_color_table
 
@@ -53,6 +54,9 @@ from graphqt.QWPopupSelectColorBar import popup_select_color_table
 
 class FWViewColorBar(FWViewImage) :
     
+    new_color_table = QtCore.pyqtSignal(int)
+    new_color_table_index_is_selected = QtCore.pyqtSignal(int)
+
     def __init__(self, parent=None,\
                  coltab=ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20),\
                  orient='H', wlength=200, wwidth=50, keys_on=True) :
@@ -104,7 +108,7 @@ class FWViewColorBar(FWViewImage) :
         ctab = ct.next_color_table(ctab_ind)
         self._ctab_ind = ctab_ind if ctab_ind is not None else ct.STOR.color_table_index()
         self.set_colorbar_table(ctab)
-        self.emit(QtCore.SIGNAL('new_color_table_index_is_selected(int)'), self._ctab_ind)
+        self.new_color_table_index_is_selected.emit(self._ctab_ind)
 
     def set_colorbar_table(self, ctab) :
         """Sets color table ctab (np.array) - list of colors 32-bit unsigned words"""
@@ -112,7 +116,7 @@ class FWViewColorBar(FWViewImage) :
         arr = ct.array_for_color_bar(ctab, self.orient)
         self.set_pixmap_from_arr(arr) # method of the FWViewImage
         #print 'XXX Color table:', ctab
-        self.emit(QtCore.SIGNAL('new_color_table()'))
+        self.new_color_table.emit()
 
     def color_table(self) :
         return self._ctab
@@ -123,10 +127,10 @@ class FWViewColorBar(FWViewImage) :
 #------------------------------
 
     def connect_new_color_table_index_is_selected_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('new_color_table_index_is_selected(int)'), recip)
+        self.new_color_table_index_is_selected[int].connect(recip)
 
     def disconnect_new_color_table_index_is_selected_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('new_color_table_index_is_selected(int)'), recip)
+        self.new_color_table_index_is_selected[int].disconnect(recip)
 
     def test_new_color_table_index_is_selected_reception(self, ind) :
         print('  FWViewColorBar.test_new_color_table_index_is_selected_reception: %s' % str(self._ctab_ind))
@@ -134,10 +138,10 @@ class FWViewColorBar(FWViewImage) :
 #------------------------------
 
     def connect_new_color_table_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('new_color_table()'), recip)
+        self.new_color_table.connect(recip)
 
     def disconnect_new_color_table_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('new_color_table()'), recip)
+        self.new_color_table.disconnect(recip)
 
     def test_new_color_table_reception(self) :
         print('  FWViewColorBar.test_new_color_table_reception: %s' % str(self._ctab[:5]))
@@ -190,7 +194,7 @@ def test_wfviewcolorbar(tname) :
     #ctab = ct.color_table_monochr256()
     #ctab = ct.color_table_interpolated()
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = None
     if   tname == '0': w = FWViewColorBar(None, coltab=ctab, orient='H')
     elif tname == '1': w = FWViewColorBar(None, coltab=ctab, orient='V')

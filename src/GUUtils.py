@@ -22,9 +22,9 @@ from __future__ import division
 
 #import os
 #from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt
+from PyQt5.QtCore import Qt
 #from PyQt4.QtGui import QGraphicsRectItem
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 
 import numpy as np
 import math
@@ -37,6 +37,12 @@ import math
 
 #------------------------------
 
+try:
+    QString = unicode
+except NameError:
+    # Python 3
+    QString = str
+
 def print_rect(r, cmt='') :
     x, y, w, h = r.x(), r.y(), r.width(), r.height()
     L, R, T, B = r.left(), r.right(), r.top(), r.bottom()
@@ -47,7 +53,7 @@ def print_rect(r, cmt='') :
 
 def select_item_from_popup_menu(list):
     """Shows the list as a pop-up menu and returns the selected item as a string or None"""
-    w = QtGui.QMenu()
+    w = QtWidgets.QMenu()
     for item in list : w.addAction(item)
     item = w.exec_(QtGui.QCursor.pos())
     return None if item is None else str(item.text()) # str(QString)
@@ -56,7 +62,7 @@ def select_item_from_popup_menu(list):
 
 def select_color(colini=Qt.blue, parent=None):
     """Select color using QColorDialog"""
-    QCD = QtGui.QColorDialog
+    QCD = QtWidgets.QColorDialog
     w = QCD(colini, parent)
     w.setOptions(QCD.ShowAlphaChannel)# | QCD.DontUseNativeDialog | QCD.NoButtons
     res = w.exec_()
@@ -151,7 +157,7 @@ def equal_rects(r1, r2):
 #------------------------------
 
 def test_select_item_from_popup_menu():
-    app = QtGui.QApplication(sys.argv)    
+    app = QtWidgets.QApplication(sys.argv)    
     lst = ('apple', 'orange', 'pear', 'peache', 'plum') 
     item = select_item_from_popup_menu(lst)
     print('%s is selected' % item)
@@ -159,7 +165,7 @@ def test_select_item_from_popup_menu():
 #------------------------------
 
 def test_select_color():
-    app = QtGui.QApplication(sys.argv)    
+    app = QtWidgets.QApplication(sys.argv)    
     color = select_color()
     print('Selected color:', color)
 

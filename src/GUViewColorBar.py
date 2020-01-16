@@ -22,7 +22,7 @@ from __future__ import print_function
 #-----------------------------
 
 import numpy as np
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 import graphqt.ColorTable as ct
 from graphqt.GUViewImage import GUViewImage, image_with_random_peaks
 from pyimgalgos.NDArrGenerators import aranged_array
@@ -58,7 +58,7 @@ def test_guiviewcolorbar(tname) :
     #ctab = ct.color_table_monochr256()
     ctab = ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20)
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = None
     if tname == '0': 
         w = GUViewColorBar(None, coltab=ctab, rulers='R', margl=0, margr=0.5, margt=0.03, margb=0.03)

@@ -11,7 +11,7 @@ from __future__ import print_function
 #import sys
 from time import time, strptime, strftime, mktime, localtime, struct_time
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from graphqt.Frame import Frame
 from graphqt.Styles import style
@@ -34,7 +34,7 @@ def time_sec(year, month=1, day=1, hour=0, minute=0, second=0) :
  
 #------------------------------
 
-class QWDateTimeSec(Frame) : # QtGui.QWidget
+class QWDateTimeSec(Frame) : # QtWidgets.QWidget
     """Widget for date and time selection
     """
     year_now = int(str_tstamp(fmt='%Y', time_sec=None))
@@ -52,28 +52,28 @@ class QWDateTimeSec(Frame) : # QtGui.QWidget
         self.verb = verb
 
         #self.lab_year   = QtGui.QLabel('')
-        self.lab_month  = QtGui.QLabel('-')
-        self.lab_day    = QtGui.QLabel('-')
-        self.lab_hour   = QtGui.QLabel(' ')
-        self.lab_minute = QtGui.QLabel(':')
-        self.lab_second = QtGui.QLabel(':')
-        self.lab_tsec   = QtGui.QLabel(' <--> t(sec):')
+        self.lab_month  = QtWidgets.QLabel('-')
+        self.lab_day    = QtWidgets.QLabel('-')
+        self.lab_hour   = QtWidgets.QLabel(' ')
+        self.lab_minute = QtWidgets.QLabel(':')
+        self.lab_second = QtWidgets.QLabel(':')
+        self.lab_tsec   = QtWidgets.QLabel(' <--> t(sec):')
 
-        self.but_year   = QtGui.QPushButton('2008')
-        self.but_month  = QtGui.QPushButton('01')
-        self.but_day    = QtGui.QPushButton('01')
-        self.but_hour   = QtGui.QPushButton('00')
-        self.but_minute = QtGui.QPushButton('00')
-        self.but_second = QtGui.QPushButton('00')
+        self.but_year   = QtWidgets.QPushButton('2008')
+        self.but_month  = QtWidgets.QPushButton('01')
+        self.but_day    = QtWidgets.QPushButton('01')
+        self.but_hour   = QtWidgets.QPushButton('00')
+        self.but_minute = QtWidgets.QPushButton('00')
+        self.but_second = QtWidgets.QPushButton('00')
 
-        self.edi = QtGui.QLineEdit('1400000000')
+        self.edi = QtWidgets.QLineEdit('1400000000')
         self.edi.setValidator(QtGui.QIntValidator(1400000000,2000000000,self))
         #self.edi.setReadOnly(True) 
 
         self.set_date_time_fields() # current time by df
         self.set_tsec()
 
-        self.hbox = QtGui.QHBoxLayout() 
+        self.hbox = QtWidgets.QHBoxLayout() 
         #self.hbox.addWidget(self.lab_year  )
         self.hbox.addWidget(self.but_year  )
         self.hbox.addWidget(self.lab_month )
@@ -95,13 +95,13 @@ class QWDateTimeSec(Frame) : # QtGui.QWidget
         self.set_tool_tips()
         self.set_style()
 
-        self.connect(self.but_year,   QtCore.SIGNAL('clicked()'), self.on_but)
-        self.connect(self.but_month,  QtCore.SIGNAL('clicked()'), self.on_but)
-        self.connect(self.but_day,    QtCore.SIGNAL('clicked()'), self.on_but)
-        self.connect(self.but_hour,   QtCore.SIGNAL('clicked()'), self.on_but)
-        self.connect(self.but_minute, QtCore.SIGNAL('clicked()'), self.on_but)
-        self.connect(self.but_second, QtCore.SIGNAL('clicked()'), self.on_but)
-        self.connect(self.edi,        QtCore.SIGNAL('editingFinished()'), self.on_edi)
+        self.but_year.clicked.connect(self.on_but)
+        self.but_month.clicked.connect(self.on_but)
+        self.but_day.clicked.connect(self.on_but)
+        self.but_hour.clicked.connect(self.on_but)
+        self.but_minute.clicked.connect(self.on_but)
+        self.but_second.clicked.connect(self.on_but)
+        self.edi.editingFinished.connect(self.on_edi)
 
     def set_tool_tips(self) :
         self.setToolTip('Select date and time to get time in second')
@@ -287,7 +287,7 @@ if __name__ == "__main__" :
     tname = sys.argv[1] if len(sys.argv) > 1 else '1'
     print(50*'_', '\nTest %s' % tname)
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
     if   tname == '0': test_select_time(tname)
     elif tname == '1': test_gui(tname)

@@ -16,8 +16,9 @@ from __future__ import print_function
 #import math
 #import math
 from math import floor
+from PyQt5.QtWidgets import *
+from PyQt5 import QtCore, QtGui
 from graphqt.GUViewAxes import *
-from PyQt4.QtCore import QRectF, QPointF
 
 class GUViewGraph(GUViewAxes) :
     
@@ -185,7 +186,7 @@ if __name__ == "__main__" :
 
     rectax=QtCore.QRectF(0, -1.25, 1000, 2.5)    
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = GUViewGraph(None, rectax, origin='DL', scale_ctl='HV', rulers='UDLR',\
                     margl=0.12, margr=0.10, margt=0.06, margb=0.06)
     w.add_graph(x, y1, QtGui.QPen(Qt.blue), brush=QtGui.QBrush())

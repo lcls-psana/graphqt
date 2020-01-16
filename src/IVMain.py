@@ -30,8 +30,8 @@ from __future__ import print_function
 #import math
 
 from math import floor
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 
 from graphqt.IVConfigParameters import cp
 
@@ -54,13 +54,13 @@ from graphqt.Styles import style
 #------------------------------
 
 #class IVMain(Frame) :
-class IVMain(QtGui.QWidget) :
+class IVMain(QtWidgets.QWidget) :
 
     _name = 'IVMain'
 
     def __init__(self, parser=None) : # **dict_opts) :
         #Frame.__init__(self, parent=None, mlw=1)
-        QtGui.QWidget.__init__(self, parent=None)
+        QtWidgets.QWidget.__init__(self, parent=None)
         #self._name = self.__class__.__name__
 
 
@@ -94,26 +94,26 @@ class IVMain(QtGui.QWidget) :
         self.wcur = IVImageCursorInfo()
         self.wlog = QWLogger(log, cp, show_buttons=False)
 
-        self.vbox = QtGui.QVBoxLayout() 
+        self.vbox = QtWidgets.QVBoxLayout() 
         self.vbox.addWidget(self.wtab) 
         self.vbox.addStretch(1)
         self.vbox.addWidget(self.wbut) 
         self.vbox.addWidget(self.wcur) 
 
-        self.wrig = QtGui.QWidget()
+        self.wrig = QtWidgets.QWidget()
         self.wrig.setLayout(self.vbox)
 
-        self.vspl = QtGui.QSplitter(QtCore.Qt.Vertical)
+        self.vspl = QtWidgets.QSplitter(QtCore.Qt.Vertical)
         self.vspl.addWidget(self.wrig) 
         self.vspl.addWidget(self.wspe) 
         self.vspl.addWidget(self.wlog) 
 
-        self.hspl = QtGui.QSplitter(QtCore.Qt.Horizontal)
+        self.hspl = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
         self.hspl.addWidget(self.wimg)
         self.hspl.addWidget(self.vspl)
         #self.hspl.addWidget(self.wrig)
 
-        self.mbox = QtGui.QHBoxLayout() 
+        self.mbox = QtWidgets.QHBoxLayout() 
         self.mbox.addWidget(self.hspl)
         self.setLayout(self.mbox)
 
@@ -131,8 +131,8 @@ class IVMain(QtGui.QWidget) :
 
     def connect_signals_to_slots(self):
 
-        self.connect(self.wbut.but_reset, QtCore.SIGNAL('clicked()'), self.on_but_reset)
-        self.connect(self.wbut.but_save,  QtCore.SIGNAL('clicked()'), self.on_but_save)
+        self.wbut.but_reset.clicked.connect(self.on_but_reset)
+        self.wbut.but_save.clicked.connect(self.on_but_save)
 
         #self.wspe.connect_color_table_is_changed_to(self.on_spectrum_color_table_is_changed)
         self.wspe.cbar.connect_new_color_table_to(self.on_spectrum_color_table_is_changed)
@@ -407,7 +407,7 @@ class IVMain(QtGui.QWidget) :
         self.setContentsMargins(QtCore.QMargins(-9,-9,-9,-9))
         self.wspe.setFixedHeight(280)
         self.wimg.setMinimumWidth(700)
-        self.wimg.setSizePolicy(QtGui.QSizePolicy.Ignored, QtGui.QSizePolicy.Ignored)
+        self.wimg.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
 
         self.wrig.setContentsMargins(-9,-9,-9,-9)
         self.wrig.setMinimumWidth(350)
@@ -444,7 +444,7 @@ class IVMain(QtGui.QWidget) :
 
         self.on_save()
 
-        QtGui.QWidget.closeEvent(self, e)
+        QtWidgets.QWidget.closeEvent(self, e)
         cp.ivmain = None
 
  
@@ -507,7 +507,7 @@ if __name__ == "__main__" :
 
     log.setPrintBits(0o377) 
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     ex  = IVMain(parser=None)
     ex.show()
     app.exec_()

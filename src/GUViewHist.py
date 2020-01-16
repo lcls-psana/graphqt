@@ -83,6 +83,7 @@ from __future__ import division
 #import math
 #import math
 from math import floor
+from PyQt5 import QtCore, QtGui, QtWidgets
 from graphqt.GUViewAxes import *
 from pyimgalgos.HBins import HBins
 import numpy as np
@@ -125,6 +126,11 @@ def image_to_hist_arr(arr, vmin=None, vmax=None, nbins=None) :
 
 class GUViewHist(GUViewAxes) :
     
+    statistics_updated = QtCore.pyqtSignal(float, float, float, float, float, float, float, float, float)
+    mean_std_updated = QtCore.pyqtSignal(float, float)
+    cursor_bin_changed = QtCore.pyqtSignal(float, float, float, float)
+    histogram_updated = QtCore.pyqtSignal()
+
     def __init__(self, parent=None, rectax=QtCore.QRectF(0, 0, 1, 1), origin='DL', scale_ctl='HV', rulers='TBLR',\
                  margl=None, margr=None, margt=None, margb=None) :
 
@@ -293,14 +299,14 @@ class GUViewHist(GUViewAxes) :
         """Evaluates histogram statistical parameters and emits them with signal"""
         mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w = self.visible_hist_stat()
         #self.test_statistics_std_reception(mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w)
-        self.emit(QtCore.SIGNAL('statistics_updated(float,float,float,float,float,float,float,float,float)'),\
+        self.statistics_updated.emit(\
                   mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w)
 
     def connect_statistics_updated_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('statistics_updated(float,float,float,float,float,float,float,float,float)'), recip)
+        self.statistics_updated[float, float, float, float, float, float, float, float, float].connect(recip)
 
     def disconnect_statistics_updated_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('statistics_updated(float,float,float,float,float,float,float,float,float)'), recip)
+        self.statistics_updated[float, float, float, float, float, float, float, float, float].disconnect(recip)
 
     def test_statistics_std_reception(self, mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w) :
         print('GUViewHist.test_statistics_std_reception: ',\
@@ -314,13 +320,13 @@ class GUViewHist(GUViewAxes) :
         mean, rms = self.visible_hist_mean_std()
         self.countemit+=1
         #print '%5d  mean: %.2f  rms: %.2f' % (self.countemit, mean, rms)
-        self.emit(QtCore.SIGNAL('mean_std_updated(float,float)'), mean, rms)
+        self.mean_std_updated.emit(mean, rms)
 
     def connect_mean_std_updated_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('mean_std_updated(float,float)'), recip)
+        self.mean_std_updated[float, float].connect(recip)
 
     def disconnect_mean_std_updated_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('mean_std_updated(float,float)'), recip)
+        self.mean_std_updated[float, float].disconnect(recip)
 
     def test_hist_mean_std_updated_reception(self, mean, rms) :
         print('GUViewHist.test_hist_mean_std_updated_reception mean: %.2f  rms: %.2f' % (mean, rms))
@@ -367,16 +373,16 @@ class GUViewHist(GUViewAxes) :
             if ibin != self.ibin_old :
                 #print 'x, ibin, val', x, ibin, val
                 self.ibin_old = ibin
-                self.emit(QtCore.SIGNAL('cursor_bin_changed(float,float,float,float)'), x, y, ibin, val)
+                self.cursor_bin_changed.emit(x, y, ibin, val)
                
         if self.pos_click is None : return
         self.set_limits()
 
     def connect_cursor_bin_changed_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('cursor_bin_changed(float,float,float,float)'), recip)
+        self.cursor_bin_changed[float, float, float, float].connect(recip)
 
     def disconnect_cursor_bin_changed_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('cursor_bin_changed(float,float,float,float)'), recip)
+        self.cursor_bin_changed[float, float, float, float].disconnect(recip)
 
 #------------------------------
 
@@ -478,15 +484,15 @@ class GUViewHist(GUViewAxes) :
         #self.update_my_scene() # ?????
         self.check_axes_limits_changed()
 
-        self.emit(QtCore.SIGNAL('histogram_updated()'))
+        self.histogram_updated.emit()
 
 #------------------------------
 
     def connect_histogram_updated_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('histogram_updated()'), recip)
+        self.histogram_updated.connect(recip)
 
     def disconnect_histogram_updated_from(self, recip) :
-        self.connect(self, QtCore.SIGNAL('histogram_updated()'), recip)
+        self.histogram_updated.connect(recip)
 
     def test_histogram_updated_reception(self) :
         print('GUViewHist.test_histogram_updated_reception')
@@ -543,7 +549,7 @@ if __name__ == "__main__" :
     #y2 = np.random.random((nbins,))
 
     rectax=QtCore.QRectF(0, -1.2, 100, 2.4)    
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = GUViewHist(None, rectax, origin='DL', scale_ctl='H', rulers='DL',\
                     margl=0.12, margr=0.02, margt=0.02, margb=0.06)
 

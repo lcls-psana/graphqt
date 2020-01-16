@@ -29,20 +29,20 @@ Created on February 1, 2017 by Mikhail Dubrovin
 """
 #------------------------------
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from graphqt.Logger import log
 from graphqt.Styles import style
 
-class IVImageCursorInfo(QtGui.QWidget) :
+class IVImageCursorInfo(QtWidgets.QWidget) :
 
     def __init__(self, parent=None) :
-        QtGui.QWidget.__init__(self, parent=None)
+        QtWidgets.QWidget.__init__(self, parent=None)
         self._name = self.__class__.__name__
 
-        self.edi = QtGui.QTextEdit('Cursor info box for image')
+        self.edi = QtWidgets.QTextEdit('Cursor info box for image')
 
-        self.hbox = QtGui.QHBoxLayout() 
+        self.hbox = QtWidgets.QHBoxLayout() 
         self.hbox.addWidget(self.edi) 
         self.hbox.addStretch(1)
         self.setLayout(self.hbox) 
@@ -91,7 +91,7 @@ class IVImageCursorInfo(QtGui.QWidget) :
 if __name__ == "__main__" :
     import sys
     log.setPrintBits(0o377) 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = IVImageCursorInfo(parent=None)
     w.setWindowTitle('Cursor info')
     w.show()

@@ -9,16 +9,22 @@ from __future__ import print_function
 
 #import os
 #import sys
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 #------------------------------
+
+try:
+    QString = unicode
+except NameError:
+    # Python 3
+    QString = str
 
 def selectFromListInPopupMenu(list):
     """Shows the list as a pop-up menu and returns the selected item as a string or None"""
 
     if list is None : return None
     
-    popupMenu = QtGui.QMenu()
+    popupMenu = QtWidgets.QMenu()
     for item in list :
         popupMenu.addAction(item)
 
@@ -40,10 +46,10 @@ def changeCheckBoxListInPopupMenu(list, win_title='Set check boxes'):
     popupMenu.move(QtGui.QCursor.pos())
     response = popupMenu.exec_()
 
-    if   response == QtGui.QDialog.Accepted :
+    if   response == QtWidgets.QDialog.Accepted :
         #logger.debug('New checkbox list is accepted', __name__)         
         return 1
-    elif response == QtGui.QDialog.Rejected :
+    elif response == QtWidgets.QDialog.Rejected :
         #logger.debug('Will use old checkbox list', __name__)
         return 0
     else                                    :
@@ -60,7 +66,7 @@ def selectRadioButtonInPopupMenu(dict_of_pars, win_title='Select option', do_con
     popupMenu = GUIPopupRadioList(None, dict_of_pars, win_title, do_confirm)
     #popupMenu.move(QtCore.QPoint(50,50))
     popupMenu.move(QtGui.QCursor.pos()-QtCore.QPoint(100,100))
-    return popupMenu.exec_() # QtGui.QDialog.Accepted or QtGui.QDialog.Rejected
+    return popupMenu.exec_() # QtWidgets.QDialog.Accepted or QtWidgets.QDialog.Rejected
 
 #------------------------------
 #------------------------------
@@ -68,7 +74,7 @@ def selectRadioButtonInPopupMenu(dict_of_pars, win_title='Select option', do_con
  
 def test_all(tname) :
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
     if tname == '0':
         instrs = ['SXR', 'AMO', 'XPP', 'CXI', 'MEC']

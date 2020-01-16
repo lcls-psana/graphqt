@@ -28,7 +28,7 @@ Created on February 1, 2017 by Mikhail Dubrovin
 #import os
 #import math
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 #from PyQt4.QtCore import Qt
 
 from graphqt.Logger import log
@@ -39,19 +39,19 @@ from graphqt.Logger import log
 from graphqt.IVConfigParameters import cp
 
 #class IVMainButtons(Frame) :
-class IVMainButtons(QtGui.QWidget) :
+class IVMainButtons(QtWidgets.QWidget) :
 
     def __init__(self, parent=None) :
         #Frame.__init__(self, parent=None, mlw=1)
-        QtGui.QWidget.__init__(self, parent=None)
+        QtWidgets.QWidget.__init__(self, parent=None)
         self._name = self.__class__.__name__
 
         self.show_buts = True
 
-        self.but_save = QtGui.QPushButton('&Save')
-        self.but_reset= QtGui.QPushButton('&Reset')
+        self.but_save = QtWidgets.QPushButton('&Save')
+        self.but_reset= QtWidgets.QPushButton('&Reset')
 
-        self.hbox = QtGui.QHBoxLayout() 
+        self.hbox = QtWidgets.QHBoxLayout() 
         self.hbox.addWidget(self.but_reset) 
         self.hbox.addWidget(self.but_save) 
         self.hbox.addStretch(1)
@@ -60,8 +60,8 @@ class IVMainButtons(QtGui.QWidget) :
         self.set_tool_tips()
         self.set_style()
 
-        self.connect(self.but_save,  QtCore.SIGNAL('clicked()'), self.on_but)
-        self.connect(self.but_reset, QtCore.SIGNAL('clicked()'), self.on_but)
+        self.but_save.clicked.connect(self.on_but)
+        self.but_reset.clicked.connect(self.on_but)
 
 #------------------------------
 
@@ -104,7 +104,7 @@ class IVMainButtons(QtGui.QWidget) :
 if __name__ == "__main__" :
     import sys
     log.setPrintBits(0o377) 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w  = IVMainButtons(parent=None)
     w.setContentsMargins(-9,-9,-9,-9)
     w.show()

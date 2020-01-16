@@ -11,8 +11,8 @@ from __future__ import print_function
 #import os
 #import math
 #from graphqt.GUView import *
-from PyQt4.QtCore import Qt
-from PyQt4 import QtGui
+from PyQt5.QtCore import Qt
+from PyQt5 import QtGui
 
 from graphqt.GUUtils import select_item_from_popup_menu, select_color
 

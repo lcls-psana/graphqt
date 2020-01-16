@@ -11,7 +11,7 @@ from __future__ import print_function
 from graphqt.QWDateTimeSec import QWDateTimeSec
 
 import sys
-from PyQt4 import QtGui #, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 #------------------------------
 
@@ -21,7 +21,7 @@ def print_msg() : print('Start convertor Date and time <-> sec')
 
 if __name__ == "__main__" :
     print_msg()
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = QWDateTimeSec(None, show_frame=True, verb=True)
     w.setWindowTitle('Date and time <-> sec')
     w.show()

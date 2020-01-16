@@ -30,7 +30,7 @@ Created on 2017-02-18 by Mikhail Dubrovin
 import sys
 import os
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from graphqt.IVConfigParameters import cp
 from graphqt.Logger             import log
@@ -43,7 +43,7 @@ from graphqt.IVTabFileName      import IVTabFileName
 #------------------------------
 
 #class IVMainTabs(Frame) :
-class IVMainTabs(QtGui.QWidget) :
+class IVMainTabs(QtWidgets.QWidget) :
     """GUI for tabs
     """
     orientation = 'H'
@@ -54,7 +54,7 @@ class IVMainTabs(QtGui.QWidget) :
     def __init__ (self, parent=None, app=None) :
 
         #Frame.__init__(self, parent, mlw=1)
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self._name = self.__class__.__name__
 
         self.current_tab = cp.current_tab
@@ -62,13 +62,13 @@ class IVMainTabs(QtGui.QWidget) :
 
         self.gui_win = None
 
-        self.hboxW = QtGui.QHBoxLayout()
+        self.hboxW = QtWidgets.QHBoxLayout()
 
         self.make_tab_bar()
         self.gui_selector()
 
-        if self.orientation == 'H' : self.box = QtGui.QVBoxLayout(self) 
-        else :                       self.box = QtGui.QHBoxLayout(self) 
+        if self.orientation == 'H' : self.box = QtWidgets.QVBoxLayout(self) 
+        else :                       self.box = QtWidgets.QHBoxLayout(self) 
 
         self.box.addWidget(self.tab_bar)
         self.box.addLayout(self.hboxW)
@@ -101,7 +101,7 @@ class IVMainTabs(QtGui.QWidget) :
 
     def make_tab_bar(self,mode=None) :
         #if mode != None : self.tab_bar.close()
-        self.tab_bar = QtGui.QTabBar()
+        self.tab_bar = QtWidgets.QTabBar()
         #self.tab_bar = EMQTabBar(width=100)
 
         #len(self.tab_names)
@@ -112,14 +112,14 @@ class IVMainTabs(QtGui.QWidget) :
         #self.tab_bar.setTabsClosable(True)
 
         if self.orientation == 'H' :
-            self.tab_bar.setShape(QtGui.QTabBar.RoundedNorth)
+            self.tab_bar.setShape(QtWidgets.QTabBar.RoundedNorth)
         else :
-            self.tab_bar.setShape(QtGui.QTabBar.RoundedWest)
+            self.tab_bar.setShape(QtWidgets.QTabBar.RoundedWest)
 
         self.set_tab_by_name(self.current_tab.value())
             
-        self.connect(self.tab_bar, QtCore.SIGNAL('currentChanged(int)'), self.on_tab_bar)
-        self.connect(self.tab_bar, QtCore.SIGNAL('tabCloseRequested(int)'), self.on_tab_close)
+        self.tab_bar.currentChanged[int].connect(self.on_tab_bar)
+        self.tab_bar.tabCloseRequested[int].connect(self.on_tab_close)
 
 
     def set_tab_by_name(self, tab_name) :
@@ -147,7 +147,7 @@ class IVMainTabs(QtGui.QWidget) :
             if tab_name == self.tab_names[itab] :
                self.gui_win = IVTabDataControl(cp, log, parent=None, show_mode=0o17, show_mode_evctl=0o17) if tab_name=='Data' else\
                               IVTabFileName(parent=None, show_mode=0o1)    if tab_name=='File' else\
-                              QtGui.QTextEdit('Window for %s'%self.tab_names[itab])
+                              QtWidgets.QTextEdit('Window for %s'%self.tab_names[itab])
 
         self.hboxW.addWidget(self.gui_win)
 
@@ -190,7 +190,7 @@ class IVMainTabs(QtGui.QWidget) :
         #try    : del self.gui_win
         #except : pass
 
-        QtGui.QWidget.closeEvent(self, e)
+        QtWidgets.QWidget.closeEvent(self, e)
         cp.guitabs = None
 
 
@@ -203,7 +203,7 @@ class IVMainTabs(QtGui.QWidget) :
 #------------------------------
 
 if __name__ == "__main__" :
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = IVMainTabs()
     w.move(QtCore.QPoint(50,50))
     w.setWindowTitle(w._name)

@@ -60,12 +60,12 @@ class IVTabDataControl(QWDataControl) :
 
 if __name__ == "__main__" :
     import sys
-    from PyQt4 import QtGui, QtCore
+    from PyQt5 import QtCore, QtGui, QtWidgets
 
     from graphqt.IVConfigParameters import cp
     from graphqt.Logger import log
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = IVTabDataControl(cp, log, show_mode=0o377, show_mode_evctl=0o17)
     #w = IVTabDataControl(cp, log, show_mode=0377, show_mode_evctl=017)
     #w.event_control().set_show_mode(show_mode=017)

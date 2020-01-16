@@ -25,8 +25,8 @@ Created on December 12, 2017 by Mikhail Dubrovin
 """
 from __future__ import print_function
 
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt, QPointF
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt, QPointF
 
 from graphqt.AxisLabeling import best_label_locs
 
@@ -145,7 +145,7 @@ class FWRuler(object) :
             txtitem = self.scene.addText(vstr, self.font)
             txtitem.setDefaultTextColor(self.color)
             txtitem.moveBy(pt.x(), pt.y())
-            txtitem.setFlag(QtGui.QGraphicsItem.ItemIgnoresTransformations, True)
+            txtitem.setFlag(QtWidgets.QGraphicsItem.ItemIgnoresTransformations, True)
             txtitem.setZValue(self.zvalue)
 
             self.lst_of_items.append(txtitem)       
@@ -175,11 +175,11 @@ if __name__ == "__main__" :
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     rs = QtCore.QRectF(0, 0, 100, 100)
     ro = QtCore.QRectF(-1, -1, 3, 2)
-    s = QtGui.QGraphicsScene(rs)
-    w = QtGui.QGraphicsView(s)
+    s = QtWidgets.QGraphicsScene(rs)
+    w = QtWidgets.QGraphicsView(s)
     w.setGeometry(20, 20, 600, 600)
 
     print('screenGeometry():', app.desktop().screenGeometry())

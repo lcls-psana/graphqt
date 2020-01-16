@@ -81,6 +81,7 @@ from __future__ import print_function
 #import math
 #import math
 from math import floor
+from PyQt5 import QtCore, QtGui, QtWidgets
 import graphqt.ColorTable as ct
 from graphqt.GUViewAxes import *
 from graphqt.Logger import log
@@ -90,6 +91,9 @@ import pyimgalgos.NDArrGenerators as ag
 
 class GUViewImage(GUViewAxes) :
     
+    cursor_pos_value = QtCore.pyqtSignal(int, int, float)
+    pixmap_is_updated = QtCore.pyqtSignal()
+
     def __init__(self, parent=None, arr=None,\
                  coltab=ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20),\
                  origin='UL', scale_ctl='HV', rulers='TBLR',\
@@ -149,15 +153,15 @@ class GUViewImage(GUViewAxes) :
         #self.setWindowTitle('GUViewImage x=%d y=%d v=%s' % (ix, iy, vstr))
         #print 'display_pixel_pos, current point: ', e.x(), e.y(), ' on scene: %.1f  %.1f' % (p.x(), p.y()) 
         #return ix, iy, v
-        self.emit(QtCore.SIGNAL('cursor_pos_value(int,int,float)'), ix, iy, v if not(v is None) else 0)
+        self.cursor_pos_value.emit(ix, iy, v if not(v is None) else 0)
 
 #------------------------------
 
     def connect_cursor_pos_value_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('cursor_pos_value(int,int,float)'), recip)
+        self.cursor_pos_value[int, int, float].connect(recip)
 
     def disconnect_cursor_pos_value_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('cursor_pos_value(int,int,float)'), recip)
+        self.cursor_pos_value[int, int, float].disconnect(recip)
 
     def test_cursor_pos_value_reception(self, ix, iy, v) :
         #print 'GUView.test_cursor_pos_value_reception x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f' % (x1, x2, y1, y2)
@@ -207,15 +211,15 @@ class GUViewImage(GUViewAxes) :
             #self.update_my_scene()
             #self.check_axes_limits_changed()
 
-        self.emit(QtCore.SIGNAL('pixmap_is_updated()'))
+        self.pixmap_is_updated.emit()
 
 #------------------------------
 
     def connect_pixmap_is_updated_to(self, recip) :
-        self.connect(self, QtCore.SIGNAL('pixmap_is_updated()'), recip)
+        self.pixmap_is_updated.connect(recip)
 
     def disconnect_pixmap_is_updated_from(self, recip) :
-        self.disconnect(self, QtCore.SIGNAL('pixmap_is_updated()'), recip)
+        self.pixmap_is_updated.disconnect(recip)
 
     def test_pixmap_is_updated_reception(self) :
         print('GUView.test_pixmap_is_updated_reception')
@@ -237,7 +241,7 @@ class GUViewImage(GUViewAxes) :
 
         fname='fig-image.xpm'
         fltr='*.xpm *.ppm *.png *.jpg *.pgm\n *'
-        fname = str(QtGui.QFileDialog.getSaveFileName(at_obj, 'Output file', fname, filter=fltr))
+        fname = str(QtWidgets.QFileDialog.getSaveFileName(at_obj, 'Output file', fname, filter=fltr))[0][0]
         if fname == '' : return
         log.info('Save image or pixmap in file: %s' % fname, self._name)
 
@@ -371,7 +375,7 @@ def test_guiviewimage(tname) :
     arr = image_with_random_peaks((1000, 1000))
     ctab = ct.color_table_monochr256()
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = None
     if   tname == '0': 
         w = GUViewImage(None, arr, coltab=ctab, origin='UL', scale_ctl='HV', rulers='UDLR',\

@@ -11,8 +11,8 @@ from __future__ import print_function
 #import os
 #import math
 #import graphqt.GUDragBase as drb
-from PyQt4 import QtGui#, QtCore
-from PyQt4.QtCore import Qt
+from PyQt5 import QtCore, QtGui#
+from PyQt5.QtCore import Qt
 from graphqt.GUDragPoint   import GUDragPoint
 from graphqt.GUDragRect    import GUDragRect
 #from graphqt.GUDragLine    import GUDragLine
@@ -21,7 +21,7 @@ from graphqt.GUDragRect    import GUDragRect
 #from graphqt.GUDragPoly    import GUDragPoly
 #from graphqt.GUDragWedge   import GUDragWedge
 
-from graphqt.GUDragBase    import DELETE 
+from graphqt.GUDragBase    import DELETE
 #-----------------------------
 
 POINT= 0

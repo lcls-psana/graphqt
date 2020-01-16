@@ -11,9 +11,9 @@ Created on December 12, 2017 by Mikhail Dubrovin
 """
 from __future__ import print_function
 
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt, QPointF
-from PyQt4.QtGui import QGraphicsView
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt, QPointF
+from PyQt5.QtWidgets import QGraphicsView
 
 #-----------------------------
 
@@ -55,12 +55,12 @@ if __name__ == "__main__" :
 
     import sys
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     rs = QtCore.QRectF(0, 0, 1500, 1500)
     ro = QtCore.QRectF(-2, -2, 10, 4)
     re = QtCore.QRectF(640-2, 480-2, 4, 4)
 
-    s = QtGui.QGraphicsScene(rs)
+    s = QtWidgets.QGraphicsScene(rs)
     w = MyQGraphicsView(s)
     w.setGeometry(20, 20, 700, 700)
     #w.setGeometry(20, 20, 800, 800)

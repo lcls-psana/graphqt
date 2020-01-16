@@ -11,9 +11,9 @@ from __future__ import division
 
 #import os
 #import math
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QGraphicsPathItem
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QGraphicsPathItem
 from graphqt.GUDragBase import *
 
 #-----------------------------
@@ -31,7 +31,8 @@ class GUDragPoint(QGraphicsPathItem, GUDragBase) :
                self.pathForPointH(point, scene, rsize) if orient=='h' else\
                self.pathForPointR(point, scene, rsize)
 
-        QGraphicsPathItem.__init__(self, path, parent, scene)
+        QGraphicsPathItem.__init__(self, path, parent)
+        if scene is not None: scene.addItem(self)
         GUDragBase.__init__(self, parent, brush, pen)
         
         self.setAcceptHoverEvents(True)

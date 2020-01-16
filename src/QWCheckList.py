@@ -24,18 +24,18 @@ Usage::
 """
 from __future__ import print_function
 #------------------------------
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 #------------------------------
 
 #class QWCheckList(QtGui.QWidget):
-class QWCheckList(QtGui.QListView):
+class QWCheckList(QtWidgets.QListView):
     """Gets dict of item for checkbox GUI in format {'CSPAD1':True, 'CSPAD2x21':False, 'pNCCD1':True, 'Opal1':False}
     and modify this list in gui.
     """
     def __init__(self, parent=None, dic_item_state={}) :
         #QtGui.QWidget.__init__(self, parent)
-        QtGui.QListView.__init__(self, parent)
+        QtWidgets.QListView.__init__(self, parent)
 
         self.set_model(dic_item_state)
         #self.set_test_model()
@@ -138,7 +138,7 @@ if __name__ == "__main__" :
     import sys
     d = {'CSPAD1':True, 'CSPAD2x21':False, 'pNCCD1':True, 'Opal1':False}
     #d = {}
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = QWCheckList(parent=None, dic_item_state=d)
     w.setGeometry(100, 100, 200, 300)
     w.setWindowTitle('Test Check List')

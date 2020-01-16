@@ -10,9 +10,9 @@ from __future__ import print_function
 
 #import os
 #import math
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QGraphicsRectItem
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QGraphicsRectItem
 
 from graphqt.GUDragBase import *
 from graphqt.GUDragPoint import GUDragPoint
@@ -43,7 +43,8 @@ class GUDragRect(QGraphicsRectItem, GUDragBase) :
 
         else : print('GUDragRect - wrong init object type:', str(obj))
         parent_for_base = None
-        QGraphicsRectItem.__init__(self, rect, parent_for_base, scene)
+        QGraphicsRectItem.__init__(self, rect, parent_for_base)
+        if scene is not None: scene.addItem(self)
         if self._mode == ADD :
             self.grabMouse() # makes available mouseMoveEvent 
         

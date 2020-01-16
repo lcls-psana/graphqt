@@ -23,11 +23,11 @@ from __future__ import division
 
 #import os
 from math import floor
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import Qt
 from graphqt.GURuler import GURuler
 
-class GUViewAxesDL(QtGui.QGraphicsView) :
+class GUViewAxesDL(QtWidgets.QGraphicsView) :
     
     def __init__(self, parent=None, rectax=QtCore.QRectF(0, 0, 10, 10), origin_up=True, scale_ctl=3, rulers='LB') :
 
@@ -36,11 +36,11 @@ class GUViewAxesDL(QtGui.QGraphicsView) :
         self.set_scale_control(scale_ctl)
         self.set_show_rulers(rulers)
 
-        sc = QtGui.QGraphicsScene() # rectax
+        sc = QtWidgets.QGraphicsScene() # rectax
         #print 'scene rect=', sc.sceneRect()        
         #print 'rect img=', self.rectax
 
-        QtGui.QGraphicsView.__init__(self, sc, parent)
+        QtWidgets.QGraphicsView.__init__(self, sc, parent)
         
         self.set_style()
         self.set_view() #ml=0.12, mr=0.02, mt=0.02, mb=0.06)
@@ -213,8 +213,8 @@ class GUViewAxesDL(QtGui.QGraphicsView) :
 
 
     def mouseReleaseEvent(self, e):
-        QtGui.QApplication.restoreOverrideCursor()
-        QtGui.QGraphicsView.mouseReleaseEvent(self, e)
+        QtWidgets.QApplication.restoreOverrideCursor()
+        QtWidgets.QGraphicsView.mouseReleaseEvent(self, e)
         #print 'GUViewAxesDL.mouseReleaseEvent, at point: ', e.pos(), ' diff:', e.pos() - self.pos_click
         #self.pos_click = e.pos()
         self.pos_click = None
@@ -228,7 +228,7 @@ class GUViewAxesDL(QtGui.QGraphicsView) :
     def mousePressEvent(self, e):
         #print 'GUViewAxesDL.mousePressEvent, at point: ', e.pos() #e.globalX(), e.globalY() 
         #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(Qt.SizeAllCursor))# ClosedHandCursor
-        QtGui.QGraphicsView.mousePressEvent(self, e)
+        QtWidgets.QGraphicsView.mousePressEvent(self, e)
 
         self.pos_click = e.pos()
         #self.pos_click_sc = self.mapToScene(self.pos_click)
@@ -261,7 +261,7 @@ class GUViewAxesDL(QtGui.QGraphicsView) :
 
 
     def mouseMoveEvent(self, e):
-        QtGui.QGraphicsView.mouseMoveEvent(self, e)
+        QtWidgets.QGraphicsView.mouseMoveEvent(self, e)
         #print 'GUViewAxesDL.mouseMoveEvent, at point: ', e.pos()
         self.display_pixel_pos(e)
 
@@ -285,7 +285,7 @@ class GUViewAxesDL(QtGui.QGraphicsView) :
 
 
     def wheelEvent(self, e) :
-        QtGui.QGraphicsView.wheelEvent(self, e)
+        QtWidgets.QGraphicsView.wheelEvent(self, e)
 
         if self._scale_ctl==0 : return
 
@@ -329,18 +329,18 @@ class GUViewAxesDL(QtGui.QGraphicsView) :
 
     def enterEvent(self, e) :
     #    print 'enterEvent'
-        QtGui.QGraphicsView.enterEvent(self, e)
+        QtWidgets.QGraphicsView.enterEvent(self, e)
         #QtGui.QApplication.setOverrideCursor(QtGui.QCursor(Qt.CrossCursor))
         
 
     def leaveEvent(self, e) :
     #    print 'leaveEvent'
-        QtGui.QGraphicsView.leaveEvent(self, e)
+        QtWidgets.QGraphicsView.leaveEvent(self, e)
         #QtGui.QApplication.restoreOverrideCursor()
 
 
     def closeEvent(self, e) :
-        QtGui.QGraphicsView.closeEvent(self, e)
+        QtWidgets.QGraphicsView.closeEvent(self, e)
         #print 'closeEvent'
         
 
@@ -350,7 +350,7 @@ class GUViewAxesDL(QtGui.QGraphicsView) :
 
 
     def resizeEvent(self, e) :
-         QtGui.QGraphicsView.resizeEvent(self, e)
+         QtWidgets.QGraphicsView.resizeEvent(self, e)
          #print 'resizeEvent'
          #print 'Geometry rect:', self.geometry()
          rs = self.scene().sceneRect()    
@@ -384,7 +384,8 @@ class GUViewAxesDL(QtGui.QGraphicsView) :
         #return self.scene().addRect(rect, pen, brush)
         pen.setCosmetic(True)
         #item = QtGui.QGraphicsRectItem(rect, parent=None, scene=self.scene())
-        item = GUQGraphicsRectItem(rect, parent=None, scene=self.scene())
+        item = GUQGraphicsRectItem(rect, parent=None)
+        self.scene().addItem(item)
         item.setPen(pen)
         item.setBrush(brush)
         #self.scene().addRect(item)
@@ -396,7 +397,7 @@ class GUViewAxesDL(QtGui.QGraphicsView) :
 
 def test_guiview(tname) :
     print('%s:' % sys._getframe().f_code.co_name)
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = None
     if tname == '0': w=GUViewAxesDL(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=3)
     if tname == '1': w=GUViewAxesDL(None, rectax=QtCore.QRectF(0, 0, 100, 100), origin_up=False, scale_ctl=0)

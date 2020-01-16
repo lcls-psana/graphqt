@@ -32,7 +32,7 @@ from __future__ import print_function
 #------------------------------
 import sys
 import os
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from graphqt.Logger             import log
 from graphqt.IVConfigParameters import cp
@@ -69,7 +69,7 @@ class IVTabFileName(Frame) :
         self.w_calib = QWDirName(None, butname='Select', label='Clb:',\
                                  path=self.calib_dir.value(), show_frame=False)
 
-        self.box = QtGui.QVBoxLayout()
+        self.box = QtWidgets.QVBoxLayout()
         self.box.addWidget(self.w_fname)
         self.box.addWidget(self.w_calib)
         #self.box.addStretch(1)
@@ -144,7 +144,7 @@ class IVTabFileName(Frame) :
         log.debug('%s.closeEvent' % self._name)
         try : self.w_fname.disconnect_path_is_changed_from_recipient(cp.ivmain.on_image_file_is_changed)
         except : pass
-        QtGui.QWidget.closeEvent(self, e)
+        QtWidgets.QWidget.closeEvent(self, e)
 
 
     def test_signal_reception(self, s) :
@@ -156,7 +156,7 @@ class IVTabFileName(Frame) :
 #------------------------------
 
 if __name__ == "__main__" :
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = IVTabFileName(show_mode=0o3)
     w.move(QtCore.QPoint(50,50))
     w.setWindowTitle(w._name)
