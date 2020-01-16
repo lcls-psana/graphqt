@@ -26,6 +26,7 @@ Usage ::
 Created on June 12, 2016 by Mikhail Dubrovin
 """
 from __future__ import print_function
+from __future__ import absolute_import
 
 #import os
 #import math
@@ -34,7 +35,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt, QPointF
 
 #from pyapps.graphqt.AxisLabeling import best_label_locs
-from AxisLabeling import best_label_locs
+from .AxisLabeling import best_label_locs
 
 class GURuler(object) :
     
