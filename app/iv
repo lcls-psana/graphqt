@@ -16,7 +16,7 @@ class IMAGE_VIEWER(object) :
     def __init__(self) :
         """Image Viever (iv)"""
 
-        #log.setPrintBits(0377) 
+        #log.setPrintBits(0377)
 
         self.parser = option_parser()
         (opts, args) = self.parser.parse_args()
@@ -37,9 +37,9 @@ class IMAGE_VIEWER(object) :
         #w = QtGui.QWidget()
 
         w.show()
-	stat = app.exec_()
+        stat = app.exec_()
 
-	statt1 = t1.quit() # t1.exit(0)
+        statt1 = t1.quit() # t1.exit(0)
 
 #------------------------------
 
@@ -79,16 +79,16 @@ def usage() :
            '\n  %prog -e mfxn8316 -r 11 -n 10'+\
            '\n  %prog -f image.txt # accepts types txt, bin, npy, h5'+\
            '\n  %prog image.txt'
- 
+
 #------------------------------
 
 def option_parser() :
 
-    def_exp = '' # 'mfxn8316' 
+    def_exp = '' # 'mfxn8316'
     def_run = 0
     def_nev = 0
-    def_clb = '' 
-    def_ifn = '' 
+    def_clb = ''
+    def_ifn = ''
     def_vrb = True
 
     h_exp = 'experiment, e.g., cxi43210, default = %s' % def_exp
@@ -105,7 +105,7 @@ def option_parser() :
     parser.add_option('-c', '--clb', default=def_clb, action='store', type='string', help=h_clb)
     parser.add_option('-f', '--ifn', default=def_ifn, action='store', type='string', help=h_ifn)
     parser.add_option('-v', '--vrb', default=def_vrb, action='store_false',          help=h_vrb)
- 
+
     return parser #, parser.parse_args()
 
 #------------------------------
