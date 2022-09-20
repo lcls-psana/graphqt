@@ -11,6 +11,16 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+2022-09-20 Mikhail Dubrovin
+Tag: V02-00-01
+  app/iv - get rid of libGL error, code cleaning, del objects at exit
+  src/FWView.py, GUView.py, GUViewAxesDL.py - code cleaning,
+	 replace wheelEvent.delta() with .angleDelta().y() for py3
+  src/IVMain.py - code cleaning
+
+V02-00-00 No comments
+V01-01-00 No comments
+
 Tag: V01-00-19
 2017-12-15 Mikhail S. Dubrovin
 - tune iv, some progress on FW, update doc
