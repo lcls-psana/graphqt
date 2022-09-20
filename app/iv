@@ -1,7 +1,9 @@
 #!@PYTHON@
-#------------------------------
+
 from __future__ import print_function
 import os
+os.environ['LIBGL_ALWAYS_INDIRECT'] = '1' # get rid of libGL error: unable to load driver: swrast_dri.so
+
 import sys
 from optparse import OptionParser
 from PyQt5 import QtGui, QtWidgets
@@ -10,10 +12,10 @@ from graphqt.IVMain import IVMain
 from graphqt.IVConfigParameters import cp
 
 from expmon.PSQThreadWorker import PSQThreadWorker
-#------------------------------
 
-class IMAGE_VIEWER(object) :
-    def __init__(self) :
+
+class IMAGE_VIEWER(object):
+    def __init__(self):
         """Image Viever (iv)"""
 
         #log.setPrintBits(0377)
@@ -25,8 +27,8 @@ class IMAGE_VIEWER(object) :
         self.defs = vars(self.parser.get_default_values())
 
         self.vrb = opts.vrb
-        #if self.vrb : self.print_raw()
-        if self.vrb : self.print_pars()
+        #if self.vrb: self.print_raw()
+        if self.vrb: self.print_pars()
 
         app = QtWidgets.QApplication(sys.argv)
 
@@ -38,39 +40,38 @@ class IMAGE_VIEWER(object) :
 
         w.show()
         stat = app.exec_()
-
         statt1 = t1.quit() # t1.exit(0)
+        del w
+        del app
+        sys.exit(stat)
+        #os._exit(stat)
 
-#------------------------------
 
-    def print_raw(self) :
+    def print_raw(self):
         print('Command:', ' '.join(sys.argv))
         print('  opts: ', self.opts)
         print('  defs: ', self.defs)
         print('  args: ', self.args)
 
-#------------------------------
 
-    def print_pars(self) :
+    def print_pars(self):
         """Prints input parameters"""
         print('Command:', ' '.join(sys.argv)+\
               '\nStart %s' % self.__init__.__doc__+\
               '\nwith argument %s and optional parameters:\n' % str(self.args)+\
               '<key>      <value>          <default>')
-        for k,v in self.opts.items() :
+        for k,v in self.opts.items():
             print('%s %s %s' % (k.ljust(10), str(v).ljust(16), str(self.defs[k]).ljust(16)))
 
-#------------------------------
 
-    def dsname(self) :
+    def dsname(self):
         """Returns dsname retrieved from input parameters, e.g.'exp=mfxn8316:run=11' """
         exp = self.opts['exp']
         run = self.opts['run']
         return 'exp=%s:run=%s' % (exp, run)
 
-#------------------------------
 
-def usage() :
+def usage():
     return '\n\nCommand to launch Monitoring Tool GUI:\n'+\
            '\n  %prog -e <experiment> -r <run-number> -n <event-number> -v'+\
            '\n  or:'+\
@@ -80,9 +81,8 @@ def usage() :
            '\n  %prog -f image.txt # accepts types txt, bin, npy, h5'+\
            '\n  %prog image.txt'
 
-#------------------------------
 
-def option_parser() :
+def option_parser():
 
     def_exp = '' # 'mfxn8316'
     def_run = 0
@@ -108,10 +108,9 @@ def option_parser() :
 
     return parser #, parser.parse_args()
 
-#------------------------------
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     IMAGE_VIEWER()
     sys.exit(0)
 
-#------------------------------
+# EOF
