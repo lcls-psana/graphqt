@@ -51,32 +51,25 @@ from graphqt.Frame  import Frame
 from graphqt.QIcons import icon
 from graphqt.Styles import style
 
-#------------------------------
 
-#class IVMain(Frame) :
-class IVMain(QtWidgets.QWidget) :
+class IVMain(QtWidgets.QWidget):
 
     _name = 'IVMain'
 
-    def __init__(self, parser=None) : # **dict_opts) :
-        #Frame.__init__(self, parent=None, mlw=1)
+    def __init__(self, parser=None):
         QtWidgets.QWidget.__init__(self, parent=None)
-        #self._name = self.__class__.__name__
-
 
         self.nssd = 0
-
-
         cp.ivmain = self
         self.improd = None
 
         self.proc_parser(parser)
-            
-        self.main_win_width  = cp.main_win_width 
+
+        self.main_win_width  = cp.main_win_width
         self.main_win_height = cp.main_win_height
-        self.main_win_pos_x  = cp.main_win_pos_x 
-        self.main_win_pos_y  = cp.main_win_pos_y  
-        self.color_table_ind = cp.color_table_ind 
+        self.main_win_pos_x  = cp.main_win_pos_x
+        self.main_win_pos_y  = cp.main_win_pos_y
+        self.color_table_ind = cp.color_table_ind
 
         self.arr = self.get_image_array()
 
@@ -94,26 +87,26 @@ class IVMain(QtWidgets.QWidget) :
         self.wcur = IVImageCursorInfo()
         self.wlog = QWLogger(log, cp, show_buttons=False)
 
-        self.vbox = QtWidgets.QVBoxLayout() 
-        self.vbox.addWidget(self.wtab) 
+        self.vbox = QtWidgets.QVBoxLayout()
+        self.vbox.addWidget(self.wtab)
         self.vbox.addStretch(1)
-        self.vbox.addWidget(self.wbut) 
-        self.vbox.addWidget(self.wcur) 
+        self.vbox.addWidget(self.wbut)
+        self.vbox.addWidget(self.wcur)
 
         self.wrig = QtWidgets.QWidget()
         self.wrig.setLayout(self.vbox)
 
         self.vspl = QtWidgets.QSplitter(QtCore.Qt.Vertical)
-        self.vspl.addWidget(self.wrig) 
-        self.vspl.addWidget(self.wspe) 
-        self.vspl.addWidget(self.wlog) 
+        self.vspl.addWidget(self.wrig)
+        self.vspl.addWidget(self.wspe)
+        self.vspl.addWidget(self.wlog)
 
         self.hspl = QtWidgets.QSplitter(QtCore.Qt.Horizontal)
         self.hspl.addWidget(self.wimg)
         self.hspl.addWidget(self.vspl)
         #self.hspl.addWidget(self.wrig)
 
-        self.mbox = QtWidgets.QHBoxLayout() 
+        self.mbox = QtWidgets.QHBoxLayout()
         self.mbox.addWidget(self.hspl)
         self.setLayout(self.mbox)
 
@@ -169,12 +162,11 @@ class IVMain(QtWidgets.QWidget) :
     def disconnect_signals_from_hist(self):
         self.wspe.hist.disconnect_axes_limits_changed_from(self.on_hist_axes_limits_changed)
 
-#------------------------------
 
-    def proc_parser(self, parser=None) :
+    def proc_parser(self, parser=None):
         self.parser=parser
 
-        if parser is None :
+        if parser is None:
             cp.fname_img.setValue('')
             return
 
@@ -193,46 +185,43 @@ class IVMain(QtWidgets.QWidget) :
         vrb = popts.vrb
 
         #cp.instr_dir .setValue() # val_def='/reg/d/psdm'
-        if exp != self.defs['exp'] : cp.instr_name.setValue(exp[:3].upper())
-        if exp != self.defs['exp'] : cp.exp_name  .setValue(exp)
-        if run != self.defs['run'] : cp.str_runnum.setValue('%d'%run)
-        if clb != self.defs['clb'] : cp.calib_dir .setValue(clb)
+        if exp != self.defs['exp']: cp.instr_name.setValue(exp[:3].upper())
+        if exp != self.defs['exp']: cp.exp_name  .setValue(exp)
+        if run != self.defs['run']: cp.str_runnum.setValue('%d'%run)
+        if clb != self.defs['clb']: cp.calib_dir .setValue(clb)
 
         self.verbos = vrb
- 
+
         ifname = ifn          if ifn != self.defs['ifn'] else\
                  self.args[0] if nargs > 0 else\
                  None
-        
-        if ifname is not None :
+
+        if ifname is not None:
             log.info('Input image file name: %s' % ifname)
             cp.fname_img.setValue(ifname)
             cp.current_tab.setValue('File')
-        #else :
+        #else:
         #    cp.current_tab.setValue('Data')
 
-#------------------------------
 
-    def get_image_array(self) :
+    def get_image_array(self):
         import expmon.PSUtils as psu
         ifname = cp.fname_img.value()
         arr = psu.get_image_array_from_file(ifname)
-        if arr is None :
+        if arr is None:
             log.warning('%s Can not get image from file: %s Substitute simulated image' % (self._name, ifname))
             arr = image_with_random_peaks((1000, 1000))
 
         log.info('Image array shape: %s' % str(arr.shape))
         return arr
-    
-#------------------------------
 
-    def print_pars(self) :
+
+    def print_pars(self):
         """Prints input parameters"""
-        print('In print_pars:') 
-        for k,v in self.opts.items() :
+        print('In print_pars:')
+        for k,v in self.opts.items():
             print('%s %s %s' % (k.ljust(10), str(v).ljust(16), str(self.defs[k]).ljust(16)))
 
-#------------------------------
 
     def spectrum_show(self, arr=None):
         a = self.arr if arr is None else arr
@@ -242,22 +231,13 @@ class IVMain(QtWidgets.QWidget) :
 
     def spectrum_close(self):
         pass
-        #self.wspe.hist.disconnect_axes_limits_changed_from(self.wspe.hist.test_axes_limits_changed_reception)
-        ##self.wspe.hist.disconnect_histogram_updated_from(self.wspe.hist.test_histogram_updated_reception)
-        #self.wspe.disconnect_color_table_is_changed_from(self.wspe.test_color_table_is_changed_reception)
-
-        #if self.wspe is None : return
-        #try :
-        #    self.wspe.close()
-        #except : pass
-        #self.wspe = None
 
 
     def set_image_data(self, arr, set_hlims=False):
         '''Sets new image data array:
         '''
         log.info('%s.set_image_data' % self._name)
-        if arr is None :
+        if arr is None:
             log.warning('%s.set_image_data: data array is None' % (self._name))
             return
 
@@ -290,9 +270,9 @@ class IVMain(QtWidgets.QWidget) :
         #log.info('%s.on_but_save' % self._name)
         slst = ['Spectrum', 'Image', 'Both']
         sel = selectFromListInPopupMenu(slst)
-        if sel is None : return
-        if sel in (slst[0],slst[2]) : self.wspe.on_but_save()
-        if sel in (slst[1],slst[2]) : self.wimg.on_but_save(at_obj=self.wbut.but_save)
+        if sel is None: return
+        if sel in (slst[0],slst[2]): self.wspe.on_but_save()
+        if sel in (slst[1],slst[2]): self.wimg.on_but_save(at_obj=self.wbut.but_save)
 
 
     def on_spectrum_color_table_is_changed(self):
@@ -319,7 +299,7 @@ class IVMain(QtWidgets.QWidget) :
         self.connect_signals_from_hist()
 
 
-    def on_image_axes_limits_changed(self, x1, x2, y1, y2) :
+    def on_image_axes_limits_changed(self, x1, x2, y1, y2):
         '''Responce on signal.
         '''
         #log.info('%s.on_image_axes_limits_changed x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f'%\
@@ -331,10 +311,10 @@ class IVMain(QtWidgets.QWidget) :
         xmin, xmax = int(floor(min(x1, x2))), int(floor(max(x1, x2)))
         ymin, ymax = int(floor(min(y1, y2))), int(floor(max(y1, y2)))
 
-        if xmin<0 : xmin = 0
-        if ymin<0 : ymin = 0
-        if xmax<0 : xmax = 0
-        if ymax<0 : ymax = 0
+        if xmin<0: xmin = 0
+        if ymin<0: ymin = 0
+        if xmax<0: xmax = 0
+        if ymax<0: ymax = 0
 
         if xmin>w1: xmin = w1
         if ymin>h1: ymin = h1
@@ -379,7 +359,7 @@ class IVMain(QtWidgets.QWidget) :
         log.debug('%s.on_new_event_number %d' % (self._name, num))
 
         set_hlims=False
-        if self.improd is None : 
+        if self.improd is None:
             from expmon.PSImageProducer import PSImageProducer
             self.improd = PSImageProducer(cp, log)
             set_hlims=True
@@ -421,7 +401,7 @@ class IVMain(QtWidgets.QWidget) :
 
         #self.setStyleSheet("background-color:blue; border: 0px solid green")
         #self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        
+
         #self.        setStyleSheet(style.styleBkgd)
         #self.butSave.setStyleSheet(style.styleButton)
         #self.butExit.setStyleSheet(style.styleButton)
@@ -436,51 +416,50 @@ class IVMain(QtWidgets.QWidget) :
 
     def closeEvent(self, e):
         log.debug('%s.closeEvent' % self._name)
-        try : self.wimg.close()
-        except : pass
+        try: self.wimg.close()
+        except: pass
 
-        try : self.wspe.close()
-        except : pass
+        try: self.wspe.close()
+        except: pass
 
         self.on_save()
 
         QtWidgets.QWidget.closeEvent(self, e)
         cp.ivmain = None
 
- 
+
     def resizeEvent(self, e):
-        #log.debug('resizeEvent', self._name) 
+        #log.debug('resizeEvent', self._name)
         #log.info('IVMain.resizeEvent: %s' % str(self.size()))
         pass
 
 
     def moveEvent(self, e):
-        #log.debug('moveEvent', self._name) 
+        #log.debug('moveEvent', self._name)
         #self.position = self.mapToGlobal(self.pos())
         #self.position = self.pos()
-        #log.debug('moveEvent - pos:' + str(self.position), __name__)       
+        #log.debug('moveEvent - pos:' + str(self.position), __name__)
         #log.info('IVMain.moveEvent - move window to x,y: ', str(self.mapToGlobal(QtCore.QPoint(0,0))))
         #self.wimg.move(self.pos() + QtCore.QPoint(self.width()+5, 0))
         pass
 
 
-    def keyPressEvent(self, e) :
-        log.info('%s.keyPressEvent, key=%d' % (self._name, e.key()))         
-        if   e.key() == Qt.Key_Escape :
+    def keyPressEvent(self, e):
+        log.info('%s.keyPressEvent, key=%d' % (self._name, e.key()))
+        if   e.key() == Qt.Key_Escape:
             self.close()
 
-        elif e.key() == Qt.Key_U : 
+        elif e.key() == Qt.Key_U:
             log.info('%s: Test set new image' % self._name)
             img = image_with_random_peaks((1000, 1000))
             self.set_image_data(img)
-
 
 
     def on_save(self):
 
         point, size = self.mapToGlobal(QtCore.QPoint(-5,-22)), self.size() # Offset (-5,-22) for frame size.
         x,y,w,h = point.x(), point.y(), size.width(), size.height()
-        msg = 'Save main window x,y,w,h : %d, %d, %d, %d' % (x,y,w,h)
+        msg = 'Save main window x,y,w,h: %d, %d, %d, %d' % (x,y,w,h)
         log.info(msg, self._name)
         #print msg
 
@@ -495,20 +474,20 @@ class IVMain(QtWidgets.QWidget) :
         cp.printParameters()
         cp.saveParametersInFile()
 
-        if cp.save_log_at_exit.value() :
+        if cp.save_log_at_exit.value():
             log.saveLogInFile(cp.log_file.value())
             #print 'Saved log file: %s' % cp.log_file.value()
             #log.saveLogTotalInFile(fnm.log_file_total())
 
 
-#------------------------------
-if __name__ == "__main__" :
+if __name__ == "__main__":
     import sys
 
-    log.setPrintBits(0o377) 
+    log.setPrintBits(0o377)
 
     app = QtWidgets.QApplication(sys.argv)
     ex  = IVMain(parser=None)
     ex.show()
     app.exec_()
-#------------------------------
+
+# EOF
