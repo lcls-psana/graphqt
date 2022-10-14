@@ -472,7 +472,8 @@ class IVMain(QtWidgets.QWidget):
         self.color_table_ind.setValue(ct.STOR.ictab)
 
         cp.printParameters()
-        cp.saveParametersInFile()
+        if cp.save_config_at_exit.value():
+            cp.saveParametersInFile()
 
         if cp.save_log_at_exit.value():
             log.saveLogInFile(cp.log_file.value())
