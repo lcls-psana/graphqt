@@ -1,5 +1,5 @@
 #!@PYTHON@
-#------------------------------
+
 """
 Class :py:class:`IVConfigParameters` supports configuration parameters for application
 ======================================================================================
@@ -29,27 +29,24 @@ See:
 
 Created on 2016-11-22 by Mikhail Dubrovin
 """
-from __future__ import print_function
-#------------------------------
 
 # import os
 #from graphqt.Logger import log
 from expmon.PSConfigParameters import PSConfigParameters
 from expmon.PSNameManager import nm # It is here for initialization
 
-#------------------------------
 
-class IVConfigParameters(PSConfigParameters) :
+class IVConfigParameters(PSConfigParameters):
     """A storage of configuration parameters for Image Vievier (iv)
     """
     _name = 'IVConfigParameters'
- 
-    def __init__(self, fname=None) :
-        """fname : str - the file name with configuration parameters, if not specified then use default.
+
+    def __init__(self, fname=None):
+        """fname: str - the file name with configuration parameters, if not specified then use default.
         """
         #log.setPrintBits(0377)
         #log.debug('In c-tor', self._name)
-        print('In %s c-tor' % self._name)
+        #print('In %s c-tor' % self._name)
 
         PSConfigParameters.__init__(self)
 
@@ -66,16 +63,14 @@ class IVConfigParameters(PSConfigParameters) :
 
         nm.set_config_pars(self)
 
-#------------------------------
-        
-    def declareParameters(self) :
-        # Possible typs for declaration : 'str', 'int', 'long', 'float', 'bool'
+
+    def declareParameters(self):
+        # Possible typs for declaration: 'str', 'int', 'long', 'float', 'bool'
         self.log_level = self.declareParameter(name='LOG_LEVEL_OF_MSGS', val_def='info', type='str')
-        #self.log_file  = self.declareParameter(name='LOG_FILE_NAME', val_def='/reg/g/psdm/logs/montool/log.txt', type='str')
         self.log_file  = self.declareParameter(name='LOG_FILE_NAME', val_def='iv-log.txt', type='str')
 
-        self.save_log_at_exit = self.declareParameter( name='SAVE_LOG_AT_EXIT', val_def=True,  type='bool')
-        #self.dir_log_cpo      = self.declareParameter( name='DIR_FOR_LOG_FILE_CPO', val_def='/reg/g/psdm/logs/calibman', type='str')
+        self.save_log_at_exit = self.declareParameter(name='SAVE_LOG_AT_EXIT', val_def=False,  type='bool')
+        self.save_config_at_exit = self.declareParameter(name='SAVE_CONFIG_AT_EXIT', val_def=False,  type='bool')
 
         self.main_win_pos_x  = self.declareParameter(name='MAIN_WIN_POS_X',  val_def=5,    type='int')
         self.main_win_pos_y  = self.declareParameter(name='MAIN_WIN_POS_Y',  val_def=5,    type='int')
@@ -86,13 +81,12 @@ class IVConfigParameters(PSConfigParameters) :
         self.current_tab     = self.declareParameter(name='MAIN_CURRENT_TAB', val_def='Status', type='str')
         self.fname_img       = self.declareParameter(name='FNAME_IMAGE', val_def='',     type='str') # '/reg/d/
 
-#------------------------------
 
 cp = IVConfigParameters()
 
-#------------------------------
 
-def test_IVConfigParameters() :
+if __name__ == "__main__":
+  def test_IVConfigParameters():
     from expmon.Logger import log
 
     log.setPrintBits(0o377)
@@ -101,11 +95,10 @@ def test_IVConfigParameters() :
     cp.log_level.setValue('debug')
     cp.saveParametersInFile()
 
-#------------------------------
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     import sys
     test_IVConfigParameters()
     sys.exit(0)
 
-#------------------------------
+# EOF
