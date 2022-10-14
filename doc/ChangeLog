@@ -11,6 +11,11 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+2022-10-14 Mikhail Dubrovin
+Tag: V02-00-02
+  src/IVConfigParameters.py - code cleaning, add parameters self.save_log_at_exit, save_config_at_exit
+  src/IVMain.py - use cp.save_config_at_exit
+
 2022-09-20 Mikhail Dubrovin
 Tag: V02-00-01
   app/iv - get rid of libGL error, code cleaning, del objects at exit
