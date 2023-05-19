@@ -11,6 +11,17 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+2023-05-19 Mikhail Dubrovin
+Tag: V02-00-03
+- modified:
+  src/FWView.py - docstring fixing, code cleaning
+  src/FWViewColorBar.py,
+  src/FWViewImage.py,
+  src/GUViewColorBar.py,
+  src/QWPopupSelectColorBar.py,
+  src/QWPopupSelectItem.py,
+  src/QWSpectrum.py - fix QWPopupSelect* returned value, code cleaning
+
 2022-10-14 Mikhail Dubrovin
 Tag: V02-00-02
   src/IVConfigParameters.py - code cleaning, add parameters self.save_log_at_exit, save_config_at_exit
