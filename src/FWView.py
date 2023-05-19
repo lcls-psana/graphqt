@@ -10,7 +10,7 @@ Usage ::
     # Test
     #-----
     import sys
-    from PyQt4 import QtGui, QtCore
+    from PyQt5 import QtGui, QtCore, QtWidgets
     from graphqt.FWView import FWView
     app = QtGui.QApplication(sys.argv)
     w = FWView(None, rscene=QtCore.QRectF(0, 0, 100, 100), origin='UL', scale_ctl='HV')
@@ -95,15 +95,9 @@ See:
 
 Created on 2017-01-03 by Mikhail Dubrovin
 """
-from __future__ import print_function
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
-
-#from time import time
-#t0_sec = time()
-#print 'time = %.6f' % (time() - t0_sec)
-
 
 class FWView(QtWidgets.QGraphicsView):
 
