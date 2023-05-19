@@ -57,20 +57,16 @@ See:
 
 Created on September 9, 2016 by Mikhail Dubrovin
 """
-from __future__ import print_function
-#------------------------------
 
 from math import floor
 import graphqt.ColorTable as ct
 from graphqt.FWView import *
 
-#------------------------------
+class FWViewImage(FWView):
 
-class FWViewImage(FWView) :
-    
     def __init__(self, parent=None, arr=None,\
                  coltab=ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20),\
-                 origin='UL', scale_ctl='HV') :
+                 origin='UL', scale_ctl='HV'):
 
         h, w = arr.shape
         rscene = QtCore.QRectF(0, 0, w, h)
@@ -81,11 +77,11 @@ class FWViewImage(FWView) :
         self.set_pixmap_from_arr(arr)
 
 
-    def set_coltab(self, coltab=ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20)) :
+    def set_coltab(self, coltab=ct.color_table_rainbow(ncolors=1000, hang1=250, hang2=-20)):
         self.coltab = coltab
 
 
-    def set_style(self) :
+    def set_style(self):
         FWView.set_style(self)
         self.setWindowTitle('FWViewImage%s' %(30*' '))
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -93,24 +89,7 @@ class FWViewImage(FWView) :
         #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
 
 
-    #def mousePressEvent(self, e):
-    #    FWView.mousePressEvent(self, e)
-    #    #print 'XXX FWViewImage.mousePressEvent'
-
-#------------------------------
-
-#    def mouseMoveEvent(self, e):
-#        FWView.mouseMoveEvent(self, e)
-
-#------------------------------
- 
-#    def closeEvent(self, e):
-#        FWView.closeEvent(self, e)
-        #print '%s.closeEvent' % self._name
-
-#------------------------------
-
-    def key_usage(self) :
+    def key_usage(self):
         return 'Keys:'\
                '\n  ESC - exit'\
                '\n  R - reset original size'\
@@ -119,25 +98,24 @@ class FWViewImage(FWView) :
                '\n  D - set new pixmap of random shape and change default scene rect'\
                '\n'
 
-#------------------------------
 
-    def keyPressEvent(self, e) :
-        #print 'keyPressEvent, key=', e.key()         
-        if   e.key() == Qt.Key_Escape :
+    def keyPressEvent(self, e):
+        #print 'keyPressEvent, key=', e.key()
+        if   e.key() == Qt.Key_Escape:
             print('Close app')
             self.close()
 
-        elif e.key() == Qt.Key_R : 
+        elif e.key() == Qt.Key_R:
             print('Reset original size')
             self.reset_original_size()
 
-        elif e.key() == Qt.Key_N : 
+        elif e.key() == Qt.Key_N:
             print('Set new pixel map')
             s = self.pmi.pixmap().size()
             img = image_with_random_peaks((s.height(), s.width()))
             self.set_pixmap_from_arr(img, set_def=False)
 
-        elif e.key() in (Qt.Key_W, Qt.Key_D)  : 
+        elif e.key() in (Qt.Key_W, Qt.Key_D):
             change_def = e.key()==Qt.Key_D
             print('%s: change scene rect %s' % (self._name, 'set new default' if change_def else ''))
             v = ag.random_standard((4,), mu=0, sigma=200, dtype=np.int)
@@ -147,35 +125,32 @@ class FWViewImage(FWView) :
             img = image_with_random_peaks((rs.height(), rs.width()))
             self.set_pixmap_from_arr(img, set_def=change_def)
 
-        else :
+        else:
             print(self.key_usage())
 
-#------------------------------
 
-    def add_pixmap_to_scene(self, pixmap) :
-        if self.pmi is None : self.pmi = self.scene().addPixmap(pixmap)
-        else                : self.pmi.setPixmap(pixmap)
+    def add_pixmap_to_scene(self, pixmap):
+        if self.pmi is None: self.pmi = self.scene().addPixmap(pixmap)
+        else               : self.pmi.setPixmap(pixmap)
 
 
-    def set_pixmap_from_arr(self, arr, set_def=True) :
-        """Input array is scailed by color table. If color table is None arr set as is.
-        """
+    def set_pixmap_from_arr(self, arr, set_def=True):
+        """Input array is scailed by color table. If color table is None arr set as is."""
         self.arr = arr
         anorm = arr if self.coltab is None else\
-                ct.apply_color_table(arr, ctable=self.coltab) 
+                ct.apply_color_table(arr, ctable=self.coltab)
         h, w = arr.shape
 
         image = QtGui.QImage(anorm, w, h, QtGui.QImage.Format_ARGB32)
         pixmap = QtGui.QPixmap.fromImage(image)
         self.add_pixmap_to_scene(pixmap)
 
-        if set_def :
+        if set_def:
             rs = QtCore.QRectF(0, 0, w, h)
             self.set_rect_scene(rs, set_def)
 
-#------------------------------
 
-    def cursor_on_image_pixcoords_and_value(self, p) :
+    def cursor_on_image_pixcoords_and_value(self, p):
         """Returns cursor pointing pixel coordinates and value,
            - p (QPoint) - cursor on scene position
         """
@@ -186,34 +161,30 @@ class FWViewImage(FWView) :
         if ix<0\
         or iy<0\
         or iy>arr.shape[0]-1\
-        or ix>arr.shape[1]-1 : pass
-        else : v = self.arr[iy,ix]
+        or ix>arr.shape[1]-1: pass
+        else: v = self.arr[iy,ix]
         return ix, iy, v
 
-#------------------------------
 
-    def test_mouse_move_event_reception(self, e) :
+    def test_mouse_move_event_reception(self, e):
         """Overrides method from FWView"""
         p = self.mapToScene(e.pos())
         ix, iy, v = self.cursor_on_image_pixcoords_and_value(p)
-        fv = 0 if v is None else v 
+        fv = 0 if v is None else v
         self.setWindowTitle('FWViewImage x=%d y=%d v=%s%s' % (ix, iy, '%.1f'%fv, 25*' '))
 
-#------------------------------
-#------------------------------
-#------------------------------
-#------------------------------
 
-def image_with_random_peaks(shape=(500, 500)) : 
+def image_with_random_peaks(shape=(500, 500)):
     import pyimgalgos.NDArrGenerators as ag
     img = ag.random_standard(shape, mu=0, sigma=10)
     peaks = ag.add_random_peaks(img, npeaks=50, amean=100, arms=50, wmean=1.5, wrms=0.3)
     ag.add_ring(img, amp=20, row=500, col=500, rad=300, sigma=50)
     return img
 
-#------------------------------
 
-def test_wfviewimage(tname) :
+if __name__ == "__main__":
+
+  def test_wfviewimage(tname):
     print('%s:' % sys._getframe().f_code.co_name)
     #import numpy as np
     #arr = np.random.random((1000, 1000))
@@ -222,7 +193,7 @@ def test_wfviewimage(tname) :
     ctab = ct.color_table_monochr256()
     #ctab = ct.color_table_interpolated()
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     w = None
     if   tname == '0': w = FWViewImage(None, arr, coltab=ctab, origin='UL', scale_ctl='HV')
     elif tname == '1': w = FWViewImage(None, arr, coltab=ctab, origin='UL', scale_ctl='H')
@@ -247,7 +218,7 @@ def test_wfviewimage(tname) :
     elif tname == '7':
         a = np.arange(15).reshape((5, 3))
         w = FWViewImage(None, a, coltab=ctab, origin='UL', scale_ctl='HV')
-    else :
+    else:
         print('test %s is not implemented' % tname)
         return
 
@@ -258,9 +229,8 @@ def test_wfviewimage(tname) :
     w.show()
     app.exec_()
 
-#------------------------------
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     import sys; global sys
     import numpy as np; global np
     import pyimgalgos.NDArrGenerators as ag; global ag
@@ -269,4 +239,4 @@ if __name__ == "__main__" :
     test_wfviewimage(tname)
     sys.exit('End of Test %s' % tname)
 
-#------------------------------
+# EOF

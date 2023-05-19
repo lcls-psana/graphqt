@@ -17,9 +17,6 @@ Usage ::
 
 Created on September 9, 2016 by Mikhail Dubrovin
 """
-from __future__ import print_function
-
-#-----------------------------
 
 import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -27,11 +24,10 @@ import graphqt.ColorTable as ct
 from graphqt.GUViewImage import GUViewImage, image_with_random_peaks
 from pyimgalgos.NDArrGenerators import aranged_array
 
-#-----------------------------
 
-class GUViewColorBar(GUViewImage) :
-    
-    def __init__(self, parent=None, coltab=None, rulers='R', margl=None, margr=None, margt=None, margb=None) :
+class GUViewColorBar(GUViewImage):
+
+    def __init__(self, parent=None, coltab=None, rulers='R', margl=None, margr=None, margt=None, margb=None):
         #arr = image_with_random_peaks((1000, 1000))
         arr = aranged_array(shape=(5,500), dtype=np.uint32)
 
@@ -44,13 +40,9 @@ class GUViewColorBar(GUViewImage) :
         #self.setMinimumSize(100,500)
         self.setFixedSize(100,500)
 
-#-----------------------------
-#-----------------------------
-#-----------------------------
-#-----------------------------
-#-----------------------------
 
-def test_guiviewcolorbar(tname) :
+if __name__ == "__main__":
+  def test_guiviewcolorbar(tname):
     print('%s:' % sys._getframe().f_code.co_name)
     #import numpy as np
     #arr = np.random.random((1000, 1000))
@@ -60,18 +52,17 @@ def test_guiviewcolorbar(tname) :
 
     app = QtWidgets.QApplication(sys.argv)
     w = None
-    if tname == '0': 
+    if tname == '0':
         w = GUViewColorBar(None, coltab=ctab, rulers='R', margl=0, margr=0.5, margt=0.03, margb=0.03)
-        
-    else :
+
+    else:
         print('test %s is not implemented' % tname)
         return
     w.show()
     app.exec_()
 
-#------------------------------
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     import sys; global sys
     #import numpy as np; global np
     tname = sys.argv[1] if len(sys.argv) > 1 else '0'
@@ -79,4 +70,4 @@ if __name__ == "__main__" :
     test_guiviewcolorbar(tname)
     sys.exit('End of Test %s' % tname)
 
-#------------------------------
+# EOF
