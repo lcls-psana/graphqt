@@ -11,6 +11,17 @@ Package author: Mikhail S. Dubrovin
 Please describe any modifications that you made to the package in the
 reverse time order.
 
+2024-11-26 Mikhail Dubrovin
+Tag: V02-00-04
+- replace deprecated np.int > np.int32, np.float > np.float32
+- code cleaning
+	modified:   src/ColorTable.py
+	modified:   src/FWView.py
+	modified:   src/FWViewImage.py
+	modified:   src/GUView.py
+	modified:   src/GUViewHist.py
+	modified:   src/GUViewImage.py
+
 2023-05-19 Mikhail Dubrovin
 Tag: V02-00-03
 - modified:
