@@ -55,8 +55,8 @@ Usage ::
 
     w.set_pixmap_random(shape=(512,512))
     w.save_pixmap_in_file(fname='fig-image.xpm')
-    w.save_qimage_in_file(fname='fig-image.gif') 
-    w.save_window_in_file(fname='fig-image.png') 
+    w.save_qimage_in_file(fname='fig-image.gif')
+    w.save_window_in_file(fname='fig-image.png')
     w.on_but_reset() # calls w.reset_original_image_size()
 
     Internal methods
@@ -70,27 +70,22 @@ Usage ::
 
     Global scope methods
     --------------------
-    img = image_with_random_peaks(shape=(500, 500)) : 
+    img = image_with_random_peaks(shape=(500, 500)) :
     test_guiviewimage(tname)
 
 Created on September 9, 2016 by Mikhail Dubrovin
 """
-from __future__ import print_function
 
-#import os
-#import math
-#import math
 from math import floor
 from PyQt5 import QtCore, QtGui, QtWidgets
 import graphqt.ColorTable as ct
 from graphqt.GUViewAxes import *
 from graphqt.Logger import log
-
 import pyimgalgos.NDArrGenerators as ag
 
 
 class GUViewImage(GUViewAxes) :
-    
+
     cursor_pos_value = QtCore.pyqtSignal(int, int, float)
     pixmap_is_updated = QtCore.pyqtSignal()
 
@@ -149,13 +144,12 @@ class GUViewImage(GUViewAxes) :
         or iy>arr.shape[0]-1\
         or ix>arr.shape[1]-1 : pass
         else : v = self.arr[iy,ix]
-        vstr = 'None' if v is None else '%.1f' % v 
+        vstr = 'None' if v is None else '%.1f' % v
         #self.setWindowTitle('GUViewImage x=%d y=%d v=%s' % (ix, iy, vstr))
-        #print 'display_pixel_pos, current point: ', e.x(), e.y(), ' on scene: %.1f  %.1f' % (p.x(), p.y()) 
+        #print 'display_pixel_pos, current point: ', e.x(), e.y(), ' on scene: %.1f  %.1f' % (p.x(), p.y())
         #return ix, iy, v
         self.cursor_pos_value.emit(ix, iy, v if not(v is None) else 0)
 
-#------------------------------
 
     def connect_cursor_pos_value_to(self, recip) :
         self.cursor_pos_value[int, int, float].connect(recip)
@@ -167,13 +161,11 @@ class GUViewImage(GUViewAxes) :
         #print 'GUView.test_cursor_pos_value_reception x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f' % (x1, x2, y1, y2)
         self.setWindowTitle('GUViewImage x=%d y=%d v=%.1f' % (ix, iy, v))
 
-#------------------------------
 
     def set_intensity_limits(self, amin=None, amax=None) :
         self.amin = amin
         self.amax = amax
 
-#------------------------------
 
     def add_pixmap_to_scene(self, pixmap, flag=Qt.IgnoreAspectRatio,\
                             mode=Qt.FastTransformation) : # Qt.KeepAspectRatio, IgnoreAspectRatio
@@ -199,12 +191,12 @@ class GUViewImage(GUViewAxes) :
             if self.arr is not None and arr.shape != self.arr.shape: need_to_update_rectax = True
             self.arr = arr
         anorm = self.arr if self.coltab is None else\
-                ct.apply_color_table(self.arr, self.coltab, self.amin, self.amax) 
+                ct.apply_color_table(self.arr, self.coltab, self.amin, self.amax)
         h, w = self.arr.shape
         image = QtGui.QImage(anorm, w, h, QtGui.QImage.Format_ARGB32)
         pixmap = QtGui.QPixmap.fromImage(image)
         self.add_pixmap_to_scene(pixmap)
-        if need_to_update_rectax : 
+        if need_to_update_rectax :
             self.set_rect_axes_default(QtCore.QRectF(0, 0, w, h))
             self.reset_original_image_size()
             #self.set_view()
@@ -213,7 +205,6 @@ class GUViewImage(GUViewAxes) :
 
         self.pixmap_is_updated.emit()
 
-#------------------------------
 
     def connect_pixmap_is_updated_to(self, recip) :
         self.pixmap_is_updated.connect(recip)
@@ -224,7 +215,6 @@ class GUViewImage(GUViewAxes) :
     def test_pixmap_is_updated_reception(self) :
         print('GUView.test_pixmap_is_updated_reception')
 
-#------------------------------
 
     def set_pixmap_random(self, shape=(512,512)) :
         from NDArrGenerators import random_array_xffffffff
@@ -234,8 +224,7 @@ class GUViewImage(GUViewAxes) :
         pixmap = QtGui.QPixmap.fromImage(image)
         self.add_pixmap_to_scene(pixmap)
 
-#------------------------------
- 
+
     def on_but_save(self, at_obj=None) :
         import os
 
@@ -250,33 +239,28 @@ class GUViewImage(GUViewAxes) :
         #elif ext.lower() == '.gif' : self.save_qimage_in_file(fname)
         else : self.save_window_in_file(fname)
 
-#------------------------------
- 
+
     def save_pixmap_in_file(self, fname='fig-image.xpm') :
         p = self.pmi.pixmap()
         p.save(fname, format=None, quality=100)
 
-#------------------------------
- 
+
     def save_qimage_in_file(self, fname='fig-image.gif') :
         qim = self.pmi.pixmap().toImage() # QPixmap -> QImage
         qim.save(fname, format=None, quality=100)
 
-#------------------------------
- 
+
     def save_window_in_file(self, fname='fig-image.png') :
         #p = QtGui.QPixmap.grabWindow(self.winId())
         p = QtGui.QPixmap.grabWidget(self, self.rect())
         p.save(fname, format=None)
-    
-#------------------------------
- 
+
+
     def on_but_reset(self) :
         log.debug('%s.on_but_reset - reset original image size' % self._name)
         self.reset_original_image_size()
 
-#------------------------------
- 
+
     def mouseMoveEvent(self, e):
         GUViewAxes.mouseMoveEvent(self, e)
 
@@ -300,57 +284,57 @@ class GUViewImage(GUViewAxes) :
 
     def keyPressEvent(self, e) :
 
-        #print 'keyPressEvent, key=', e.key()         
+        #print 'keyPressEvent, key=', e.key()
         if   e.key() == Qt.Key_Escape :
             self.close()
 
-        elif e.key() == Qt.Key_R : 
+        elif e.key() == Qt.Key_R :
             print('%s: Reset original size' % self._name)
             self.reset_original_image_size() # see GUViewAxes
 
-        elif e.key() == Qt.Key_N : 
+        elif e.key() == Qt.Key_N :
             print('%s: Set new pixel map of the same shape' % self._name)
             s = self.pmi.pixmap().size()
             #self.set_pixmap_random((s.width(), s.height()))
             img = image_with_random_peaks((s.height(), s.width()))
             self.set_pixmap_from_arr(img)
 
-        elif e.key() == Qt.Key_S : 
+        elif e.key() == Qt.Key_S :
             print('%s: Set new pixel map of different shape' % self._name)
             #s = self.pmi.pixmap().size()
             #self.set_pixmap_random((s.width(), s.height()))
-            sh_new = ag.random_standard((2,), mu=1000, sigma=200, dtype=np.int)
-            #sh_new = [(int(v) if v>100 else 100) for v in s_newh] 
+            sh_new = ag.random_standard((2,), mu=1000, sigma=200, dtype=np.int32)
+            #sh_new = [(int(v) if v>100 else 100) for v in s_newh]
             print('%s: Set image with new shape %s' % (self._name, str(sh_new)))
             img = image_with_random_peaks(sh_new)
             self.set_pixmap_from_arr(img)
 
-        elif e.key() == Qt.Key_C : 
+        elif e.key() == Qt.Key_C :
             print('Reset color table')
             ctab = ct.next_color_table()
             self.set_color_table(coltab=ctab)
             self.set_pixmap_from_arr()
 
-        elif e.key() == Qt.Key_L : 
-            nsigma = ag.random_standard((2,), mu=3, sigma=1, dtype=np.float)
+        elif e.key() == Qt.Key_L :
+            nsigma = ag.random_standard((2,), mu=3, sigma=1, dtype=np.float32)
             arr = self.arr
             mean, std = arr.mean(), arr.std()
             amin, amax = mean-nsigma[0]*std, mean+nsigma[1]*std # None, None
             print('%s: Set intensity min=%.1f max=%.1f' % (self._name, amin, amax))
-            #------------------------------------
+
             self.set_intensity_limits(amin, amax)
             self.set_pixmap_from_arr()
- 
-        elif e.key() == Qt.Key_W : 
+
+        elif e.key() == Qt.Key_W :
             print('%s: change axes rect, do not change default)' % self._name)
-            v = ag.random_standard((4,), mu=0, sigma=200, dtype=np.int)
+            v = ag.random_standard((4,), mu=0, sigma=200, dtype=np.int32)
             rax = QtCore.QRectF(v[0], v[1], v[2]+1000, v[3]+1000)
             print('Set new axes rect: %s' % str(rax))
             self.set_rect_axes(rax, set_def=False) # def in GUView
 
-        elif e.key() == Qt.Key_D : 
+        elif e.key() == Qt.Key_D :
             print('%s: change default axes rect, set new default' % self._name)
-            v = ag.random_standard((4,), mu=0, sigma=200, dtype=np.int)
+            v = ag.random_standard((4,), mu=0, sigma=200, dtype=np.int32)
             rax = QtCore.QRectF(v[0], v[1], v[2]+1000, v[3]+1000)
             print('Set new default axes rect: %s' % str(rax))
             self.set_rect_axes(rax) # def in GUView
@@ -358,15 +342,13 @@ class GUViewImage(GUViewAxes) :
         else :
             print(self.key_usage())
 
-#------------------------------
 
-def image_with_random_peaks(shape=(500, 500)) : 
+def image_with_random_peaks(shape=(500, 500)) :
     img = ag.random_standard(shape, mu=0, sigma=10)
     peaks = ag.add_random_peaks(img, npeaks=50, amean=100, arms=50, wmean=1.5, wrms=0.3)
     ag.add_ring(img, amp=20, row=500, col=500, rad=300, sigma=50)
     return img
 
-#-----------------------------
 
 def test_guiviewimage(tname) :
     print('%s:' % sys._getframe().f_code.co_name)
@@ -377,13 +359,13 @@ def test_guiviewimage(tname) :
 
     app = QtWidgets.QApplication(sys.argv)
     w = None
-    if   tname == '0': 
+    if   tname == '0':
         w = GUViewImage(None, arr, coltab=ctab, origin='UL', scale_ctl='HV', rulers='UDLR',\
                         margl=0.12, margr=0.10, margt=0.06, margb=0.06)
-    elif tname == '1': 
+    elif tname == '1':
         w = GUViewImage(None, arr, coltab=ctab, origin='UL', scale_ctl='HV', rulers='DL',\
                         margl=0.12, margr=0.02, margt=0.02, margb=0.06)
-    elif tname == '2': 
+    elif tname == '2':
         w = GUViewImage(None, arr, coltab=ctab, origin='UL', scale_ctl='HV', rulers='',\
                         margl=0, margr=0, margt=0, margb=0)
     elif tname == '3':
@@ -400,14 +382,13 @@ def test_guiviewimage(tname) :
 
     w.connect_pixmap_is_updated_to(w.test_pixmap_is_updated_reception)
     #w.disconnect_pixmap_is_updated_from(w.test_pixmap_is_updated_reception)
-    
+
     w.connect_cursor_pos_value_to(w.test_cursor_pos_value_reception)
     #w.disconnect_cursor_pos_value_from(w.test_cursor_pos_value_reception)
 
     w.show()
     app.exec_()
 
-#------------------------------
 
 if __name__ == "__main__" :
     import sys; global sys
@@ -417,4 +398,4 @@ if __name__ == "__main__" :
     test_guiviewimage(tname)
     sys.exit('End of Test %s' % tname)
 
-#------------------------------
+# EOF

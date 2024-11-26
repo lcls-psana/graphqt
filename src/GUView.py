@@ -738,14 +738,14 @@ class GUView(QtWidgets.QGraphicsView):
 
         elif e.key() == Qt.Key_W:
             print('%s: set rect of axes, do not change default' % self._name)
-            v = ag.random_standard((4,), mu=0, sigma=20, dtype=np.int)
+            v = ag.random_standard((4,), mu=0, sigma=20, dtype=np.int32)
             rax = QtCore.QRectF(v[0], v[1], v[2]+100, v[3]+100)
             print('Set axes rect: %s' % str(rax))
             self.set_rect_axes(rax, set_def=False)
 
         elif e.key() == Qt.Key_D:
             print('%s: change default axes rect, set new default' % self._name)
-            v = ag.random_standard((4,), mu=0, sigma=20, dtype=np.int)
+            v = ag.random_standard((4,), mu=0, sigma=20, dtype=np.int32)
             rax = QtCore.QRectF(v[0], v[1], v[2]+100, v[3]+100)
             print('Set new default axes rect: %s' % str(rax))
             self.set_rect_axes(rax) # def in GUView

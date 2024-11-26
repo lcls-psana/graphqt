@@ -10,7 +10,7 @@ Usage ::
     import sys
     from PyQt4 import QtGui, QtCore
     from graphqt.GUViewHist import GUViewHist
-    rectax=QtCore.QRectF(0, -1.2, 100, 2.4)    
+    rectax=QtCore.QRectF(0, -1.2, 100, 2.4)
     app = QtGui.QApplication(sys.argv)
     w = GUViewHist(None, rectax, origin='DL', scale_ctl='H', rulers='DL',\
                     margl=0.12, margr=0.02, margt=0.02, margb=0.06)
@@ -25,7 +25,7 @@ Usage ::
     w.connect_statistics_updated_to(recip)
     w.disconnect_statistics_updated_from(recip)
     w.test_statistics_std_reception(self, mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w)
- 
+
     w.connect_mean_std_updated_to(recip)
     w.disconnect_mean_std_updated_from(recip)
     w.test_hist_mean_std_updated_reception(self, mean, rms)
@@ -52,9 +52,9 @@ Usage ::
 
     ind, hb.values = w.hist_bin_value(x, ihis=0)
 
-    w.reset_original_hist() 
-    w.add_hist(values, edges, pen=QtGui.QPen(Qt.black), brush=QtGui.QBrush(), vtype=np.float)
-    w.add_array_as_hist(arr, pen=QtGui.QPen(Qt.black), brush=QtGui.QBrush(), vtype=np.float)
+    w.reset_original_hist()
+    w.add_hist(values, edges, pen=QtGui.QPen(Qt.black), brush=QtGui.QBrush(), vtype=np.float32)
+    w.add_array_as_hist(arr, pen=QtGui.QPen(Qt.black), brush=QtGui.QBrush(), vtype=np.float32)
     w.remove_all_graphs()
 
 
@@ -67,7 +67,7 @@ Usage ::
 
     Re-defines methods
     ------------------
-    mouseReleaseEvent, closeEvent, mouseMoveEvent, wheelEvent, 
+    mouseReleaseEvent, closeEvent, mouseMoveEvent, wheelEvent,
     enterEvent, leaveEvent, keyPressEvent, __del__
 
     Global scope methods
@@ -76,12 +76,7 @@ Usage ::
 
 Created on September 9, 2016 by Mikhail Dubrovin
 """
-from __future__ import print_function
-from __future__ import division
 
-#import os
-#import math
-#import math
 from math import floor
 from PyQt5 import QtCore, QtGui, QtWidgets
 from graphqt.GUViewAxes import *
@@ -89,10 +84,8 @@ from pyimgalgos.HBins import HBins
 import numpy as np
 import math
 
-#------------------------------
-
 def image_to_hist_arr(arr, vmin=None, vmax=None, nbins=None) :
-    
+
     amin = math.floor(arr.min() if vmin is None else vmin)
     amax = math.ceil (arr.max() if vmax is None else vmax)
 
@@ -105,11 +98,11 @@ def image_to_hist_arr(arr, vmin=None, vmax=None, nbins=None) :
     if amin == amax : amax += 1
     nhbins = int(amax-amin) if nbins is None else nbins
 
-    NBINS_MIN = 2 if arr.dtype == np.int else 100
+    NBINS_MIN = 2 if arr.dtype == np.int32 else 100
     NBINS_MAX = (1<<15) - 1
 
     #print 'XXX:NBINS_MAX', NBINS_MAX
-    
+
     if nhbins>NBINS_MAX : nhbins=NBINS_MAX
     if nhbins<NBINS_MIN : nhbins=NBINS_MIN
 
@@ -122,10 +115,9 @@ def image_to_hist_arr(arr, vmin=None, vmax=None, nbins=None) :
 
     return amin, amax, nhbins, values
 
-#------------------------------
 
 class GUViewHist(GUViewAxes) :
-    
+
     statistics_updated = QtCore.pyqtSignal(float, float, float, float, float, float, float, float, float)
     mean_std_updated = QtCore.pyqtSignal(float, float)
     cursor_bin_changed = QtCore.pyqtSignal(float, float, float, float)
@@ -134,8 +126,8 @@ class GUViewHist(GUViewAxes) :
     def __init__(self, parent=None, rectax=QtCore.QRectF(0, 0, 1, 1), origin='DL', scale_ctl='HV', rulers='TBLR',\
                  margl=None, margr=None, margt=None, margb=None) :
 
-        #xmin, xmax = np.amin(x), np.amax(x) 
-        #ymin, ymax = np.amin(y), np.amax(y) 
+        #xmin, xmax = np.amin(x), np.amax(x)
+        #ymin, ymax = np.amin(y), np.amax(y)
         #w, h = xmax-xmin, ymax-ymin
 
         GUViewAxes.__init__(self, parent, rectax, origin, scale_ctl, rulers, margl, margr, margt, margb)
@@ -144,7 +136,7 @@ class GUViewHist(GUViewAxes) :
 
         self.countemit = 0
         self.ibin_old = None
-        
+
         self.do_cursor_scope = True
         if self.do_cursor_scope : self._init_cursor_scope()
 
@@ -186,7 +178,6 @@ class GUViewHist(GUViewAxes) :
         #self.setWindowFlags(self.windowFlags() | QtCore.Qt.FramelessWindowHint)
         #self.setAttribute(Qt.WA_TranslucentBackground)
 
-#------------------------------
 
     def set_limits_horizontal(self, amin=None, amax=None) :
         self.amin, self.amax = amin, amax
@@ -209,13 +200,13 @@ class GUViewHist(GUViewAxes) :
 
         for hb in self.lst_hbins :
             i1,i2 = hb.bin_indexes((x1,x2))
-            hmin = hb.values[i1] if i1==i2 else hb.values[i1:i2].min()            
+            hmin = hb.values[i1] if i1==i2 else hb.values[i1:i2].min()
             hmax = hb.values[i1] if i1==i2 else hb.values[i1:i2].max()
             hmean= hb.values[i1] if i1==i2 else hb.values[i1:i2].mean()
             if hmax>20*hmean : hmax = 20*hmean
 
-            ymin = hmin #if ymin is None else min(hmin,ymin) 
-            ymax = hmax + 0.12*(hmax-hmin) #if ymax is None else max(hmax,ymax) 
+            ymin = hmin #if ymin is None else min(hmin,ymin)
+            ymax = hmax + 0.12*(hmax-hmin) #if ymax is None else max(hmax,ymax)
             #print hb.values
 
         #print 'i1, i2, hmin, hmax:', i1, i2, hmin, hmax
@@ -224,7 +215,6 @@ class GUViewHist(GUViewAxes) :
 
         self.evaluate_hist_mean_std()
 
-#------------------------------
 
     def visible_hist_vce(self, ihis=0):
         '''Returns arrays of values, bin centers, and edges for visible part of the hystogram
@@ -247,10 +237,10 @@ class GUViewHist(GUViewAxes) :
         #print_ndarr(hb.values, name='XXX: hb.values()', first=0, last=10)
         #print_ndarr(hb.bincenters(), name='XXX: hb.bincenters()', first=0, last=10)
         #print_ndarr(hb.binedges(), name='XXX: hb.binedges()', first=0, last=10)
-       
+
         values  = hb.values[i1:i2]
         centers = hb.bincenters()[i1:i2]
-        edges   = hb.binedges()[i1:i2+1] 
+        edges   = hb.binedges()[i1:i2+1]
 
         #print 'XXX: GUViewHist.visible_hist_vce'
         #print 'XXX: hb.nbins()', hb.nbins()
@@ -286,14 +276,12 @@ class GUViewHist(GUViewAxes) :
         #print 'XXX visible_hist_mean_std:', mean, std
         return mean, std
 
-#------------------------------
 
     def on_axes_limits_changed(self, x1, x2, y1, y2):
-        #print 'XXX:GUViewHist.on_axes_limits_changed  x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f' % (x1, x2, y1, y2)      
+        #print 'XXX:GUViewHist.on_axes_limits_changed  x1: %.2f  x2: %.2f  y1: %.2f  y2: %.2f' % (x1, x2, y1, y2)
         self.set_limits_horizontal(amin=x1, amax=x2)
         self.evaluate_hist_statistics()
 
-#------------------------------
 
     def evaluate_hist_statistics(self):
         """Evaluates histogram statistical parameters and emits them with signal"""
@@ -313,7 +301,6 @@ class GUViewHist(GUViewAxes) :
               'mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w\n',\
                mean, rms, err_mean, err_rms, neff, skew, kurt, err_err, sum_w)
 
-#------------------------------
 
     def evaluate_hist_mean_std(self):
         """Evaluates histogram mean and std (standard deviation) and emits them with signal"""
@@ -331,7 +318,6 @@ class GUViewHist(GUViewAxes) :
     def test_hist_mean_std_updated_reception(self, mean, rms) :
         print('GUViewHist.test_hist_mean_std_updated_reception mean: %.2f  rms: %.2f' % (mean, rms))
 
-#------------------------------
 
     def hist_bin_value(self, x, ihis=0):
         '''Returns arrays of values, bin centers, and edges for visible part of the hystogram
@@ -341,14 +327,12 @@ class GUViewHist(GUViewAxes) :
         ind = hb.bin_index(x)
         return ind, hb.values[ind]
 
-#------------------------------
- 
+
     def mouseReleaseEvent(self, e):
         GUViewAxes.mouseReleaseEvent(self, e)
         #print 'GUViewHist.mouseReleaseEvent'
 
-#------------------------------
- 
+
     def closeEvent(self, e):
         #print 'GUViewHist.closeEvent'
         self.lst_items = []
@@ -356,25 +340,24 @@ class GUViewHist(GUViewAxes) :
         GUViewAxes.closeEvent(self, e)
         #print '%s.closeEvent' % self._name
 
-#------------------------------
 
     def mouseMoveEvent(self, e):
         GUViewAxes.mouseMoveEvent(self, e) # calls display_pixel_pos(e)
 
-        if self.do_cursor_scope : 
+        if self.do_cursor_scope :
             p = self.mapToScene(e.pos())
             x, y = p.x(), p.y()
             if x<self.rectax.left() : return
             y1, y2 = self.rectax.bottom(), self.rectax.top()
             self.cline1i.setLine(x, y1, x, y2)
             self.cline2i.setLine(x, y1, x, y2)
-            
+
             ibin, val = self.hist_bin_value(x)
             if ibin != self.ibin_old :
                 #print 'x, ibin, val', x, ibin, val
                 self.ibin_old = ibin
                 self.cursor_bin_changed.emit(x, y, ibin, val)
-               
+
         if self.pos_click is None : return
         self.set_limits()
 
@@ -384,7 +367,6 @@ class GUViewHist(GUViewAxes) :
     def disconnect_cursor_bin_changed_from(self, recip) :
         self.cursor_bin_changed[float, float, float, float].disconnect(recip)
 
-#------------------------------
 
     def wheelEvent(self, e) :
         GUViewAxes.wheelEvent(self, e)
@@ -394,15 +376,15 @@ class GUViewHist(GUViewAxes) :
     def enterEvent(self, e) :
     #    print 'enterEvent'
         GUViewAxes.enterEvent(self, e)
-        if self.do_cursor_scope : 
+        if self.do_cursor_scope :
             self.cline1i.setPen(self.pen1)
             self.cline2i.setPen(self.pen2)
-        
+
 
     def leaveEvent(self, e) :
     #    print 'leaveEvent'
         GUViewAxes.leaveEvent(self, e)
-        if self.do_cursor_scope : 
+        if self.do_cursor_scope :
             self.cline1i.setPen(QtGui.QPen())
             self.cline2i.setPen(QtGui.QPen())
 
@@ -414,11 +396,11 @@ class GUViewHist(GUViewAxes) :
                '\n'
 
     def keyPressEvent(self, e) :
-        #print 'keyPressEvent, key=', e.key()         
+        #print 'keyPressEvent, key=', e.key()
         if   e.key() == Qt.Key_Escape :
             self.close()
 
-        elif e.key() == Qt.Key_R : 
+        elif e.key() == Qt.Key_R :
             self.reset_original_hist()
 
         elif e.key() == Qt.Key_N :
@@ -426,15 +408,15 @@ class GUViewHist(GUViewAxes) :
             print('%s: Test set new histogram' % self._name)
             arr = image_with_random_peaks((50, 50))
             self.remove_all_graphs()
-            hcolor = Qt.green # Qt.yellow Qt.blue Qt.yellow 
+            hcolor = Qt.green # Qt.yellow Qt.blue Qt.yellow
             self.add_array_as_hist(arr, pen=QtGui.QPen(hcolor, 0), brush=QtGui.QBrush(hcolor))
         else :
             print(self.key_usage())
 
-    
+
     def reset_original_hist(self) :
 
-        #print 'GUViewHist.reset_original_hist'        
+        #print 'GUViewHist.reset_original_hist'
 
         #print 'Reset original size'
         #ihis=0
@@ -455,9 +437,8 @@ class GUViewHist(GUViewAxes) :
         self.lst_items.append(self.scene().addPath(path, pen, brush))
         #self.update_my_scene() # ?????
 
-#------------------------------
 
-    def add_hist(self, values, edges, pen=QtGui.QPen(Qt.black), brush=QtGui.QBrush(), vtype=np.float) :
+    def add_hist(self, values, edges, pen=QtGui.QPen(Qt.black), brush=QtGui.QBrush(), vtype=np.float32) :
         nbins = len(values) #if isinstance(values, (list,tuple)) else values.size
         hb   = HBins(edges, nbins) #, vtype)
         binl = hb.binedgesleft()
@@ -486,7 +467,6 @@ class GUViewHist(GUViewAxes) :
 
         self.histogram_updated.emit()
 
-#------------------------------
 
     def connect_histogram_updated_to(self, recip) :
         self.histogram_updated.connect(recip)
@@ -497,14 +477,13 @@ class GUViewHist(GUViewAxes) :
     def test_histogram_updated_reception(self) :
         print('GUViewHist.test_histogram_updated_reception')
 
-#------------------------------
 
     def add_array_as_hist(self, arr, pen=QtGui.QPen(Qt.black), brush=QtGui.QBrush(),\
-                          vtype=np.float, set_hlims=True) :
+                          vtype=np.float32, set_hlims=True) :
         """Adds array (i.e. like image) as a histogram of intensities
         """
         amin, amax, nbins, values = image_to_hist_arr(arr) #, self.amin, self.amax)
-        if set_hlims : 
+        if set_hlims :
             self.set_limits_horizontal(amin, amax)
 
         vmin, vmax = values.min(), values.max()
@@ -514,7 +493,7 @@ class GUViewHist(GUViewAxes) :
         #print 'XXX: GUViewHist.add_array_as_hist: amin=%.1f  amax=%.1f  vmin=%.1f  vmax=%.1f' % (amin, amax, vmin, vmax)
 
         self.set_limits_vertical(None, vmax)
-        self.raxes = QtCore.QRectF(self.amin, vmin, self.amax-self.amin, vmax-vmin) 
+        self.raxes = QtCore.QRectF(self.amin, vmin, self.amax-self.amin, vmax-vmin)
 
         #print 'XXX A'
         self.add_hist(values, (amin,amax), pen, brush, vtype)
@@ -533,7 +512,6 @@ class GUViewHist(GUViewAxes) :
     def __del__(self) :
         self.remove_all_graphs()
 
-#------------------------------
 
 if __name__ == "__main__" :
 
@@ -548,14 +526,14 @@ if __name__ == "__main__" :
     y2 = np.sin(x2)/x2
     #y2 = np.random.random((nbins,))
 
-    rectax=QtCore.QRectF(0, -1.2, 100, 2.4)    
+    rectax=QtCore.QRectF(0, -1.2, 100, 2.4)
     app = QtWidgets.QApplication(sys.argv)
     w = GUViewHist(None, rectax, origin='DL', scale_ctl='H', rulers='DL',\
                     margl=0.12, margr=0.02, margt=0.02, margb=0.06)
 
-    w.set_limits_vertical(-1.2, 1.2) 
+    w.set_limits_vertical(-1.2, 1.2)
     w.setWindowTitle("GUViewHist")
-    
+
     w.connect_axes_limits_changed_to(w.test_axes_limits_changed_reception)
     #w.disconnect_axes_limits_changed_from(w.test_axes_limits_changed_reception)
 
@@ -574,4 +552,4 @@ if __name__ == "__main__" :
     w.show()
     app.exec_()
 
-#-----------------------------
+# EOF
